@@ -63,7 +63,7 @@
   var S = [];
   S.push(title('Session 5 · Live demo · Contoso Order Desk', 'From business requirement to <em>production</em>',
     'One requirement, seven steps on GitHub, one trusted hand-off to Azure. Each step below is a simulated walkthrough of what you will do live.',
-    ['Simulated walkthrough', '≈ 3.5 minutes', 'Steps from GitHub Docs and Microsoft Learn']));
+    ['Simulated walkthrough', 'Under 4 minutes', 'Steps from GitHub Docs and Microsoft Learn']));
   S.push({ name: 'Architecture', chapter: 'Architecture', dur: 7, html: arch(0), steps: [
     { t: 0.2, cap: 'Seven steps on GitHub, then one trusted hand-off to Azure.' },
     { t: 2.6, focus: 's1', dur: 1.4, pad: 4 }, { t: 3.4, cap: 'Follow the requirement from step 1 to step 7.' },
@@ -347,7 +347,7 @@
   var A = [];
   A.push(title('Session 6 · Agentic software development', 'Delegate work to an <em>agent</em>, stay in control',
     'The Copilot cloud agent researches, plans, implements and checks its own work. People specify, steer, review and merge.',
-    ['Simulated walkthrough', '≈ 2.5 minutes', 'Steps from GitHub Docs']));
+    ['Simulated walkthrough', 'About 2 minutes', 'Steps from GitHub Docs']));
   A.push({ name: 'The agentic loop', chapter: 'Overview', dur: 7, html: loop(0), steps: [
     { t: 0.2, cap: 'Assistive AI suggests. <b>Agentic</b> AI takes a task and works toward the goal.' },
     { t: 3.4, cap: 'Humans at both ends, and guardrails the platform enforces.' }, { t: 3.6, focus: 'guards', dur: 3, pad: 6 } ] });
