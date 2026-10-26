@@ -5,335 +5,11 @@
 <meta content="light dark" name="color-scheme"/>
 <title>05 · Live Demo: From Business Requirement to Production · Contoso × GitHub Workshop</title>
 <meta content="Experience an end-to-end application development journey, starting from a business requirement and progressing through AI-assisted development, code review, security validation, CI/CD, and application deployment." name="description"/>
-<style>
-:root{
-  color-scheme: light;
-  --bg:#ffffff; --surface:#f6f8fa; --surface-2:#eef1f5; --fg:#1f2328; --muted:#59636e; --border:#d1d9e0;
-  --accent:#8250df; --accent-soft:#f6f0ff; --accent-2:#0969da; --accent-2-soft:#ddf4ff;
-  --ok:#1a7f37; --ok-soft:#dafbe1; --warn:#9a6700; --warn-soft:#fff8c5; --danger:#cf222e; --danger-soft:#ffebe9;
-  --on-accent:#ffffff; --topbar-bg:rgba(255,255,255,.9);
-  --fac-bg:#fff9e8; --fac-border:#e3b341; --fac-fg:#4d3800; --fac-chip:#fbe7a6;
-  --hero-a:#0d1117; --hero-b:#151a3f; --hero-c:#3a1d78; --hero-fg:#f0f6fc; --hero-muted:#c3cbd6;
-  --hero-line:rgba(240,246,252,.18); --hero-chip:rgba(240,246,252,.07);
-  --hero-grad-1:#d2a8ff; --hero-grad-2:#79c0ff; --glow-1:rgba(163,113,247,.38); --glow-2:rgba(68,147,248,.26);
-  --code-bg:#0d1117; --code-fg:#e6edf3; --code-muted:#8b949e; --code-key:#ff7b72; --code-str:#a5d6ff; --code-head:#161b22;
-  --lane-gh:rgba(130,80,223,.06); --lane-gh-stroke:rgba(130,80,223,.38); --lane-az:rgba(9,105,218,.06); --lane-az-stroke:rgba(9,105,218,.38);
-  --shadow:0 1px 2px rgba(31,35,40,.05),0 10px 28px rgba(31,35,40,.06);
-  --radius:14px; --max:1440px;
-  --font:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
-  --mono:"Cascadia Code","Cascadia Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    color-scheme: dark;
-    --bg:#0d1117; --surface:#151b23; --surface-2:#1c2330; --fg:#e6edf3; --muted:#9198a1; --border:#30363d;
-    --accent:#a371f7; --accent-soft:rgba(163,113,247,.14); --accent-2:#4493f8; --accent-2-soft:rgba(68,147,248,.14);
-    --ok:#3fb950; --ok-soft:rgba(63,185,80,.14); --warn:#d29922; --warn-soft:rgba(210,153,34,.14); --danger:#f85149; --danger-soft:rgba(248,81,73,.14);
-    --on-accent:#0d1117; --topbar-bg:rgba(13,17,23,.88);
-    --fac-bg:rgba(210,153,34,.08); --fac-border:rgba(210,153,34,.55); --fac-fg:#f2cc60; --fac-chip:rgba(210,153,34,.22);
-    --code-bg:#010409; --code-head:#0d1117;
-    --lane-gh:rgba(163,113,247,.09); --lane-gh-stroke:rgba(163,113,247,.42); --lane-az:rgba(68,147,248,.09); --lane-az-stroke:rgba(68,147,248,.42);
-    --shadow:0 0 0 1px rgba(240,246,252,.04);
-  }
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-block-start:84px}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.62;text-align:start;-webkit-font-smoothing:antialiased}
-a{color:var(--accent-2);text-underline-offset:2px}
-a:hover{text-decoration-thickness:2px}
-code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);padding:.1em .38em;border-radius:6px}
-kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--border);border-block-end-width:2px;border-radius:6px;padding:.05em .4em;background:var(--surface)}
-img,svg{max-inline-size:100%}
-.skip{position:absolute;inset-inline-start:-9999px;inset-block-start:8px;background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px;z-index:60}
-.skip:focus{inset-inline-start:12px}
-
-/* Top bar */
-.topbar{position:sticky;inset-block-start:0;z-index:40;background:var(--topbar-bg);backdrop-filter:saturate(180%) blur(10px);border-block-end:1px solid var(--border)}
-.nav{max-inline-size:var(--max);margin-inline:auto;padding-block:10px;padding-inline:20px;display:flex;align-items:center;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--fg);text-decoration:none;white-space:nowrap;font-size:15px}
-.brand-mark{inline-size:26px;block-size:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
-.brand small{color:var(--muted);font-weight:500}
-.nav ul{list-style:none;display:flex;gap:2px;margin:0;margin-inline-start:auto;padding:0;overflow-x:auto}
-.nav li a{display:block;padding-block:6px;padding-inline:10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;white-space:nowrap}
-.nav li a:hover,.nav li a[aria-current="page"]{background:var(--surface);color:var(--fg)}
-.fac-toggle{display:none;align-items:center;gap:8px;border:1px solid var(--fac-border);background:var(--fac-bg);color:var(--fac-fg);font:inherit;font-size:13px;font-weight:650;padding-block:6px;padding-inline:10px;border-radius:999px;cursor:pointer;white-space:nowrap}
-.js .fac-toggle{display:inline-flex}
-.fac-toggle .dot{inline-size:8px;block-size:8px;border-radius:50%;background:var(--fac-border)}
-.fac-off .fac-toggle{border-color:var(--border);background:var(--surface);color:var(--muted)}
-.fac-off .fac-toggle .dot{background:var(--border)}
-.fac-off .facilitator{display:none}
-
-/* Layout */
-.layout{max-inline-size:var(--max);margin-inline:auto;display:grid;grid-template-columns:270px minmax(0,1fr) 220px;gap:36px;padding-inline:20px}
-.sidebar{position:sticky;inset-block-start:58px;align-self:start;max-block-size:calc(100vh - 58px);overflow-y:auto;padding-block:24px 40px;font-size:14px}
-.sidebar h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 10px;margin-inline:0}
-.sidebar ol{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:2px}
-.sidebar a{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:7px;padding-inline:10px;border-radius:9px;color:var(--fg);text-decoration:none;line-height:1.35}
-.sidebar a:hover{background:var(--surface)}
-.sidebar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:650;box-shadow:inset 3px 0 0 var(--accent)}
-.sidebar .t{font-family:var(--mono);font-size:12px;color:var(--muted);padding-block-start:1px}
-.sidebar .brk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:5px;padding-inline:10px;color:var(--muted);font-style:italic}
-.toc{position:sticky;inset-block-start:58px;align-self:start;padding-block:28px;font-size:13px;max-block-size:calc(100vh - 58px);overflow-y:auto}
-.toc h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 8px;margin-inline:0}
-.toc ol{list-style:none;margin:0;padding:0;border-inline-start:1px solid var(--border)}
-.toc a{display:block;padding-block:4px;padding-inline:12px;color:var(--muted);text-decoration:none;line-height:1.35}
-.toc a:hover{color:var(--fg)}
-main{min-inline-size:0;padding-block:28px 64px}
-.content{max-inline-size:900px}
-@media (max-width:1360px){.layout{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
-@media (max-width:860px){
-  .layout{grid-template-columns:minmax(0,1fr);gap:0}
-  .sidebar{position:static;max-block-size:none;padding-block:12px 0;border-block-end:1px solid var(--border)}
-  .sidebar details:not([open]) ol{display:none}
-  .nav ul{display:none}
-}
-.sidebar details summary{display:none}
-@media (max-width:860px){.sidebar details summary{display:block;cursor:pointer;font-weight:650;padding-block:8px}}
-
-/* Typography */
-h1{font-size:clamp(30px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin-block:6px 14px;margin-inline:0;font-weight:750}
-h2{font-size:26px;line-height:1.25;letter-spacing:-.01em;margin-block:46px 12px;margin-inline:0;padding-block-start:6px;font-weight:700}
-h3{font-size:19px;line-height:1.3;margin-block:28px 8px;margin-inline:0;font-weight:680}
-h4{font-size:16px;margin-block:20px 6px;margin-inline:0}
-p{margin-block:0 14px}
-ul,ol{margin-block:0 14px;padding-inline-start:22px}
-li{margin-block:4px}
-li::marker{color:var(--muted)}
-hr{border:0;border-block-start:1px solid var(--border);margin-block:36px}
-.lede{font-size:18px;color:var(--muted);max-inline-size:70ch}
-.muted{color:var(--muted)}
-.small{font-size:14px}
-.crumbs{font-size:13.5px;color:var(--muted);margin-block-end:6px}
-.crumbs a{color:var(--muted)}
-
-/* Chips & badges */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-block:4px 18px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--fg);padding-block:3px;padding-inline:10px;border-radius:999px;white-space:nowrap}
-.chip.time{font-family:var(--mono);font-size:12.5px}
-.chip.talk{background:var(--accent-2-soft);border-color:transparent;color:var(--accent-2)}
-.chip.demo{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
-.chip.disc{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
-.chip.brk{background:var(--surface-2);border-color:transparent;color:var(--muted)}
-.st{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-block:1px;padding-inline:7px;border-radius:999px;vertical-align:2px;white-space:nowrap}
-.st.ga{background:var(--ok-soft);color:var(--ok)}
-.st.pv{background:var(--warn-soft);color:var(--warn)}
-.st.plan{background:var(--accent-2-soft);color:var(--accent-2)}
-.st.ret{background:var(--danger-soft);color:var(--danger)}
-.num{display:inline-grid;place-items:center;inline-size:34px;block-size:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:15px;margin-inline-end:4px}
-
-/* Cards & grids */
-.grid{display:grid;gap:14px;margin-block:8px 18px}
-.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:980px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
-.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding-block:16px;padding-inline:18px;box-shadow:var(--shadow)}
-.card h3,.card h4{margin-block-start:0}
-.card p:last-child,.card ul:last-child{margin-block-end:0}
-.card .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-block-end:4px}
-.card.soft{background:var(--surface);box-shadow:none}
-.card.accent{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
-.card.blue{border-color:var(--lane-az-stroke);background:var(--lane-az)}
-a.card{display:block;color:inherit;text-decoration:none}
-a.card:hover{border-color:var(--accent)}
-
-/* Glance */
-.glance{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;margin-block:6px 26px}
-@media (max-width:760px){.glance{grid-template-columns:minmax(0,1fr)}}
-.glance .card ul{padding-inline-start:18px}
-.keymsg{font-size:17px;font-weight:600;line-height:1.45;margin:0}
-
-/* Callouts */
-.callout{border:1px solid var(--border);border-inline-start:4px solid var(--accent-2);background:var(--surface);border-radius:10px;padding-block:12px;padding-inline:16px;margin-block:14px 18px}
-.callout p:last-child,.callout ul:last-child{margin-block-end:0}
-.callout .h{font-weight:700;display:block;margin-block-end:4px}
-.callout.tip{border-inline-start-color:var(--ok)}
-.callout.warn{border-inline-start-color:var(--warn);background:var(--warn-soft)}
-.callout.danger{border-inline-start-color:var(--danger);background:var(--danger-soft)}
-.callout.docs{border-inline-start-color:var(--accent)}
-
-/* Facilitator panels */
-.facilitator{border:1px solid var(--fac-border);background:var(--fac-bg);border-radius:var(--radius);margin-block:22px 26px;padding-block:0;padding-inline:0}
-.facilitator > summary{list-style:none;cursor:pointer;padding-block:12px;padding-inline:18px;font-weight:700;color:var(--fac-fg);display:flex;align-items:center;gap:10px}
-.facilitator > summary::-webkit-details-marker{display:none}
-.facilitator > summary::before{content:"FACILITATOR";font-size:10.5px;letter-spacing:.1em;background:var(--fac-chip);color:var(--fac-fg);padding-block:2px;padding-inline:8px;border-radius:999px}
-.facilitator > summary::after{content:"\25BE";margin-inline-start:auto;font-size:14px;transition:transform .15s}
-.facilitator:not([open]) > summary::after{transform:rotate(-90deg)}
-.facilitator .fbody{padding-block:0 16px;padding-inline:18px}
-.facilitator h4{margin-block-start:14px;color:var(--fac-fg)}
-.facilitator table{background:var(--bg)}
-
-/* Tables */
-.tablewrap{overflow-x:auto;margin-block:8px 20px;border:1px solid var(--border);border-radius:12px}
-table{border-collapse:collapse;inline-size:100%;font-size:14.5px}
-th,td{text-align:start;vertical-align:top;padding-block:9px;padding-inline:12px;border-block-end:1px solid var(--border)}
-thead th{background:var(--surface);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;white-space:nowrap}
-tbody tr:last-child td{border-block-end:0}
-td.t{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--muted)}
-tr.break td{background:var(--surface);color:var(--muted);font-style:italic}
-.agenda td:nth-child(2) a{font-weight:650}
-.agenda td p{margin:2px 0 0;color:var(--muted);font-size:14px}
-
-/* Steps (runbook) */
-.steps{list-style:none;counter-reset:s;padding:0;margin-block:8px 18px;display:grid;gap:10px}
-.steps > li{counter-increment:s;position:relative;padding-block:12px;padding-inline:56px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg);margin:0}
-.steps > li::before{content:counter(s);position:absolute;inset-inline-start:14px;inset-block-start:12px;inline-size:28px;block-size:28px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-weight:750;font-size:14px;color:var(--fg)}
-.steps > li > :last-child{margin-block-end:0}
-.steps .expect{display:block;margin-block-start:6px;font-size:14px;color:var(--ok)}
-.steps .expect::before{content:"\2713  Expect: ";font-weight:700}
-
-/* Acts (demo) */
-.act{border:1px solid var(--border);border-radius:var(--radius);margin-block:26px;overflow:hidden;box-shadow:var(--shadow)}
-.act-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;padding-inline:18px;background:var(--surface);border-block-end:1px solid var(--border)}
-.act-head h3{margin:0;font-size:19px}
-.act-head .chip{margin-inline-start:auto}
-.act-body{padding-block:14px 4px;padding-inline:18px}
-
-/* Prompt blocks */
-.prompt{border:1px solid var(--lane-gh-stroke);background:var(--lane-gh);border-radius:12px;padding-block:10px;padding-inline:14px;margin-block:10px 16px}
-.prompt .lbl{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-block-end:4px}
-.prompt p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.55;white-space:pre-wrap}
-
-/* Code */
-figure.code{margin-block:10px 18px;margin-inline:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--code-bg)}
-figure.code figcaption{display:flex;align-items:center;gap:10px;background:var(--code-head);color:var(--code-muted);font-family:var(--mono);font-size:12.5px;padding-block:7px;padding-inline:14px;border-block-end:1px solid rgba(240,246,252,.1)}
-figure.code figcaption .src{margin-inline-start:auto;font-family:var(--font);font-size:12px}
-figure.code figcaption .src a{color:var(--code-str)}
-figure.code pre{margin:0;padding-block:14px;padding-inline:16px;overflow-x:auto;color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.55;background:transparent}
-figure.code code{background:none;padding:0;font-size:inherit;color:inherit}
-.copy{border:1px solid rgba(240,246,252,.2);background:transparent;color:var(--code-fg);font:inherit;font-size:12px;border-radius:6px;padding-block:2px;padding-inline:8px;cursor:pointer}
-.copy:hover{background:rgba(240,246,252,.1)}
-.y-c{color:var(--code-muted)} .y-k{color:var(--code-key)} .y-s{color:var(--code-str)}
-
-/* Diagrams */
-.diagram{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding-block:18px;padding-inline:18px;margin-block:12px 20px;margin-inline:0;overflow-x:auto}
-.diagram figcaption{font-size:13px;color:var(--muted);margin-block-start:10px}
-.flow{display:flex;align-items:stretch;gap:0;min-inline-size:720px}
-.flow .node{flex:1 1 0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;line-height:1.4}
-.flow .node b{display:block;font-size:14px;margin-block-end:4px}
-.flow .node .tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-block-end:2px}
-.flow .node ul{margin:0;padding-inline-start:16px;font-size:13px}
-.flow .node.gh{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
-.flow .node.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
-.flow .node.hl{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-.flow .arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--muted);font-size:18px}
-.pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;min-inline-size:760px}
-.pillar{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:12px;font-size:13.5px}
-.pillar h4{margin-block:0 6px;font-size:14.5px}
-.pillar ul{margin:0;padding-inline-start:16px}
-.pillar.ai{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
-.foundation{grid-column:1 / -1;background:var(--surface-2);border:1px dashed var(--border);border-radius:12px;padding-block:10px;padding-inline:14px;font-size:13.5px;text-align:center}
-.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;min-inline-size:760px}
-.rung{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding-block:10px;padding-inline:12px;font-size:13.5px}
-.rung b{display:block}
-.rung .lvl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.rung.r1{min-block-size:120px}.rung.r2{min-block-size:150px}.rung.r3{min-block-size:180px}.rung.r4{min-block-size:210px;border-color:var(--lane-gh-stroke);background:var(--lane-gh)}.rung.r5{min-block-size:240px;border-color:var(--accent);background:var(--accent-soft)}
-.arch{display:grid;grid-template-columns:minmax(0,1.3fr) 46px minmax(0,1fr);gap:0;align-items:stretch;min-inline-size:680px}
-.lane{border-radius:14px;padding-block:12px;padding-inline:12px;border:1.5px dashed var(--lane-gh-stroke);background:var(--lane-gh)}
-.lane.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
-.lane > .lt{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:750;color:var(--muted);margin-block-end:8px;display:block}
-.lane .boxes{display:grid;gap:8px}
-.lane .box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding-block:8px;padding-inline:10px;font-size:13px;line-height:1.35;display:flex;gap:10px;align-items:center}
-.lane .box b{display:block;font-size:13.5px}
-.lane .box .ic{flex:0 0 36px;inline-size:36px;block-size:36px;display:grid;place-items:center}
-.lane .box .ic svg{inline-size:36px;block-size:36px}
-.lane .box .gnum{flex:0 0 26px;inline-size:26px;block-size:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:var(--accent-soft);color:var(--accent)}
-.bridge{display:grid;place-items:center;text-align:center;font-size:11.5px;color:var(--muted);padding-inline:4px}
-.bridge span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.06em;font-weight:700}
-
-/* Hero (home) */
-.hero{background:radial-gradient(1100px 520px at 88% -12%,var(--glow-1),transparent 62%),radial-gradient(900px 520px at -5% 112%,var(--glow-2),transparent 60%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 55%,var(--hero-c));color:var(--hero-fg);border-radius:20px;padding-block:44px 38px;padding-inline:38px;margin-block:0 26px}
-.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--hero-muted);background:var(--hero-chip);border:1px solid var(--hero-line);padding-block:5px;padding-inline:12px;border-radius:999px;margin:0 0 16px}
-.hero h1{color:var(--hero-fg);font-size:clamp(32px,4.2vw,50px);line-height:1.06;margin-block:0 16px}
-.grad{background:linear-gradient(90deg,var(--hero-grad-1),var(--hero-grad-2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero .lede{color:var(--hero-muted);font-size:18px}
-.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-block:22px 24px;margin-inline:0}
-@media (max-width:760px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-inline:22px}}
-.facts div{background:var(--hero-chip);border:1px solid var(--hero-line);border-radius:12px;padding-block:9px;padding-inline:13px}
-.facts dt{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--hero-muted);margin:0}
-.facts dd{margin:2px 0 0;font-weight:650;font-size:15px;line-height:1.35}
-.cta-row{display:flex;flex-wrap:wrap;gap:10px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding-block:10px;padding-inline:16px;border-radius:10px;font-weight:650;text-decoration:none;font-size:15px}
-.btn.primary{background:var(--hero-fg);color:var(--hero-a)}
-.btn.ghost{color:var(--hero-fg);border:1px solid var(--hero-line)}
-
-/* Checklists */
-.check{list-style:none;padding:0;margin-block:6px 18px;display:grid;gap:6px}
-.check li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0;padding-block:6px;padding-inline:10px;border:1px solid var(--border);border-radius:9px;background:var(--bg)}
-.check input{margin-block-start:4px;accent-color:var(--accent)}
-.check li.done{background:var(--ok-soft);border-color:transparent}
-
-/* Sources */
-.sources{border-block-start:1px solid var(--border);margin-block-start:40px;padding-block-start:8px}
-.sources ul{columns:2;column-gap:28px;font-size:14px;padding-inline-start:18px}
-@media (max-width:760px){.sources ul{columns:1}}
-.sources li{break-inside:avoid}
-.ext::after{content:" \2197";font-size:.85em;color:var(--muted)}
-
-/* Pager */
-.pager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block-start:44px}
-.pager a{display:block;border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:16px;text-decoration:none;color:var(--fg)}
-.pager a:hover{border-color:var(--accent)}
-.pager .d{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
-.pager .next{text-align:end;grid-column:2}
-
-/* Worksheet */
-.canvas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block:10px 20px}
-@media (max-width:760px){.canvas{grid-template-columns:minmax(0,1fr)}}
-.canvas .cell{border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:14px;min-block-size:120px;background:var(--bg)}
-.canvas .cell b{display:block;margin-block-end:4px}
-.canvas .cell p{font-size:14px;color:var(--muted);margin:0}
-.matrix{display:grid;grid-template-columns:28px repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(110px,auto)) 28px;gap:8px;margin-block:10px 20px;max-inline-size:640px}
-.matrix .q{border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;background:var(--bg)}
-.matrix .q b{display:block}
-.matrix .q.best{border-color:var(--ok);background:var(--ok-soft)}
-.matrix .ax{display:grid;place-items:center;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.matrix .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / 3;grid-column:1}
-.matrix .ax.x{grid-column:2 / 4;grid-row:3}
-
-footer.site{border-block-start:1px solid var(--border);margin-block-start:20px}
-footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:22px 36px;padding-inline:20px;font-size:13.5px;color:var(--muted);display:grid;gap:6px}
-
-@media print{
-  .topbar,.sidebar,.toc,.pager,.fac-toggle,.copy{display:none !important}
-  .layout{display:block}
-  .facilitator{break-inside:avoid}
-  .hero{background:none;color:var(--fg);border:1px solid var(--border)}
-  .hero h1,.hero .lede,.facts dd,.facts dt{color:var(--fg)}
-  a{color:var(--fg)}
-}
-
-</style>
+<link href="assets/site.css?v=2" rel="stylesheet"/>
 <script>
-(function(){
-  var d=document.documentElement; d.classList.add('js');
-  var KEY='contoso-ws-fac';
-  try{ if(localStorage.getItem(KEY)==='off'){ d.classList.add('fac-off'); } }catch(e){}
-  document.addEventListener('DOMContentLoaded',function(){
-    var b=document.querySelector('.fac-toggle');
-    function label(){ var off=d.classList.contains('fac-off'); b.setAttribute('aria-pressed', off?'false':'true'); b.querySelector('.lbl').textContent= off?'Facilitator notes: off':'Facilitator notes: on'; }
-    if(b){ label(); b.addEventListener('click',function(){ d.classList.toggle('fac-off'); try{localStorage.setItem(KEY, d.classList.contains('fac-off')?'off':'on');}catch(e){} label(); }); }
-    document.querySelectorAll('figure.code').forEach(function(f){
-      var cap=f.querySelector('figcaption'); var pre=f.querySelector('pre'); if(!cap||!pre){return;}
-      var btn=document.createElement('button'); btn.type='button'; btn.className='copy'; btn.textContent='Copy';
-      btn.addEventListener('click',function(){
-        var t=pre.innerText;
-        var p=(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(t):Promise.reject(new Error('no clipboard'));
-        p.then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},1500);},function(){btn.textContent='Copy failed';});
-      });
-      cap.appendChild(btn);
-    });
-    document.querySelectorAll('.check input[type=checkbox][data-k]').forEach(function(cb){
-      var k='contoso-ws-ck-'+cb.getAttribute('data-k');
-      try{ if(localStorage.getItem(k)==='1'){cb.checked=true;} }catch(e){}
-      function upd(){ var li=cb.closest('li'); if(li){li.classList.toggle('done',cb.checked);} }
-      upd();
-      cb.addEventListener('change',function(){ try{localStorage.setItem(k,cb.checked?'1':'0');}catch(e){} upd(); });
-    });
-  });
-})();
+(function(){var d=document.documentElement;d.classList.add('js');try{if(localStorage.getItem('contoso-ws-fac')==='off'){d.classList.add('fac-off');}}catch(e){}})();
 </script>
+<script defer="" src="assets/site.js?v=2"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -343,6 +19,7 @@ footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:2
     <ul>
       <li><a href="index.html">Agenda</a></li>
       <li><a aria-current="page" href="05-live-demo.html">Live demo</a></li>
+      <li><a href="videos.html">Demo videos</a></li>
       <li><a href="facilitator.html">Facilitator guide</a></li>
       <li><a href="resources.html">Resources</a></li>
       
@@ -374,6 +51,7 @@ footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:2
       <ol>
         <li><a href="facilitator.html"><span class="t">↳</span><span>Facilitator guide &amp; preparation</span></a></li>
         <li><a href="resources.html"><span class="t">↳</span><span>Resources &amp; GitHub Docs</span></a></li>
+        <li><a href="videos.html"><span class="t">↳</span><span>Demo videos</span></a></li>
       </ol>
     </details>
   </aside>
@@ -425,29 +103,34 @@ footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:2
     <div class="lane">
       <span class="lt">GitHub · contoso/contoso-order-desk</span>
       <div class="boxes">
-        <div class="box"><span class="gnum">1</span><div><b>Issues &amp; Projects</b>Requirement → feature issue → sub-issues → board</div></div>
-        <div class="box"><span class="gnum">2</span><div><b>GitHub Copilot</b>Agent mode in VS Code builds the API; the cloud agent builds the page on a <code>copilot/</code> branch</div></div>
-        <div class="box"><span class="gnum">3</span><div><b>Pull requests</b>Copilot code review, then human review (CODEOWNERS)</div></div>
-        <div class="box"><span class="gnum">4</span><div><b>Security gates</b>Push protection · CodeQL + Copilot Autofix · dependency review</div></div>
-        <div class="box"><span class="gnum">5</span><div><b>Ruleset on main</b>Required approvals, status checks and code scanning results</div></div>
-        <div class="box"><span class="gnum">6</span><div><b>GitHub Actions</b>CI/CD workflow: build and test, then deploy job</div></div>
-        <div class="box"><span class="gnum">7</span><div><b>Environment "production"</b>Required reviewer approves; the job requests a short-lived OIDC token</div></div>
+        <div class="box" data-seek="live-demo@11.6"><span class="gnum">1</span><div><b>Issues &amp; Projects</b>Requirement → feature issue → sub-issues → board</div></div>
+        <div class="box" data-seek="live-demo@41.5"><span class="gnum">2</span><div><b>GitHub Copilot</b>Agent mode in VS Code builds the API; the cloud agent builds the page on a <code>copilot/</code> branch</div></div>
+        <div class="box" data-seek="live-demo@77.9"><span class="gnum">3</span><div><b>Pull requests</b>Copilot code review, then human review (CODEOWNERS)</div></div>
+        <div class="box" data-seek="live-demo@101.8"><span class="gnum">4</span><div><b>Security gates</b>Push protection · CodeQL + Copilot Autofix · dependency review</div></div>
+        <div class="box" data-seek="live-demo@137.7"><span class="gnum">5</span><div><b>Ruleset on main</b>Required approvals, status checks and code scanning results</div></div>
+        <div class="box" data-seek="live-demo@158.1"><span class="gnum">6</span><div><b>GitHub Actions</b>CI/CD workflow: build and test, then deploy job</div></div>
+        <div class="box" data-seek="live-demo@174"><span class="gnum">7</span><div><b>Environment "production"</b>Required reviewer approves; the job requests a short-lived OIDC token</div></div>
       </div>
     </div>
     <div class="bridge"><span>OIDC token → federated credential · no stored cloud secret</span></div>
     <div class="lane az">
       <span class="lt">Microsoft Azure · rg-contoso-order-desk</span>
       <div class="boxes">
-        <div class="box"><span class="ic"><svg aria-label="Microsoft Entra ID app registrations icon" id="i1-a76a0103-ce03-4d58-859d-4c27e02925d2" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientTransform="matrix(0.5, 0, 0, -0.5, 3267.42, 559.99)" gradientUnits="userSpaceOnUse" id="i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19" x1="-6518.78" x2="-6518.78" y1="1118.86" y2="1090.06"><stop offset="0" stop-color="#5ea0ef"></stop><stop offset="0.18" stop-color="#589eed"></stop><stop offset="0.41" stop-color="#4897e9"></stop><stop offset="0.66" stop-color="#2e8ce1"></stop><stop offset="0.94" stop-color="#0a7cd7"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><path d="M5.67,10.61H10v4.32H5.67Zm-5-5.76H5V.53H1.23a.6.6,0,0,0-.6.6Zm.6,10.08H5V10.61H.63v3.72A.6.6,0,0,0,1.23,14.93Zm-.6-5H5V5.57H.63Zm10.08,5h3.72a.6.6,0,0,0,.6-.6V10.61H10.71Zm-5-5H10V5.57H5.67Zm5,0H15V5.57H10.71Zm0-9.36V4.85H15V1.13a.6.6,0,0,0-.6-.6Zm-5,4.32H10V.53H5.67Z" fill="url(#i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19)"></path><polygon fill="#32bedd" points="17.37 10.7 17.37 15.21 13.5 17.47 13.5 12.96 17.37 10.7"></polygon><polygon fill="#9cebff" points="17.37 10.7 13.5 12.97 9.63 10.7 13.5 8.44 17.37 10.7"></polygon><polygon fill="#50e6ff" points="13.5 12.97 13.5 17.47 9.63 15.21 9.63 10.7 13.5 12.97"></polygon><polygon fill="#9cebff" points="9.63 15.21 13.5 12.96 13.5 17.47 9.63 15.21"></polygon><polygon fill="#50e6ff" points="17.37 15.21 13.5 12.96 13.5 17.47 17.37 15.21"></polygon></svg></span><div><b>Microsoft Entra ID</b>App registration with a federated credential that trusts only <code>environment:production</code></div></div>
-        <div class="box"><span class="ic"><svg aria-label="Azure App Service icon" id="i2-b70acf0a-34b4-4bdf-9024-7496043ff915" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="13428.81" cy="3518.86" gradientTransform="translate(-2005.33 -518.83) scale(0.15)" gradientUnits="userSpaceOnUse" id="i2-e2cf8746-c9a8-4eee-86c2-4951983c6032" r="56.67"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bdd213dd-d313-473c-8ff4-0133fd3a9033" x1="4.4" x2="4.37" y1="11.48" y2="7.53"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-afcc63c5-3649-4476-a742-bcb53a569f3c" x1="10.13" x2="10.13" y1="15.45" y2="11.9"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d" x1="14.18" x2="14.18" y1="11.15" y2="7.38"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient></defs><title>Icon-web-41</title><path d="M14.21,15.72A8.5,8.5,0,0,1,3.79,2.28l.09-.06a8.5,8.5,0,0,1,10.33,13.5" fill="url(#i2-e2cf8746-c9a8-4eee-86c2-4951983c6032)" id="i2-ee75dd06-1aca-4f76-9d11-d05a284020ad"></path><path d="M6.69,7.23A13,13,0,0,1,15.6,3.65a8.47,8.47,0,0,0-1.49-1.44,14.34,14.34,0,0,0-4.69,1.1A12.54,12.54,0,0,0,5.34,6.13,2.76,2.76,0,0,1,6.69,7.23Z" fill="#fff" opacity="0.6"></path><path d="M2.48,10.65a17.86,17.86,0,0,0-.83,2.62,7.82,7.82,0,0,0,.62.92c.18.23.35.44.55.65A17.94,17.94,0,0,1,3.9,11.37,2.76,2.76,0,0,1,2.48,10.65Z" fill="#fff" opacity="0.6"></path><path d="M3.46,6.11a12,12,0,0,1-.69-2.94,8.15,8.15,0,0,0-1.1,1.45A12.69,12.69,0,0,0,2.24,7,2.69,2.69,0,0,1,3.46,6.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><path d="M8.36,13.67A1.77,1.77,0,0,1,8.9,12.4a11.88,11.88,0,0,1-2.53-1.86,2.74,2.74,0,0,1-1.49.83,13.1,13.1,0,0,0,1.45,1.28A12.12,12.12,0,0,0,8.38,13.9,1.79,1.79,0,0,1,8.36,13.67Z" fill="#f2f2f2" opacity="0.55"></path><path d="M14.66,13.88a12,12,0,0,1-2.76-.32.41.41,0,0,1,0,.11,1.75,1.75,0,0,1-.51,1.24,13.69,13.69,0,0,0,3.42.24A8.21,8.21,0,0,0,16,13.81,11.5,11.5,0,0,1,14.66,13.88Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle><path d="M12.32,8.93a1.83,1.83,0,0,1,.61-1A25.5,25.5,0,0,1,8.47,3.79a16.91,16.91,0,0,1-2-2.92,7.64,7.64,0,0,0-1.09.42A18.14,18.14,0,0,0,7.53,4.47,26.44,26.44,0,0,0,12.32,8.93Z" fill="#f2f2f2" opacity="0.7"></path><circle cx="14.18" cy="9.27" fill="url(#i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d)" r="1.89"></circle><path d="M17.35,10.54,17,10.37l0,0-.3-.16-.06,0L16.38,10l-.07,0L16,9.8a1.76,1.76,0,0,1-.64.92c.12.08.25.15.38.22l.08.05.35.19,0,0,.86.45h0a8.63,8.63,0,0,0,.29-1.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle></svg></span><div><b>Azure App Service</b>Web app, Linux, Node.js LTS. The identity has <em>Website Contributor</em> on this app only</div></div>
-        <div class="box"><span class="ic"><svg aria-label="App Service plan icon" id="i3-fca2105f-c039-4f34-bd65-8ab95d4ecdb9" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientUnits="userSpaceOnUse" id="i3-a773af38-43e4-4fd2-9485-f8aac63ca91b" x1="5.57" x2="5.57" y1="17.5" y2="0.5"><stop offset="0.05" stop-color="#949494"></stop><stop offset="0.36" stop-color="#979797"></stop><stop offset="0.54" stop-color="#9f9f9f"></stop><stop offset="0.69" stop-color="#adadad"></stop><stop offset="0.73" stop-color="#b3b3b3"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i3-b4779ae6-74a5-486d-8aad-cd011859785a" x1="10.56" x2="10.56" y1="6.02" y2="19.71"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><title>Icon-web-46</title><path d="M10.56,16.93a.56.56,0,0,1-.57.57H1.14a.56.56,0,0,1-.56-.57V1.07A.56.56,0,0,1,1.14.5H10a.56.56,0,0,1,.57.57Z" fill="url(#i3-a773af38-43e4-4fd2-9485-f8aac63ca91b)"></path><path d="M2,6.46A1.08,1.08,0,0,1,3.13,5.38h5A1.08,1.08,0,0,1,9.18,6.46h0A1.08,1.08,0,0,1,8.1,7.55h-5A1.09,1.09,0,0,1,2,6.46Z" fill="#003067"></path><path d="M2,3.24A1.09,1.09,0,0,1,3.13,2.15h5A1.08,1.08,0,0,1,9.18,3.24h0A1.08,1.08,0,0,1,8.1,4.32h-5A1.08,1.08,0,0,1,2,3.24Z" fill="#003067"></path><circle cx="3.17" cy="3.24" fill="#50e6ff" r="0.73"></circle><circle cx="3.17" cy="6.46" fill="#50e6ff" r="0.73"></circle><path d="M17.42,14.38a3.12,3.12,0,0,0-2.67-3,3.93,3.93,0,0,0-4-3.8,4,4,0,0,0-3.83,2.66A3.7,3.7,0,0,0,3.7,13.83,3.77,3.77,0,0,0,7.56,17.5l.34,0h6.26l.17,0A3.15,3.15,0,0,0,17.42,14.38Z" fill="url(#i3-b4779ae6-74a5-486d-8aad-cd011859785a)"></path><rect fill="none" height="18" width="18"></rect></svg></span><div><b>App Service plan</b>Linux plan hosting the web app</div></div>
-        <div class="box"><span class="ic"><svg aria-label="Application Insights icon" id="i4-b6f6d99e-f330-481d-836f-ea58cc42217f" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="9" cy="7.35" gradientUnits="userSpaceOnUse" id="i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5" r="6.42"><stop offset="0" stop-color="#b77af4"></stop><stop offset="0.21" stop-color="#b378f2"></stop><stop offset="0.43" stop-color="#a672ed"></stop><stop offset="0.65" stop-color="#9267e4"></stop><stop offset="0.88" stop-color="#7559d8"></stop><stop offset="1" stop-color="#624fd0"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49" x1="9.02" x2="9.08" y1="3.91" y2="11.49"><stop offset="0" stop-color="#f2f2f2"></stop><stop offset="0.23" stop-color="#f1f1f2" stop-opacity="0.99"></stop><stop offset="0.37" stop-color="#ededf1" stop-opacity="0.95"></stop><stop offset="0.48" stop-color="#e7e5f0" stop-opacity="0.89"></stop><stop offset="0.58" stop-color="#dedbee" stop-opacity="0.81"></stop><stop offset="0.67" stop-color="#d3ceeb" stop-opacity="0.7"></stop><stop offset="0.76" stop-color="#c4bee8" stop-opacity="0.57"></stop><stop offset="0.84" stop-color="#b4abe5" stop-opacity="0.41"></stop><stop offset="0.92" stop-color="#a095e1" stop-opacity="0.22"></stop><stop offset="0.99" stop-color="#8b7ddc" stop-opacity="0.02"></stop><stop offset="1" stop-color="#897bdc" stop-opacity="0"></stop></linearGradient></defs><title>Icon-manage-310</title><path d="M10.23,17.39l.81-.87V14.2H7v2.32l.81.87A.32.32,0,0,0,8,17.5h2A.32.32,0,0,0,10.23,17.39Z" fill="#cecece"></path><path d="M9,.5A5.89,5.89,0,0,0,3.09,7.07c.27,2.47,2.62,3.62,3.29,6.75a.49.49,0,0,0,.47.38h4.3a.49.49,0,0,0,.47-.38c.67-3.13,3-4.28,3.29-6.75A5.89,5.89,0,0,0,9,.5ZM7,14.2" fill="url(#i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5)"></path><path d="M11.46,3.79a1.4,1.4,0,0,0-1.35,1.44V6H8V5.23A1.41,1.41,0,0,0,6.59,3.79,1.4,1.4,0,0,0,5.24,5.23,1.41,1.41,0,0,0,6.59,6.68h.64v6a.36.36,0,0,0,.72,0v-6h2.16v6a.36.36,0,1,0,.72,0v-6h.63a1.4,1.4,0,0,0,1.35-1.45A1.4,1.4,0,0,0,11.46,3.79ZM7.23,6H6.55a.74.74,0,0,1-.68-.77.74.74,0,0,1,.68-.77.74.74,0,0,1,.68.77Zm4.28,0h-.68V5.19a.68.68,0,1,1,1.35,0A.73.73,0,0,1,11.51,6Z" fill="url(#i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49)"></path><polygon fill="#999" points="6.96 15.8 11.04 15.01 11.04 14.56 6.96 15.36 6.96 15.8"></polygon><polygon fill="#999" points="11.04 16.11 11.04 15.67 6.96 16.48 6.96 16.52 7.27 16.86 11.04 16.11"></polygon></svg></span><div><b>Application Insights</b>Optional: telemetry for the live app</div></div>
-        <div class="box"><span class="ic"><svg aria-label="Resource groups icon" id="i5-a685cc8c-32ba-4d54-91da-3a125cb58ded" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><title>Icon-general-7</title><g><g><path d="M.5,15.08a.16.16,0,0,0,.08.14l1.16.65L3.7,17a.17.17,0,0,0,.23-.06l.66-1.12a.16.16,0,0,0-.06-.21l-2.3-1.3a.17.17,0,0,1-.08-.14V3.85a.16.16,0,0,1,.08-.14l2.3-1.3a.16.16,0,0,0,.06-.21L3.93,1.08A.17.17,0,0,0,3.7,1L1.78,2.11l-1.2.67a.16.16,0,0,0-.08.14V15.08Z" fill="#949494"></path><path d="M2.14,3.77l.06-.06,2.3-1.3a.14.14,0,0,0,.06-.21L3.9,1.08A.15.15,0,0,0,3.68,1L1.75,2.11.56,2.78s-.05,0-.06.06l.9.51Z" fill="#a3a3a3"></path><path d="M4.5,15.59l-2.3-1.3a.22.22,0,0,1-.07-.09l-1.62,1,.05,0,1.15.65,2,1.11a.15.15,0,0,0,.22-.06l.66-1.12A.14.14,0,0,0,4.5,15.59Z" fill="#a3a3a3"></path></g><path d="M17.5,15.08a.16.16,0,0,1-.08.14l-1.16.65L14.3,17a.17.17,0,0,1-.23-.06l-.66-1.12a.16.16,0,0,1,.06-.21l2.3-1.3a.17.17,0,0,0,.08-.14V3.85a.16.16,0,0,0-.08-.14l-2.3-1.3a.16.16,0,0,1-.06-.21l.66-1.12A.17.17,0,0,1,14.3,1l1.92,1.09,1.2.67a.16.16,0,0,1,.08.14V15.08Z" fill="#949494"></path><path d="M15.86,3.77l-.06-.06-2.3-1.3a.14.14,0,0,1-.06-.21l.66-1.12A.15.15,0,0,1,14.32,1l1.93,1.09,1.19.67s0,0,.06.06l-.9.51Z" fill="#a3a3a3"></path><path d="M13.5,15.59l2.3-1.3a.22.22,0,0,0,.07-.09l1.62,1,0,0-1.15.65-2,1.11a.15.15,0,0,1-.22-.06l-.66-1.12A.14.14,0,0,1,13.5,15.59Z" fill="#a3a3a3"></path><polygon fill="#32bedd" points="14.31 5.93 14.31 12.07 8.99 15.16 8.99 9.01 14.31 5.93"></polygon><polygon fill="#9cebff" points="14.31 5.93 9 9.02 3.68 5.93 9 2.84 14.31 5.93"></polygon><polygon fill="#50e6ff" points="8.99 9.02 8.99 15.16 3.68 12.07 3.68 5.93 8.99 9.02"></polygon><polygon fill="#9cebff" points="3.68 12.07 8.99 9.01 8.99 15.16 3.68 12.07"></polygon><polygon fill="#50e6ff" points="14.31 12.07 8.99 9.01 8.99 15.16 14.31 12.07"></polygon></g></svg></span><div><b>Resource group</b>Holds every demo resource; delete it after the workshop</div></div>
+        <div class="box" data-seek="live-demo@195.4"><span class="ic"><svg aria-label="Microsoft Entra ID app registrations icon" id="i1-a76a0103-ce03-4d58-859d-4c27e02925d2" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientTransform="matrix(0.5, 0, 0, -0.5, 3267.42, 559.99)" gradientUnits="userSpaceOnUse" id="i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19" x1="-6518.78" x2="-6518.78" y1="1118.86" y2="1090.06"><stop offset="0" stop-color="#5ea0ef"></stop><stop offset="0.18" stop-color="#589eed"></stop><stop offset="0.41" stop-color="#4897e9"></stop><stop offset="0.66" stop-color="#2e8ce1"></stop><stop offset="0.94" stop-color="#0a7cd7"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><path d="M5.67,10.61H10v4.32H5.67Zm-5-5.76H5V.53H1.23a.6.6,0,0,0-.6.6Zm.6,10.08H5V10.61H.63v3.72A.6.6,0,0,0,1.23,14.93Zm-.6-5H5V5.57H.63Zm10.08,5h3.72a.6.6,0,0,0,.6-.6V10.61H10.71Zm-5-5H10V5.57H5.67Zm5,0H15V5.57H10.71Zm0-9.36V4.85H15V1.13a.6.6,0,0,0-.6-.6Zm-5,4.32H10V.53H5.67Z" fill="url(#i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19)"></path><polygon fill="#32bedd" points="17.37 10.7 17.37 15.21 13.5 17.47 13.5 12.96 17.37 10.7"></polygon><polygon fill="#9cebff" points="17.37 10.7 13.5 12.97 9.63 10.7 13.5 8.44 17.37 10.7"></polygon><polygon fill="#50e6ff" points="13.5 12.97 13.5 17.47 9.63 15.21 9.63 10.7 13.5 12.97"></polygon><polygon fill="#9cebff" points="9.63 15.21 13.5 12.96 13.5 17.47 9.63 15.21"></polygon><polygon fill="#50e6ff" points="17.37 15.21 13.5 12.96 13.5 17.47 17.37 15.21"></polygon></svg></span><div><b>Microsoft Entra ID</b>App registration with a federated credential that trusts only <code>environment:production</code></div></div>
+        <div class="box" data-seek="live-demo@195.4"><span class="ic"><svg aria-label="Azure App Service icon" id="i2-b70acf0a-34b4-4bdf-9024-7496043ff915" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="13428.81" cy="3518.86" gradientTransform="translate(-2005.33 -518.83) scale(0.15)" gradientUnits="userSpaceOnUse" id="i2-e2cf8746-c9a8-4eee-86c2-4951983c6032" r="56.67"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bdd213dd-d313-473c-8ff4-0133fd3a9033" x1="4.4" x2="4.37" y1="11.48" y2="7.53"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-afcc63c5-3649-4476-a742-bcb53a569f3c" x1="10.13" x2="10.13" y1="15.45" y2="11.9"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d" x1="14.18" x2="14.18" y1="11.15" y2="7.38"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient></defs><title>Icon-web-41</title><path d="M14.21,15.72A8.5,8.5,0,0,1,3.79,2.28l.09-.06a8.5,8.5,0,0,1,10.33,13.5" fill="url(#i2-e2cf8746-c9a8-4eee-86c2-4951983c6032)" id="i2-ee75dd06-1aca-4f76-9d11-d05a284020ad"></path><path d="M6.69,7.23A13,13,0,0,1,15.6,3.65a8.47,8.47,0,0,0-1.49-1.44,14.34,14.34,0,0,0-4.69,1.1A12.54,12.54,0,0,0,5.34,6.13,2.76,2.76,0,0,1,6.69,7.23Z" fill="#fff" opacity="0.6"></path><path d="M2.48,10.65a17.86,17.86,0,0,0-.83,2.62,7.82,7.82,0,0,0,.62.92c.18.23.35.44.55.65A17.94,17.94,0,0,1,3.9,11.37,2.76,2.76,0,0,1,2.48,10.65Z" fill="#fff" opacity="0.6"></path><path d="M3.46,6.11a12,12,0,0,1-.69-2.94,8.15,8.15,0,0,0-1.1,1.45A12.69,12.69,0,0,0,2.24,7,2.69,2.69,0,0,1,3.46,6.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><path d="M8.36,13.67A1.77,1.77,0,0,1,8.9,12.4a11.88,11.88,0,0,1-2.53-1.86,2.74,2.74,0,0,1-1.49.83,13.1,13.1,0,0,0,1.45,1.28A12.12,12.12,0,0,0,8.38,13.9,1.79,1.79,0,0,1,8.36,13.67Z" fill="#f2f2f2" opacity="0.55"></path><path d="M14.66,13.88a12,12,0,0,1-2.76-.32.41.41,0,0,1,0,.11,1.75,1.75,0,0,1-.51,1.24,13.69,13.69,0,0,0,3.42.24A8.21,8.21,0,0,0,16,13.81,11.5,11.5,0,0,1,14.66,13.88Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle><path d="M12.32,8.93a1.83,1.83,0,0,1,.61-1A25.5,25.5,0,0,1,8.47,3.79a16.91,16.91,0,0,1-2-2.92,7.64,7.64,0,0,0-1.09.42A18.14,18.14,0,0,0,7.53,4.47,26.44,26.44,0,0,0,12.32,8.93Z" fill="#f2f2f2" opacity="0.7"></path><circle cx="14.18" cy="9.27" fill="url(#i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d)" r="1.89"></circle><path d="M17.35,10.54,17,10.37l0,0-.3-.16-.06,0L16.38,10l-.07,0L16,9.8a1.76,1.76,0,0,1-.64.92c.12.08.25.15.38.22l.08.05.35.19,0,0,.86.45h0a8.63,8.63,0,0,0,.29-1.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle></svg></span><div><b>Azure App Service</b>Web app, Linux, Node.js LTS. The identity has <em>Website Contributor</em> on this app only</div></div>
+        <div class="box" data-seek="live-demo@195.4"><span class="ic"><svg aria-label="App Service plan icon" id="i3-fca2105f-c039-4f34-bd65-8ab95d4ecdb9" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientUnits="userSpaceOnUse" id="i3-a773af38-43e4-4fd2-9485-f8aac63ca91b" x1="5.57" x2="5.57" y1="17.5" y2="0.5"><stop offset="0.05" stop-color="#949494"></stop><stop offset="0.36" stop-color="#979797"></stop><stop offset="0.54" stop-color="#9f9f9f"></stop><stop offset="0.69" stop-color="#adadad"></stop><stop offset="0.73" stop-color="#b3b3b3"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i3-b4779ae6-74a5-486d-8aad-cd011859785a" x1="10.56" x2="10.56" y1="6.02" y2="19.71"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><title>Icon-web-46</title><path d="M10.56,16.93a.56.56,0,0,1-.57.57H1.14a.56.56,0,0,1-.56-.57V1.07A.56.56,0,0,1,1.14.5H10a.56.56,0,0,1,.57.57Z" fill="url(#i3-a773af38-43e4-4fd2-9485-f8aac63ca91b)"></path><path d="M2,6.46A1.08,1.08,0,0,1,3.13,5.38h5A1.08,1.08,0,0,1,9.18,6.46h0A1.08,1.08,0,0,1,8.1,7.55h-5A1.09,1.09,0,0,1,2,6.46Z" fill="#003067"></path><path d="M2,3.24A1.09,1.09,0,0,1,3.13,2.15h5A1.08,1.08,0,0,1,9.18,3.24h0A1.08,1.08,0,0,1,8.1,4.32h-5A1.08,1.08,0,0,1,2,3.24Z" fill="#003067"></path><circle cx="3.17" cy="3.24" fill="#50e6ff" r="0.73"></circle><circle cx="3.17" cy="6.46" fill="#50e6ff" r="0.73"></circle><path d="M17.42,14.38a3.12,3.12,0,0,0-2.67-3,3.93,3.93,0,0,0-4-3.8,4,4,0,0,0-3.83,2.66A3.7,3.7,0,0,0,3.7,13.83,3.77,3.77,0,0,0,7.56,17.5l.34,0h6.26l.17,0A3.15,3.15,0,0,0,17.42,14.38Z" fill="url(#i3-b4779ae6-74a5-486d-8aad-cd011859785a)"></path><rect fill="none" height="18" width="18"></rect></svg></span><div><b>App Service plan</b>Linux plan hosting the web app</div></div>
+        <div class="box" data-seek="live-demo@195.4"><span class="ic"><svg aria-label="Application Insights icon" id="i4-b6f6d99e-f330-481d-836f-ea58cc42217f" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="9" cy="7.35" gradientUnits="userSpaceOnUse" id="i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5" r="6.42"><stop offset="0" stop-color="#b77af4"></stop><stop offset="0.21" stop-color="#b378f2"></stop><stop offset="0.43" stop-color="#a672ed"></stop><stop offset="0.65" stop-color="#9267e4"></stop><stop offset="0.88" stop-color="#7559d8"></stop><stop offset="1" stop-color="#624fd0"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49" x1="9.02" x2="9.08" y1="3.91" y2="11.49"><stop offset="0" stop-color="#f2f2f2"></stop><stop offset="0.23" stop-color="#f1f1f2" stop-opacity="0.99"></stop><stop offset="0.37" stop-color="#ededf1" stop-opacity="0.95"></stop><stop offset="0.48" stop-color="#e7e5f0" stop-opacity="0.89"></stop><stop offset="0.58" stop-color="#dedbee" stop-opacity="0.81"></stop><stop offset="0.67" stop-color="#d3ceeb" stop-opacity="0.7"></stop><stop offset="0.76" stop-color="#c4bee8" stop-opacity="0.57"></stop><stop offset="0.84" stop-color="#b4abe5" stop-opacity="0.41"></stop><stop offset="0.92" stop-color="#a095e1" stop-opacity="0.22"></stop><stop offset="0.99" stop-color="#8b7ddc" stop-opacity="0.02"></stop><stop offset="1" stop-color="#897bdc" stop-opacity="0"></stop></linearGradient></defs><title>Icon-manage-310</title><path d="M10.23,17.39l.81-.87V14.2H7v2.32l.81.87A.32.32,0,0,0,8,17.5h2A.32.32,0,0,0,10.23,17.39Z" fill="#cecece"></path><path d="M9,.5A5.89,5.89,0,0,0,3.09,7.07c.27,2.47,2.62,3.62,3.29,6.75a.49.49,0,0,0,.47.38h4.3a.49.49,0,0,0,.47-.38c.67-3.13,3-4.28,3.29-6.75A5.89,5.89,0,0,0,9,.5ZM7,14.2" fill="url(#i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5)"></path><path d="M11.46,3.79a1.4,1.4,0,0,0-1.35,1.44V6H8V5.23A1.41,1.41,0,0,0,6.59,3.79,1.4,1.4,0,0,0,5.24,5.23,1.41,1.41,0,0,0,6.59,6.68h.64v6a.36.36,0,0,0,.72,0v-6h2.16v6a.36.36,0,1,0,.72,0v-6h.63a1.4,1.4,0,0,0,1.35-1.45A1.4,1.4,0,0,0,11.46,3.79ZM7.23,6H6.55a.74.74,0,0,1-.68-.77.74.74,0,0,1,.68-.77.74.74,0,0,1,.68.77Zm4.28,0h-.68V5.19a.68.68,0,1,1,1.35,0A.73.73,0,0,1,11.51,6Z" fill="url(#i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49)"></path><polygon fill="#999" points="6.96 15.8 11.04 15.01 11.04 14.56 6.96 15.36 6.96 15.8"></polygon><polygon fill="#999" points="11.04 16.11 11.04 15.67 6.96 16.48 6.96 16.52 7.27 16.86 11.04 16.11"></polygon></svg></span><div><b>Application Insights</b>Optional: telemetry for the live app</div></div>
+        <div class="box" data-seek="live-demo@195.4"><span class="ic"><svg aria-label="Resource groups icon" id="i5-a685cc8c-32ba-4d54-91da-3a125cb58ded" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><title>Icon-general-7</title><g><g><path d="M.5,15.08a.16.16,0,0,0,.08.14l1.16.65L3.7,17a.17.17,0,0,0,.23-.06l.66-1.12a.16.16,0,0,0-.06-.21l-2.3-1.3a.17.17,0,0,1-.08-.14V3.85a.16.16,0,0,1,.08-.14l2.3-1.3a.16.16,0,0,0,.06-.21L3.93,1.08A.17.17,0,0,0,3.7,1L1.78,2.11l-1.2.67a.16.16,0,0,0-.08.14V15.08Z" fill="#949494"></path><path d="M2.14,3.77l.06-.06,2.3-1.3a.14.14,0,0,0,.06-.21L3.9,1.08A.15.15,0,0,0,3.68,1L1.75,2.11.56,2.78s-.05,0-.06.06l.9.51Z" fill="#a3a3a3"></path><path d="M4.5,15.59l-2.3-1.3a.22.22,0,0,1-.07-.09l-1.62,1,.05,0,1.15.65,2,1.11a.15.15,0,0,0,.22-.06l.66-1.12A.14.14,0,0,0,4.5,15.59Z" fill="#a3a3a3"></path></g><path d="M17.5,15.08a.16.16,0,0,1-.08.14l-1.16.65L14.3,17a.17.17,0,0,1-.23-.06l-.66-1.12a.16.16,0,0,1,.06-.21l2.3-1.3a.17.17,0,0,0,.08-.14V3.85a.16.16,0,0,0-.08-.14l-2.3-1.3a.16.16,0,0,1-.06-.21l.66-1.12A.17.17,0,0,1,14.3,1l1.92,1.09,1.2.67a.16.16,0,0,1,.08.14V15.08Z" fill="#949494"></path><path d="M15.86,3.77l-.06-.06-2.3-1.3a.14.14,0,0,1-.06-.21l.66-1.12A.15.15,0,0,1,14.32,1l1.93,1.09,1.19.67s0,0,.06.06l-.9.51Z" fill="#a3a3a3"></path><path d="M13.5,15.59l2.3-1.3a.22.22,0,0,0,.07-.09l1.62,1,0,0-1.15.65-2,1.11a.15.15,0,0,1-.22-.06l-.66-1.12A.14.14,0,0,1,13.5,15.59Z" fill="#a3a3a3"></path><polygon fill="#32bedd" points="14.31 5.93 14.31 12.07 8.99 15.16 8.99 9.01 14.31 5.93"></polygon><polygon fill="#9cebff" points="14.31 5.93 9 9.02 3.68 5.93 9 2.84 14.31 5.93"></polygon><polygon fill="#50e6ff" points="8.99 9.02 8.99 15.16 3.68 12.07 3.68 5.93 8.99 9.02"></polygon><polygon fill="#9cebff" points="3.68 12.07 8.99 9.01 8.99 15.16 3.68 12.07"></polygon><polygon fill="#50e6ff" points="14.31 12.07 8.99 9.01 8.99 15.16 14.31 12.07"></polygon></g></svg></span><div><b>Resource group</b>Holds every demo resource; delete it after the workshop</div></div>
       </div>
     </div>
   </div>
   <figcaption>Azure services are shown with the official Azure Architecture Icons. The OIDC flow follows GitHub Docs "Configuring OpenID Connect in Azure" and Microsoft Learn "Deploy to Azure App Service by using GitHub Actions".</figcaption>
 </figure>
+<p class="seek-hint">Select any step, or any Azure service, to play that part of the demo video below.</p>
+
+<h2 id="watch">Watch the demo</h2>
+<p>A simulated walkthrough of the whole hour in under four minutes, one chapter per step in the architecture. Use it to preview the demo, to recap it afterwards, or as a backup if the live environment fails on the day.</p>
+<section aria-label="From business requirement to production: simulated video" class="vdemo" data-demo="live-demo" data-title="From business requirement to production" id="video"><div class="vd-top"><h3>From business requirement to production</h3><span class="sim">Simulated walkthrough</span><span class="small muted">3:41 · 1080p · captions, no audio</span></div><div class="vd"><div class="vd-player"><video controls="" playsinline="" poster="videos/live-demo.jpg" preload="metadata"><source src="videos/live-demo.mp4" type="video/mp4"/><a href="replay.html?demo=live-demo">Open the interactive replay</a></video></div><ol aria-label="Chapters" class="vd-ch"><li><button data-t="0" type="button"><span class="tc">0:00</span><span>Intro</span></button></li><li><button data-t="4.6" type="button"><span class="tc">0:04</span><span>Architecture</span></button></li><li><button data-t="11.6" type="button"><span class="tc">0:11</span><span>1 · Issues &amp; Projects</span></button></li><li><button data-t="41.5" type="button"><span class="tc">0:41</span><span>2 · GitHub Copilot</span></button></li><li><button data-t="77.9" type="button"><span class="tc">1:17</span><span>3 · Pull requests</span></button></li><li><button data-t="101.8" type="button"><span class="tc">1:41</span><span>4 · Security gates</span></button></li><li><button data-t="137.7" type="button"><span class="tc">2:17</span><span>5 · Ruleset on main</span></button></li><li><button data-t="158.1" type="button"><span class="tc">2:38</span><span>6 · GitHub Actions</span></button></li><li><button data-t="174" type="button"><span class="tc">2:54</span><span>7 · Environment production</span></button></li><li><button data-t="195.4" type="button"><span class="tc">3:15</span><span>Azure</span></button></li><li><button data-t="201.9" type="button"><span class="tc">3:21</span><span>Live app</span></button></li><li><button data-t="213.9" type="button"><span class="tc">3:33</span><span>Recap</span></button></li></ol></div><div class="vd-links"><a class="ibtn" href="replay.html?demo=live-demo">Open the interactive replay</a><a class="ibtn" download="" href="videos/live-demo.mp4">Download the MP4</a></div><p class="vd-note">The seven steps of the demo architecture, from a requirement in GitHub Issues to the live Order Desk on Azure App Service. The screens are simulated: the steps follow GitHub Docs, but interfaces are simplified and the AI output is illustrative. If you play it in front of the room, say that it is a simulation.</p></section>
 
 <h2 id="timeline-60-minutes">Timeline · 60 minutes</h2>
 <div class="tablewrap"><table>
@@ -756,9 +439,11 @@ gh pr create --fill --base main
     <tr><td>Checks don't start on Copilot's pull request</td><td>"Approve and run workflows" banner</td><td>The Approver approves the workflow run</td></tr>
     <tr><td>Code scanning still running</td><td>Check pending</td><td>Use the security pull requests opened before the session</td></tr>
     <tr><td>Deployment fails</td><td>Login or deploy step red</td><td>Show the last successful deployment and the live site; check the federated credential subject afterwards</td></tr>
-    <tr><td>Network failure</td><td>Pages don't load</td><td>Play the rehearsal recording and narrate live</td></tr>
+    <tr><td>Network failure</td><td>Pages don't load</td><td>Play the rehearsal recording and narrate live. If there is no recording, play the <a href="#watch">simulated video</a> from a downloaded copy and say that it is a simulation</td></tr>
   </tbody>
 </table></div>
+
+<h2 id="knowledge-check">Knowledge check</h2><section aria-label="Knowledge check" class="quiz" data-quiz="s5"><div class="qz-head"><h3>3 quick questions</h3><span class="small muted">Answers come from this page. Nothing is sent anywhere.</span><span aria-live="polite" class="qz-score"></span></div><ol class="qs"><li class="q" data-a="1" data-n="0"><p>How does the deploy job sign in to Azure without a stored password?</p><div class="opts"><button type="button"><span class="k">A</span><span>With a personal access token saved as a repository secret</span></button><button type="button"><span class="k">B</span><span>It requests a short-lived OIDC token that Microsoft Entra ID trusts through a federated credential</span></button><button type="button"><span class="k">C</span><span>With an Azure administrator password in a repository variable</span></button><button type="button"><span class="k">D</span><span>It doesn't sign in: App Service pulls the code</span></button></div><div aria-live="polite" class="why"><b></b>The federated credential trusts only environment:production, and the identity has Website Contributor on this one web app.</div></li><li class="q" data-a="1" data-n="1"><p>Why does the live demo need a second person, the Approver?</p><div class="opts"><button type="button"><span class="k">A</span><span>Two people type faster on stage</span></button><button type="button"><span class="k">B</span><span>The person who asks Copilot for work cannot approve the resulting pull request, and workflows on Copilot's pull requests wait for approval from a user with write access</span></button><button type="button"><span class="k">C</span><span>GitHub needs two accounts to run a demo</span></button><button type="button"><span class="k">D</span><span>The Approver drives the Azure portal</span></button></div><div aria-live="polite" class="why"><b></b>Two people are required, not just nice to have. The Approver also approves the production deployment.</div></li><li class="q" data-a="1" data-n="2"><p>What holds the deploy job until a person approves it?</p><div class="opts"><button type="button"><span class="k">A</span><span>A scheduled trigger</span></button><button type="button"><span class="k">B</span><span>Required reviewers on the production environment</span></button><button type="button"><span class="k">C</span><span>An open Dependabot alert</span></button><button type="button"><span class="k">D</span><span>Copilot code review</span></button></div><div aria-live="polite" class="why"><b></b>Required reviewers are configured on the production environment. With Prevent self-review on, the presenter cannot approve their own deployment.</div></li></ol><div class="qz-foot"><button class="ibtn sm" data-reset="" type="button">Reset answers</button></div></section>
 
 <details class="facilitator" open="">
   <summary>Presenter tips for a live AI demo</summary>
@@ -794,11 +479,12 @@ gh pr create --fill --base main
     <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect">Authenticate to Azure from GitHub Actions by OpenID Connect (Microsoft Learn)</a></li>
   </ul>
 </section>
-<nav aria-label="Previous and next" class="pager"><a class="prev" href="04-security.html"><span class="d">← Previous</span>04 · Building Security into the Developer Workflow</a><a class="next" href="06-agentic.html"><span class="d">Next →</span>06 · The Next Evolution: Agentic Software Development</a></nav>
+<div class="mark-row"><button aria-pressed="false" class="mark-done" data-file="05-live-demo.html" type="button">Mark this session as done</button></div><nav aria-label="Previous and next" class="pager"><a class="prev" href="04-security.html"><span class="d">← Previous</span>04 · Building Security into the Developer Workflow</a><a class="next" href="06-agentic.html"><span class="d">Next →</span>06 · The Next Evolution: Agentic Software Development</a></nav>
     </div>
   </main>
-  <nav aria-label="On this page" class="toc"><h2>On this page</h2><ol><li><a href="#the-story">The story</a></li><li><a href="#demo-architecture">Demo architecture</a></li><li><a href="#timeline-60-minutes">Timeline · 60 minutes</a></li><li><a href="#pre-flight-30-minutes-before">Pre-flight · 30 minutes before</a></li><li><a href="#demo-kit-files-used-on-stage">Demo kit: files used on stage</a></li><li><a href="#fallbacks-at-a-glance">Fallbacks at a glance</a></li></ol></nav>
+  <nav aria-label="On this page" class="toc"><h2>On this page</h2><ol><li><a href="#the-story">The story</a></li><li><a href="#demo-architecture">Demo architecture</a></li><li><a href="#watch">Watch the demo</a></li><li><a href="#timeline-60-minutes">Timeline · 60 minutes</a></li><li><a href="#pre-flight-30-minutes-before">Pre-flight · 30 minutes before</a></li><li><a href="#demo-kit-files-used-on-stage">Demo kit: files used on stage</a></li><li><a href="#fallbacks-at-a-glance">Fallbacks at a glance</a></li><li><a href="#knowledge-check">Knowledge check</a></li></ol></nav>
 </div>
+<div aria-label="Facilitator session timer" class="stimer" data-mins="60" data-sid="s5" role="group"><span class="lb">Timer</span><span class="tv" role="timer">60:00</span><span aria-hidden="true" class="bar"><i></i></span><button data-act="go" type="button">Start</button><button aria-label="Reset the session timer" data-act="reset" type="button">Reset</button></div>
 <footer class="site">
   <div class="inner">
     <div>Content compiled from <a class="ext" href="https://docs.github.com/en">GitHub Docs</a> and <a class="ext" href="https://learn.microsoft.com/">Microsoft Learn</a>, checked on 26 October 2026. GitHub features, plans and preview status change often: re-check the <a class="ext" href="https://github.blog/changelog/">GitHub changelog</a> in the week before delivery.</div>

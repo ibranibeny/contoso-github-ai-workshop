@@ -19,15 +19,33 @@ Workshop site for a half-day, demo-led session with Contoso (13:00–16:30): how
 
 ## What's in this repository
 
-| File | Purpose |
+| Path | Purpose |
 |---|---|
-| `index.html` | Overview, agenda, how to use the site |
-| `01-ai-era.html` … `07-next-steps.html` | One guide per session: key message, content, facilitator notes, sources |
-| `05-live-demo.html` | Live demo runbook: story, architecture, six acts, prompts, files, fallbacks |
+| `index.html` | Overview, agenda with session progress, demo videos, how to use the site |
+| `01-ai-era.html` … `07-next-steps.html` | One guide per session: key message, content, knowledge check, facilitator notes, sources |
+| `05-live-demo.html` | Live demo runbook: story, clickable architecture, demo video, six acts, prompts, files, fallbacks |
+| `06-agentic.html` | Agentic development: clickable agentic loop and demo video |
+| `07-next-steps.html` | Use-case canvas: capture ideas, score value and feasibility, plot them, export Markdown or CSV |
+| `videos.html` | Both demo videos with chapters |
+| `replay.html` | Interactive replay of a demo (`?demo=live-demo` or `?demo=agentic`) |
+| `videos/` | Rendered MP4 videos (1920 × 1080, 25 fps, captions, no audio) and poster images |
 | `facilitator.html` | Roles, run of show, preparation checklists, demo environment build, watchlist |
-| `resources.html` | GitHub Docs and Microsoft Learn links, certifications, glossary |
+| `resources.html` | GitHub Docs and Microsoft Learn links with a filter, certifications, glossary |
+| `assets/` | Shared CSS and JavaScript, the replay engine (`replay.js`, `replay.css`) and the demo scenarios (`demos.js`) |
+| `tools/render-video.mjs` | Renders a replay to MP4 with headless Chrome and ffmpeg |
 
-Every page is a self-contained HTML file (inline CSS and SVG, a small inline script for copy buttons, checklists and the facilitator-notes toggle). There are no external fonts, images or scripts.
+There are no external fonts, images, scripts or trackers. Knowledge-check answers, checklists, session progress, the facilitator timer and the use-case canvas are stored only in the visitor's browser (localStorage).
+
+## About the demo videos
+
+The videos are **simulated walkthroughs**. Steps, settings and file names follow GitHub Docs and the runbooks on this site, but the screens are simplified re-creations and the AI output is illustrative. Every frame is labelled *Simulated walkthrough*.
+
+To re-render a video locally (Node.js 22 or later, Chrome and ffmpeg):
+
+```bash
+node tools/render-video.mjs --site . --demo live-demo --out videos/live-demo.mp4 --poster videos/live-demo.jpg
+node tools/render-video.mjs --site . --demo agentic --out videos/agentic.mp4 --poster videos/agentic.jpg
+```
 
 ## Sources
 

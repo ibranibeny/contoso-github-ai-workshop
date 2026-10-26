@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Demo replay · Contoso × GitHub Workshop</title>
+<meta name="description" content="Interactive replay of a workshop demo: a simulated walkthrough with chapters, built from GitHub Docs steps.">
+<link rel="stylesheet" href="assets/replay.css">
+<script src="assets/replay.js"></script>
+<script src="assets/demos.js"></script>
+<style>
+  body{margin:0;font-family:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.6;color:#1f2328;background:#fff}
+  a{color:#0969da}
+  .crumbs{font-size:13.5px;color:#59636e}
+  .small{font-size:14px}.muted{color:#59636e}
+  @media (prefers-color-scheme: dark){body{color:#e6edf3;background:#0d1117}a{color:#4493f8}.crumbs,.muted{color:#9198a1}}
+  body.rp-solo{margin:0}
+  .rp-render body,.rp-render{background:#0b0f19}
+  .rp-render #player{width:1280px;height:720px;position:relative;overflow:hidden}
+  .rp-page{max-width:1180px;margin-inline:auto;padding-block:20px 40px;padding-inline:20px}
+  .rp-page h1{font-size:28px;margin-block:6px 6px}
+  .rp-page .lede{margin-block-end:14px}
+  .rp-embed,.rp-embed body{margin:0;background:#0b0f19;overflow:hidden}
+  .rp-embed #player{max-width:calc((100vh - 46px) * 16 / 9);margin-inline:auto}
+  .rp-embed .rp-chaps{display:none}
+  .rp-embed .rp-viewport{border-radius:0}
+  .rp-embed .rp-ctrl{padding:6px 6px 0;gap:8px}
+  .rp-embed .rp-btn{padding:3px 8px;min-width:32px;font-size:13px}
+  .rp-embed .rp-time{color:#c9d1d9}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  var qs = new URLSearchParams(location.search);
+  var id = qs.get('demo') || 'live-demo';
+  var demo = window.Replay.get(id);
+  var app = document.getElementById('app');
+  if (qs.get('render') === '1') {
+    document.documentElement.classList.add('rp-render');
+    document.body.classList.add('rp-solo');
+    app.innerHTML = '<div id="player"></div>';
+    window.__rp = window.Replay.mount(document.getElementById('player'), demo, { render: true });
+    return;
+  }
+  if (demo && qs.get('embed') === '1') {
+    document.documentElement.classList.add('rp-embed');
+    app.innerHTML = '<div id="player"></div>';
+    var pe = window.Replay.mount(document.getElementById('player'), demo, { autoplay: qs.get('autoplay') === '1' });
+    var te = parseFloat(qs.get('t') || '');
+    if (!isNaN(te)) pe.seek(te);
+    return;
+  }
+  if (!demo) { app.innerHTML = '<div class="rp-page"><h1>Demo not found</h1><p><a href="index.html">Back to the workshop</a></p></div>'; return; }
+  var back = demo.session === 5 ? '05-live-demo.html#video' : demo.session === 6 ? '06-agentic.html#video' : 'index.html';
+  app.innerHTML = '<div class="rp-page"><div class="crumbs"><a href="index.html">Workshop</a> / <a href="' + back + '">Session ' + demo.session + '</a> / Interactive replay</div>' +
+    '<h1>' + demo.title + '</h1><p class="lede">Simulated walkthrough built from the steps in GitHub Docs. Interfaces are simplified and AI output is illustrative. Use the chapters to jump to any step; press space to play or pause.</p>' +
+    '<div id="player"></div><p class="small muted" style="margin-top:12px"><a href="videos/' + demo.id + '.mp4" download>Download the MP4 video</a> · <a href="' + back + '">Back to the session page</a></p></div>';
+  var start = parseFloat(qs.get('t') || '');
+  var p = window.Replay.mount(document.getElementById('player'), demo, { autoplay: qs.get('autoplay') === '1' });
+  var ch = parseInt(qs.get('chapter') || '', 10);
+  if (!isNaN(ch)) p.playChapter(ch); else if (!isNaN(start)) p.seek(start);
+})();
+</script>
+</body>
+</html>
