@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>Resources &amp; GitHub Docs · Contoso × GitHub Workshop</title>
+<meta content="Curated GitHub Docs and Microsoft Learn links, certifications and glossary for the Contoso GitHub workshop." name="description"/>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#ffffff; --surface:#f6f8fa; --surface-2:#eef1f5; --fg:#1f2328; --muted:#59636e; --border:#d1d9e0;
+  --accent:#8250df; --accent-soft:#f6f0ff; --accent-2:#0969da; --accent-2-soft:#ddf4ff;
+  --ok:#1a7f37; --ok-soft:#dafbe1; --warn:#9a6700; --warn-soft:#fff8c5; --danger:#cf222e; --danger-soft:#ffebe9;
+  --on-accent:#ffffff; --topbar-bg:rgba(255,255,255,.9);
+  --fac-bg:#fff9e8; --fac-border:#e3b341; --fac-fg:#4d3800; --fac-chip:#fbe7a6;
+  --hero-a:#0d1117; --hero-b:#151a3f; --hero-c:#3a1d78; --hero-fg:#f0f6fc; --hero-muted:#c3cbd6;
+  --hero-line:rgba(240,246,252,.18); --hero-chip:rgba(240,246,252,.07);
+  --hero-grad-1:#d2a8ff; --hero-grad-2:#79c0ff; --glow-1:rgba(163,113,247,.38); --glow-2:rgba(68,147,248,.26);
+  --code-bg:#0d1117; --code-fg:#e6edf3; --code-muted:#8b949e; --code-key:#ff7b72; --code-str:#a5d6ff; --code-head:#161b22;
+  --lane-gh:rgba(130,80,223,.06); --lane-gh-stroke:rgba(130,80,223,.38); --lane-az:rgba(9,105,218,.06); --lane-az-stroke:rgba(9,105,218,.38);
+  --shadow:0 1px 2px rgba(31,35,40,.05),0 10px 28px rgba(31,35,40,.06);
+  --radius:14px; --max:1440px;
+  --font:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code","Cascadia Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#0d1117; --surface:#151b23; --surface-2:#1c2330; --fg:#e6edf3; --muted:#9198a1; --border:#30363d;
+    --accent:#a371f7; --accent-soft:rgba(163,113,247,.14); --accent-2:#4493f8; --accent-2-soft:rgba(68,147,248,.14);
+    --ok:#3fb950; --ok-soft:rgba(63,185,80,.14); --warn:#d29922; --warn-soft:rgba(210,153,34,.14); --danger:#f85149; --danger-soft:rgba(248,81,73,.14);
+    --on-accent:#0d1117; --topbar-bg:rgba(13,17,23,.88);
+    --fac-bg:rgba(210,153,34,.08); --fac-border:rgba(210,153,34,.55); --fac-fg:#f2cc60; --fac-chip:rgba(210,153,34,.22);
+    --code-bg:#010409; --code-head:#0d1117;
+    --lane-gh:rgba(163,113,247,.09); --lane-gh-stroke:rgba(163,113,247,.42); --lane-az:rgba(68,147,248,.09); --lane-az-stroke:rgba(68,147,248,.42);
+    --shadow:0 0 0 1px rgba(240,246,252,.04);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-block-start:84px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.62;text-align:start;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);padding:.1em .38em;border-radius:6px}
+kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--border);border-block-end-width:2px;border-radius:6px;padding:.05em .4em;background:var(--surface)}
+img,svg{max-inline-size:100%}
+.skip{position:absolute;inset-inline-start:-9999px;inset-block-start:8px;background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px;z-index:60}
+.skip:focus{inset-inline-start:12px}
+
+/* Top bar */
+.topbar{position:sticky;inset-block-start:0;z-index:40;background:var(--topbar-bg);backdrop-filter:saturate(180%) blur(10px);border-block-end:1px solid var(--border)}
+.nav{max-inline-size:var(--max);margin-inline:auto;padding-block:10px;padding-inline:20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--fg);text-decoration:none;white-space:nowrap;font-size:15px}
+.brand-mark{inline-size:26px;block-size:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.brand small{color:var(--muted);font-weight:500}
+.nav ul{list-style:none;display:flex;gap:2px;margin:0;margin-inline-start:auto;padding:0;overflow-x:auto}
+.nav li a{display:block;padding-block:6px;padding-inline:10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;white-space:nowrap}
+.nav li a:hover,.nav li a[aria-current="page"]{background:var(--surface);color:var(--fg)}
+.fac-toggle{display:none;align-items:center;gap:8px;border:1px solid var(--fac-border);background:var(--fac-bg);color:var(--fac-fg);font:inherit;font-size:13px;font-weight:650;padding-block:6px;padding-inline:10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.js .fac-toggle{display:inline-flex}
+.fac-toggle .dot{inline-size:8px;block-size:8px;border-radius:50%;background:var(--fac-border)}
+.fac-off .fac-toggle{border-color:var(--border);background:var(--surface);color:var(--muted)}
+.fac-off .fac-toggle .dot{background:var(--border)}
+.fac-off .facilitator{display:none}
+
+/* Layout */
+.layout{max-inline-size:var(--max);margin-inline:auto;display:grid;grid-template-columns:270px minmax(0,1fr) 220px;gap:36px;padding-inline:20px}
+.sidebar{position:sticky;inset-block-start:58px;align-self:start;max-block-size:calc(100vh - 58px);overflow-y:auto;padding-block:24px 40px;font-size:14px}
+.sidebar h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 10px;margin-inline:0}
+.sidebar ol{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:2px}
+.sidebar a{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:7px;padding-inline:10px;border-radius:9px;color:var(--fg);text-decoration:none;line-height:1.35}
+.sidebar a:hover{background:var(--surface)}
+.sidebar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:650;box-shadow:inset 3px 0 0 var(--accent)}
+.sidebar .t{font-family:var(--mono);font-size:12px;color:var(--muted);padding-block-start:1px}
+.sidebar .brk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:5px;padding-inline:10px;color:var(--muted);font-style:italic}
+.toc{position:sticky;inset-block-start:58px;align-self:start;padding-block:28px;font-size:13px;max-block-size:calc(100vh - 58px);overflow-y:auto}
+.toc h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 8px;margin-inline:0}
+.toc ol{list-style:none;margin:0;padding:0;border-inline-start:1px solid var(--border)}
+.toc a{display:block;padding-block:4px;padding-inline:12px;color:var(--muted);text-decoration:none;line-height:1.35}
+.toc a:hover{color:var(--fg)}
+main{min-inline-size:0;padding-block:28px 64px}
+.content{max-inline-size:900px}
+@media (max-width:1360px){.layout{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .sidebar{position:static;max-block-size:none;padding-block:12px 0;border-block-end:1px solid var(--border)}
+  .sidebar details:not([open]) ol{display:none}
+  .nav ul{display:none}
+}
+.sidebar details summary{display:none}
+@media (max-width:860px){.sidebar details summary{display:block;cursor:pointer;font-weight:650;padding-block:8px}}
+
+/* Typography */
+h1{font-size:clamp(30px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin-block:6px 14px;margin-inline:0;font-weight:750}
+h2{font-size:26px;line-height:1.25;letter-spacing:-.01em;margin-block:46px 12px;margin-inline:0;padding-block-start:6px;font-weight:700}
+h3{font-size:19px;line-height:1.3;margin-block:28px 8px;margin-inline:0;font-weight:680}
+h4{font-size:16px;margin-block:20px 6px;margin-inline:0}
+p{margin-block:0 14px}
+ul,ol{margin-block:0 14px;padding-inline-start:22px}
+li{margin-block:4px}
+li::marker{color:var(--muted)}
+hr{border:0;border-block-start:1px solid var(--border);margin-block:36px}
+.lede{font-size:18px;color:var(--muted);max-inline-size:70ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.crumbs{font-size:13.5px;color:var(--muted);margin-block-end:6px}
+.crumbs a{color:var(--muted)}
+
+/* Chips & badges */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-block:4px 18px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--fg);padding-block:3px;padding-inline:10px;border-radius:999px;white-space:nowrap}
+.chip.time{font-family:var(--mono);font-size:12.5px}
+.chip.talk{background:var(--accent-2-soft);border-color:transparent;color:var(--accent-2)}
+.chip.demo{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.chip.disc{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.chip.brk{background:var(--surface-2);border-color:transparent;color:var(--muted)}
+.st{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-block:1px;padding-inline:7px;border-radius:999px;vertical-align:2px;white-space:nowrap}
+.st.ga{background:var(--ok-soft);color:var(--ok)}
+.st.pv{background:var(--warn-soft);color:var(--warn)}
+.st.plan{background:var(--accent-2-soft);color:var(--accent-2)}
+.st.ret{background:var(--danger-soft);color:var(--danger)}
+.num{display:inline-grid;place-items:center;inline-size:34px;block-size:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:15px;margin-inline-end:4px}
+
+/* Cards & grids */
+.grid{display:grid;gap:14px;margin-block:8px 18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:980px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding-block:16px;padding-inline:18px;box-shadow:var(--shadow)}
+.card h3,.card h4{margin-block-start:0}
+.card p:last-child,.card ul:last-child{margin-block-end:0}
+.card .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-block-end:4px}
+.card.soft{background:var(--surface);box-shadow:none}
+.card.accent{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.card.blue{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+a.card{display:block;color:inherit;text-decoration:none}
+a.card:hover{border-color:var(--accent)}
+
+/* Glance */
+.glance{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;margin-block:6px 26px}
+@media (max-width:760px){.glance{grid-template-columns:minmax(0,1fr)}}
+.glance .card ul{padding-inline-start:18px}
+.keymsg{font-size:17px;font-weight:600;line-height:1.45;margin:0}
+
+/* Callouts */
+.callout{border:1px solid var(--border);border-inline-start:4px solid var(--accent-2);background:var(--surface);border-radius:10px;padding-block:12px;padding-inline:16px;margin-block:14px 18px}
+.callout p:last-child,.callout ul:last-child{margin-block-end:0}
+.callout .h{font-weight:700;display:block;margin-block-end:4px}
+.callout.tip{border-inline-start-color:var(--ok)}
+.callout.warn{border-inline-start-color:var(--warn);background:var(--warn-soft)}
+.callout.danger{border-inline-start-color:var(--danger);background:var(--danger-soft)}
+.callout.docs{border-inline-start-color:var(--accent)}
+
+/* Facilitator panels */
+.facilitator{border:1px solid var(--fac-border);background:var(--fac-bg);border-radius:var(--radius);margin-block:22px 26px;padding-block:0;padding-inline:0}
+.facilitator > summary{list-style:none;cursor:pointer;padding-block:12px;padding-inline:18px;font-weight:700;color:var(--fac-fg);display:flex;align-items:center;gap:10px}
+.facilitator > summary::-webkit-details-marker{display:none}
+.facilitator > summary::before{content:"FACILITATOR";font-size:10.5px;letter-spacing:.1em;background:var(--fac-chip);color:var(--fac-fg);padding-block:2px;padding-inline:8px;border-radius:999px}
+.facilitator > summary::after{content:"\25BE";margin-inline-start:auto;font-size:14px;transition:transform .15s}
+.facilitator:not([open]) > summary::after{transform:rotate(-90deg)}
+.facilitator .fbody{padding-block:0 16px;padding-inline:18px}
+.facilitator h4{margin-block-start:14px;color:var(--fac-fg)}
+.facilitator table{background:var(--bg)}
+
+/* Tables */
+.tablewrap{overflow-x:auto;margin-block:8px 20px;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;inline-size:100%;font-size:14.5px}
+th,td{text-align:start;vertical-align:top;padding-block:9px;padding-inline:12px;border-block-end:1px solid var(--border)}
+thead th{background:var(--surface);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-block-end:0}
+td.t{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--muted)}
+tr.break td{background:var(--surface);color:var(--muted);font-style:italic}
+.agenda td:nth-child(2) a{font-weight:650}
+.agenda td p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* Steps (runbook) */
+.steps{list-style:none;counter-reset:s;padding:0;margin-block:8px 18px;display:grid;gap:10px}
+.steps > li{counter-increment:s;position:relative;padding-block:12px;padding-inline:56px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg);margin:0}
+.steps > li::before{content:counter(s);position:absolute;inset-inline-start:14px;inset-block-start:12px;inline-size:28px;block-size:28px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-weight:750;font-size:14px;color:var(--fg)}
+.steps > li > :last-child{margin-block-end:0}
+.steps .expect{display:block;margin-block-start:6px;font-size:14px;color:var(--ok)}
+.steps .expect::before{content:"\2713  Expect: ";font-weight:700}
+
+/* Acts (demo) */
+.act{border:1px solid var(--border);border-radius:var(--radius);margin-block:26px;overflow:hidden;box-shadow:var(--shadow)}
+.act-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;padding-inline:18px;background:var(--surface);border-block-end:1px solid var(--border)}
+.act-head h3{margin:0;font-size:19px}
+.act-head .chip{margin-inline-start:auto}
+.act-body{padding-block:14px 4px;padding-inline:18px}
+
+/* Prompt blocks */
+.prompt{border:1px solid var(--lane-gh-stroke);background:var(--lane-gh);border-radius:12px;padding-block:10px;padding-inline:14px;margin-block:10px 16px}
+.prompt .lbl{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-block-end:4px}
+.prompt p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.55;white-space:pre-wrap}
+
+/* Code */
+figure.code{margin-block:10px 18px;margin-inline:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--code-bg)}
+figure.code figcaption{display:flex;align-items:center;gap:10px;background:var(--code-head);color:var(--code-muted);font-family:var(--mono);font-size:12.5px;padding-block:7px;padding-inline:14px;border-block-end:1px solid rgba(240,246,252,.1)}
+figure.code figcaption .src{margin-inline-start:auto;font-family:var(--font);font-size:12px}
+figure.code figcaption .src a{color:var(--code-str)}
+figure.code pre{margin:0;padding-block:14px;padding-inline:16px;overflow-x:auto;color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.55;background:transparent}
+figure.code code{background:none;padding:0;font-size:inherit;color:inherit}
+.copy{border:1px solid rgba(240,246,252,.2);background:transparent;color:var(--code-fg);font:inherit;font-size:12px;border-radius:6px;padding-block:2px;padding-inline:8px;cursor:pointer}
+.copy:hover{background:rgba(240,246,252,.1)}
+.y-c{color:var(--code-muted)} .y-k{color:var(--code-key)} .y-s{color:var(--code-str)}
+
+/* Diagrams */
+.diagram{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding-block:18px;padding-inline:18px;margin-block:12px 20px;margin-inline:0;overflow-x:auto}
+.diagram figcaption{font-size:13px;color:var(--muted);margin-block-start:10px}
+.flow{display:flex;align-items:stretch;gap:0;min-inline-size:720px}
+.flow .node{flex:1 1 0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;line-height:1.4}
+.flow .node b{display:block;font-size:14px;margin-block-end:4px}
+.flow .node .tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-block-end:2px}
+.flow .node ul{margin:0;padding-inline-start:16px;font-size:13px}
+.flow .node.gh{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.flow .node.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.flow .node.hl{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.flow .arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--muted);font-size:18px}
+.pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;min-inline-size:760px}
+.pillar{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:12px;font-size:13.5px}
+.pillar h4{margin-block:0 6px;font-size:14.5px}
+.pillar ul{margin:0;padding-inline-start:16px}
+.pillar.ai{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.foundation{grid-column:1 / -1;background:var(--surface-2);border:1px dashed var(--border);border-radius:12px;padding-block:10px;padding-inline:14px;font-size:13.5px;text-align:center}
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;min-inline-size:760px}
+.rung{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding-block:10px;padding-inline:12px;font-size:13.5px}
+.rung b{display:block}
+.rung .lvl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rung.r1{min-block-size:120px}.rung.r2{min-block-size:150px}.rung.r3{min-block-size:180px}.rung.r4{min-block-size:210px;border-color:var(--lane-gh-stroke);background:var(--lane-gh)}.rung.r5{min-block-size:240px;border-color:var(--accent);background:var(--accent-soft)}
+.arch{display:grid;grid-template-columns:minmax(0,1.3fr) 46px minmax(0,1fr);gap:0;align-items:stretch;min-inline-size:680px}
+.lane{border-radius:14px;padding-block:12px;padding-inline:12px;border:1.5px dashed var(--lane-gh-stroke);background:var(--lane-gh)}
+.lane.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.lane > .lt{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:750;color:var(--muted);margin-block-end:8px;display:block}
+.lane .boxes{display:grid;gap:8px}
+.lane .box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding-block:8px;padding-inline:10px;font-size:13px;line-height:1.35;display:flex;gap:10px;align-items:center}
+.lane .box b{display:block;font-size:13.5px}
+.lane .box .ic{flex:0 0 36px;inline-size:36px;block-size:36px;display:grid;place-items:center}
+.lane .box .ic svg{inline-size:36px;block-size:36px}
+.lane .box .gnum{flex:0 0 26px;inline-size:26px;block-size:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:var(--accent-soft);color:var(--accent)}
+.bridge{display:grid;place-items:center;text-align:center;font-size:11.5px;color:var(--muted);padding-inline:4px}
+.bridge span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.06em;font-weight:700}
+
+/* Hero (home) */
+.hero{background:radial-gradient(1100px 520px at 88% -12%,var(--glow-1),transparent 62%),radial-gradient(900px 520px at -5% 112%,var(--glow-2),transparent 60%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 55%,var(--hero-c));color:var(--hero-fg);border-radius:20px;padding-block:44px 38px;padding-inline:38px;margin-block:0 26px}
+.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--hero-muted);background:var(--hero-chip);border:1px solid var(--hero-line);padding-block:5px;padding-inline:12px;border-radius:999px;margin:0 0 16px}
+.hero h1{color:var(--hero-fg);font-size:clamp(32px,4.2vw,50px);line-height:1.06;margin-block:0 16px}
+.grad{background:linear-gradient(90deg,var(--hero-grad-1),var(--hero-grad-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{color:var(--hero-muted);font-size:18px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-block:22px 24px;margin-inline:0}
+@media (max-width:760px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-inline:22px}}
+.facts div{background:var(--hero-chip);border:1px solid var(--hero-line);border-radius:12px;padding-block:9px;padding-inline:13px}
+.facts dt{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--hero-muted);margin:0}
+.facts dd{margin:2px 0 0;font-weight:650;font-size:15px;line-height:1.35}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding-block:10px;padding-inline:16px;border-radius:10px;font-weight:650;text-decoration:none;font-size:15px}
+.btn.primary{background:var(--hero-fg);color:var(--hero-a)}
+.btn.ghost{color:var(--hero-fg);border:1px solid var(--hero-line)}
+
+/* Checklists */
+.check{list-style:none;padding:0;margin-block:6px 18px;display:grid;gap:6px}
+.check li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0;padding-block:6px;padding-inline:10px;border:1px solid var(--border);border-radius:9px;background:var(--bg)}
+.check input{margin-block-start:4px;accent-color:var(--accent)}
+.check li.done{background:var(--ok-soft);border-color:transparent}
+
+/* Sources */
+.sources{border-block-start:1px solid var(--border);margin-block-start:40px;padding-block-start:8px}
+.sources ul{columns:2;column-gap:28px;font-size:14px;padding-inline-start:18px}
+@media (max-width:760px){.sources ul{columns:1}}
+.sources li{break-inside:avoid}
+.ext::after{content:" \2197";font-size:.85em;color:var(--muted)}
+
+/* Pager */
+.pager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block-start:44px}
+.pager a{display:block;border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:16px;text-decoration:none;color:var(--fg)}
+.pager a:hover{border-color:var(--accent)}
+.pager .d{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.pager .next{text-align:end;grid-column:2}
+
+/* Worksheet */
+.canvas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block:10px 20px}
+@media (max-width:760px){.canvas{grid-template-columns:minmax(0,1fr)}}
+.canvas .cell{border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:14px;min-block-size:120px;background:var(--bg)}
+.canvas .cell b{display:block;margin-block-end:4px}
+.canvas .cell p{font-size:14px;color:var(--muted);margin:0}
+.matrix{display:grid;grid-template-columns:28px repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(110px,auto)) 28px;gap:8px;margin-block:10px 20px;max-inline-size:640px}
+.matrix .q{border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;background:var(--bg)}
+.matrix .q b{display:block}
+.matrix .q.best{border-color:var(--ok);background:var(--ok-soft)}
+.matrix .ax{display:grid;place-items:center;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.matrix .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / 3;grid-column:1}
+.matrix .ax.x{grid-column:2 / 4;grid-row:3}
+
+footer.site{border-block-start:1px solid var(--border);margin-block-start:20px}
+footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:22px 36px;padding-inline:20px;font-size:13.5px;color:var(--muted);display:grid;gap:6px}
+
+@media print{
+  .topbar,.sidebar,.toc,.pager,.fac-toggle,.copy{display:none !important}
+  .layout{display:block}
+  .facilitator{break-inside:avoid}
+  .hero{background:none;color:var(--fg);border:1px solid var(--border)}
+  .hero h1,.hero .lede,.facts dd,.facts dt{color:var(--fg)}
+  a{color:var(--fg)}
+}
+
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  var KEY='contoso-ws-fac';
+  try{ if(localStorage.getItem(KEY)==='off'){ d.classList.add('fac-off'); } }catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.querySelector('.fac-toggle');
+    function label(){ var off=d.classList.contains('fac-off'); b.setAttribute('aria-pressed', off?'false':'true'); b.querySelector('.lbl').textContent= off?'Facilitator notes: off':'Facilitator notes: on'; }
+    if(b){ label(); b.addEventListener('click',function(){ d.classList.toggle('fac-off'); try{localStorage.setItem(KEY, d.classList.contains('fac-off')?'off':'on');}catch(e){} label(); }); }
+    document.querySelectorAll('figure.code').forEach(function(f){
+      var cap=f.querySelector('figcaption'); var pre=f.querySelector('pre'); if(!cap||!pre){return;}
+      var btn=document.createElement('button'); btn.type='button'; btn.className='copy'; btn.textContent='Copy';
+      btn.addEventListener('click',function(){
+        var t=pre.innerText;
+        var p=(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(t):Promise.reject(new Error('no clipboard'));
+        p.then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},1500);},function(){btn.textContent='Copy failed';});
+      });
+      cap.appendChild(btn);
+    });
+    document.querySelectorAll('.check input[type=checkbox][data-k]').forEach(function(cb){
+      var k='contoso-ws-ck-'+cb.getAttribute('data-k');
+      try{ if(localStorage.getItem(k)==='1'){cb.checked=true;} }catch(e){}
+      function upd(){ var li=cb.closest('li'); if(li){li.classList.toggle('done',cb.checked);} }
+      upd();
+      cb.addEventListener('change',function(){ try{localStorage.setItem(k,cb.checked?'1':'0');}catch(e){} upd(); });
+    });
+  });
+})();
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <nav aria-label="Site" class="nav">
+    <a class="brand" href="index.html"><span aria-hidden="true" class="brand-mark">C</span><span>Contoso × GitHub <small>· AI-Powered SDLC Workshop</small></span></a>
+    <ul>
+      <li><a href="index.html">Agenda</a></li>
+      <li><a href="05-live-demo.html">Live demo</a></li>
+      <li><a href="facilitator.html">Facilitator guide</a></li>
+      <li><a aria-current="page" href="resources.html">Resources</a></li>
+      
+    </ul>
+    <button aria-pressed="true" class="fac-toggle" title="Show or hide the facilitator notes on every page" type="button"><span aria-hidden="true" class="dot"></span><span class="lbl">Facilitator notes: on</span></button>
+  </nav>
+</header>
+<div class="layout">
+  <aside aria-label="Workshop sessions" class="sidebar">
+    <details open="">
+      <summary>Workshop sessions</summary>
+      <h2>Start here</h2>
+      <ol>
+        <li><a href="index.html"><span class="t">—</span><span>Overview &amp; agenda</span></a></li>
+      </ol>
+      <h2>Agenda · 13:00–16:30</h2>
+      <ol>
+        <li><a href="01-ai-era.html"><span class="t">13:00</span><span>Opening &amp; Software Development in the AI Era</span></a></li>
+        <li><a href="02-platform.html"><span class="t">13:15</span><span>GitHub as an AI-Powered Developer Platform</span></a></li>
+        <li><a href="03-copilot.html"><span class="t">13:40</span><span>Accelerating Developer Productivity with GitHub Copilot</span></a></li>
+        <li><a href="04-security.html"><span class="t">14:10</span><span>Building Security into the Developer Workflow</span></a></li>
+        <li class="brk"><span class="t">14:35</span><span>Break</span></li>
+        <li><a href="05-live-demo.html"><span class="t">14:45</span><span>Live Demo: From Business Requirement to Production</span></a></li>
+        <li><a href="06-agentic.html"><span class="t">15:45</span><span>The Next Evolution: Agentic Software Development</span></a></li>
+        <li><a href="07-next-steps.html"><span class="t">16:10</span><span>Discussion, Use Cases &amp; Next Steps</span></a></li>
+        
+      </ol>
+      <h2>Run the workshop</h2>
+      <ol>
+        <li><a href="facilitator.html"><span class="t">↳</span><span>Facilitator guide &amp; preparation</span></a></li>
+        <li><a aria-current="page" href="resources.html"><span class="t">↳</span><span>Resources &amp; GitHub Docs</span></a></li>
+      </ol>
+    </details>
+  </aside>
+  <main id="main">
+    <div class="content">
+<div class="crumbs"><a href="index.html">Overview</a> / Resources</div>
+<h1>Resources &amp; GitHub Docs</h1>
+<p class="lede">The GitHub Docs and Microsoft Learn pages behind this workshop, grouped by topic, plus certifications, recent name changes and a short glossary.</p>
+
+<h2 id="what-changed-recently">What changed recently</h2>
+<p>Older workshop material may still use these names. Use the current ones with Contoso.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>Then</th><th>Now</th><th>When (source)</th></tr></thead>
+  <tbody>
+    <tr><td>Copilot coding agent</td><td><strong>Copilot cloud agent</strong></td><td>April 2026 (<a class="ext" href="https://github.blog/changelog/2026-04-01-research-plan-and-code-with-copilot-cloud-agent/">changelog</a>)</td></tr>
+    <tr><td>Premium requests and model multipliers</td><td><strong>GitHub AI Credits</strong> (usage-based billing)</td><td>1 June 2026 (<a class="ext" href="https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/">changelog</a>)</td></tr>
+    <tr><td><code>gh copilot</code> CLI extension</td><td><strong>GitHub Copilot CLI</strong> (GA)</td><td>Extension stopped 25 Oct 2025; CLI GA 25 Feb 2026 (<a class="ext" href="https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/">changelog</a>)</td></tr>
+    <tr><td>GitHub Advanced Security (one product)</td><td><strong>GitHub Secret Protection</strong> and <strong>GitHub Code Security</strong></td><td><a class="ext" href="https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security">About GitHub Advanced Security</a></td></tr>
+    <tr><td>Copilot secret scanning</td><td><strong>AI-detected secrets</strong></td><td><a class="ext" href="https://docs.github.com/en/code-security/how-tos/secure-your-secrets/detect-secret-leaks/enabling-secret-scanning-for-ai-detected-secrets">GitHub Docs</a></td></tr>
+    <tr><td>Repository "Security" tab</td><td><strong>Security and quality</strong> tab</td><td><a class="ext" href="https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning">GitHub Docs</a></td></tr>
+    <tr><td>Copilot Chat Cookbook</td><td><strong>GitHub Copilot Cookbook</strong></td><td><a class="ext" href="https://docs.github.com/en/copilot/tutorials/copilot-cookbook">GitHub Docs</a></td></tr>
+    <tr><td>Legacy Copilot Metrics API</td><td><strong>Copilot usage metrics</strong> API and dashboards</td><td>Legacy API closed 2 Apr 2026 (<a class="ext" href="https://github.blog/changelog/2026-01-29-closing-down-notice-of-legacy-copilot-metrics-apis/">changelog</a>)</td></tr>
+    <tr><td>GitHub Models; GitHub Spark</td><td>Retired (30 Jul 2026); Spark closed to new users and apps (4 Aug 2026)</td><td><a class="ext" href="https://github.blog/changelog/2026-08-04-upcoming-deprecation-of-github-spark-on-github-com/">changelog</a></td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="github-docs-by-topic">GitHub Docs by topic</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>GitHub Copilot: getting started</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/get-started/about-github-copilot">About GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/get-started/where-to-use-github-copilot">Where to use GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/get-started/plans">Plans for GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/get-started/best-practices">Best practices for using GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/prompting-and-context/prompt-engineering">Prompt engineering for GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/tutorials/copilot-cookbook">GitHub Copilot Cookbook</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/reference/copilot-feature-matrix">Copilot feature matrix</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Customizing Copilot</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/prompting-and-context/custom-instructions">Custom instructions for GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/reference/customization-cheat-sheet">Copilot customization cheat sheet</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/custom-agents">Custom agents</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/mcp">Model Context Protocol (MCP)</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/prompting-and-context/spaces">About GitHub Copilot Spaces</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/reference/ai-models/supported-models">Supported AI models in GitHub Copilot</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Agents</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github">GitHub Copilot on GitHub.com</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results">Best practices for using GitHub Copilot to work on tasks</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github">Using Copilot cloud agent on GitHub</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/agent-management">Agent management</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli">GitHub Copilot CLI</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows">GitHub Agentic Workflows</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations">Risks and mitigations for GitHub Copilot cloud agent</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Administration, governance and rollout</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/enterprise/policies">GitHub Copilot policies for enterprises and organizations</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion">Content exclusion for GitHub Copilot</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing">Usage-based billing for organizations and enterprises</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/tutorials/roll-out-at-scale">Rolling out GitHub Copilot at scale</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/billing-and-usage/copilot-usage-metrics/copilot-metrics">GitHub Copilot usage metrics</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events">Audit log events for agents</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/copilot/responsible-use">Responsible use of GitHub Copilot features</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Security</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security">About GitHub Advanced Security</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/code-security/concepts/code-scanning/setup-types">About setup types for code scanning</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/code-security/concepts/code-scanning/autofix-for-code-scanning">About autofix for code scanning</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/code-security/concepts/secret-security/push-protection">Push protection</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/code-security/concepts/supply-chain-security/dependency-review">Dependency review</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/code-security/concepts/security-at-scale/about-security-campaigns">About security campaigns</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/enterprise-cloud@latest/code-security/tutorials/adopting-github-advanced-security-at-scale/introduction-to-adopting-github-advanced-security-at-scale">Introduction to adopting GitHub Advanced Security at scale</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Planning, Actions and deployment</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects">About Projects</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms">Syntax for issue forms</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/actions/get-started/understand-github-actions">Understanding GitHub Actions</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs">Building and testing Node.js</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-azure">Configuring OpenID Connect in Azure</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments">Managing environments for deployment</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/actions/reference/security/secure-use">Secure use reference</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Enterprise platform</h3>
+    <ul>
+      <li><a class="ext" href="https://docs.github.com/en/get-started/learning-about-github/githubs-plans">GitHub's plans</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/enterprise-cloud@latest/admin/overview/about-github-for-enterprises">About GitHub for enterprises</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/enterprise-cloud@latest/admin/concepts/enterprise-fundamentals/choose-an-enterprise-type">Choosing an enterprise type for GitHub Enterprise Cloud</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/enterprise-cloud@latest/admin/concepts/identity-and-access-management/enterprise-managed-users">About Enterprise Managed Users</a></li>
+      <li><a class="ext" href="https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/about-github-enterprise-cloud-with-data-residency">About GitHub Enterprise Cloud with data residency</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Microsoft Learn</h3>
+    <ul>
+      <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions">Deploy to Azure App Service by using GitHub Actions</a></li>
+      <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect">Authenticate to Azure from GitHub Actions by OpenID Connect</a></li>
+      <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/developer/github-copilot-app-modernization/overview">Analyze Applications and Migrate to Azure by Using GitHub Copilot Modernization</a></li>
+      <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java">GitHub Copilot Modernization for Java Developers</a></li>
+      <li><a class="ext" href="https://learn.microsoft.com/en-us/dotnet/azure/migration/appmod/overview">GitHub Copilot modernization overview (.NET)</a></li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="certifications">Certifications</h2>
+<p>GitHub certifications are delivered through Microsoft Learn. Each exam is 100 minutes and costs USD 99 (price varies by country). Certifications are valid for two years, except GitHub Foundations, which does not need renewal.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>Certification</th><th>Exam</th><th>Level</th><th>Good for</th></tr></thead>
+  <tbody>
+    <tr><td><a class="ext" href="https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/">GitHub Foundations</a></td><td>GH-900</td><td>Beginner</td><td>Everyone new to GitHub</td></tr>
+    <tr><td><a class="ext" href="https://learn.microsoft.com/en-us/credentials/certifications/github-copilot/">GitHub Copilot</a></td><td>GH-300</td><td>Intermediate</td><td>Developers and champions in a Copilot pilot</td></tr>
+    <tr><td><a class="ext" href="https://learn.microsoft.com/en-us/credentials/certifications/github-advanced-security/">GitHub Advanced Security</a></td><td>GH-500</td><td>Intermediate</td><td>AppSec engineers and security champions</td></tr>
+    <tr><td><a class="ext" href="https://learn.microsoft.com/en-us/credentials/certifications/github-actions/">GitHub Actions</a></td><td>GH-200</td><td>Intermediate</td><td>Platform and DevOps engineers</td></tr>
+    <tr><td><a class="ext" href="https://learn.microsoft.com/en-us/credentials/certifications/github-administration/">GitHub Administration</a></td><td>GH-100</td><td>Intermediate</td><td>GitHub and enterprise administrators (English only)</td></tr>
+  </tbody>
+</table></div>
+<p class="small"><a class="ext" href="https://docs.github.com/en/get-started/showcase-your-expertise-with-github-certifications/about-github-certifications">About GitHub Certifications</a></p>
+
+<h2 id="glossary">Glossary</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Term</th><th>Meaning in this workshop</th></tr></thead>
+  <tbody>
+    <tr><td>Agent mode</td><td>Copilot in the IDE taking a multi-step task: choosing files, editing, running commands (with your approval) and iterating.</td></tr>
+    <tr><td>Plan mode</td><td>A read-only planning agent that proposes an implementation plan before any code changes.</td></tr>
+    <tr><td>Copilot cloud agent</td><td>Formerly the coding agent. Works in the background in a cloud environment and returns a pull request for human review.</td></tr>
+    <tr><td>GitHub AI Credits</td><td>The unit of Copilot usage billing since 1 June 2026; 1 credit = USD 0.01.</td></tr>
+    <tr><td>Custom instructions</td><td>Markdown files (for example <code>.github/copilot-instructions.md</code>) that tell Copilot your project's rules.</td></tr>
+    <tr><td>Custom agent</td><td>An agent profile (<code>.github/agents/NAME.agent.md</code>) with its own instructions and tools.</td></tr>
+    <tr><td>MCP</td><td>Model Context Protocol: the standard way to give Copilot tools and context from other systems.</td></tr>
+    <tr><td>Copilot Autofix</td><td>AI-generated fix suggestions for code scanning alerts.</td></tr>
+    <tr><td>Agentic autofix</td><td>Assigning code scanning alerts to Copilot, which explores, fixes, rechecks with CodeQL and opens a draft pull request.</td></tr>
+    <tr><td>Push protection</td><td>Blocks commits that contain detected secrets before they reach the repository.</td></tr>
+    <tr><td>Ruleset</td><td>Branch or tag rules (reviews, checks, code scanning results) enforced for humans and agents alike.</td></tr>
+    <tr><td>Environment</td><td>A deployment target in GitHub Actions with protection rules such as required reviewers.</td></tr>
+    <tr><td>OIDC</td><td>OpenID Connect: GitHub Actions requests a short-lived token that a cloud trusts, so no long-lived cloud secret is stored.</td></tr>
+    <tr><td>EMU</td><td>Enterprise Managed Users: GitHub accounts created and controlled by your identity provider.</td></tr>
+    <tr><td>GHE.com</td><td>GitHub Enterprise Cloud with data residency, on a dedicated subdomain.</td></tr>
+  </tbody>
+</table></div>
+<nav aria-label="Previous and next" class="pager"><a class="prev" href="facilitator.html"><span class="d">← Previous</span>Facilitator guide &amp; preparation</a></nav>
+    </div>
+  </main>
+  <nav aria-label="On this page" class="toc"><h2>On this page</h2><ol><li><a href="#what-changed-recently">What changed recently</a></li><li><a href="#github-docs-by-topic">GitHub Docs by topic</a></li><li><a href="#certifications">Certifications</a></li><li><a href="#glossary">Glossary</a></li></ol></nav>
+</div>
+<footer class="site">
+  <div class="inner">
+    <div>Content compiled from <a class="ext" href="https://docs.github.com/en">GitHub Docs</a> and <a class="ext" href="https://learn.microsoft.com/">Microsoft Learn</a>, checked on 26 October 2026. GitHub features, plans and preview status change often: re-check the <a class="ext" href="https://github.blog/changelog/">GitHub changelog</a> in the week before delivery.</div>
+    <div>Prepared by Microsoft for the Contoso half-day workshop. Product names, plans and preview labels are quoted from GitHub Docs as of the date above; nothing on this site is a commercial offer.</div>
+  </div>
+</footer>
+
+</body></html>

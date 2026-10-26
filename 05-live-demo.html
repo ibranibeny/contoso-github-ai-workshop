@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>05 · Live Demo: From Business Requirement to Production · Contoso × GitHub Workshop</title>
+<meta content="Experience an end-to-end application development journey, starting from a business requirement and progressing through AI-assisted development, code review, security validation, CI/CD, and application deployment." name="description"/>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#ffffff; --surface:#f6f8fa; --surface-2:#eef1f5; --fg:#1f2328; --muted:#59636e; --border:#d1d9e0;
+  --accent:#8250df; --accent-soft:#f6f0ff; --accent-2:#0969da; --accent-2-soft:#ddf4ff;
+  --ok:#1a7f37; --ok-soft:#dafbe1; --warn:#9a6700; --warn-soft:#fff8c5; --danger:#cf222e; --danger-soft:#ffebe9;
+  --on-accent:#ffffff; --topbar-bg:rgba(255,255,255,.9);
+  --fac-bg:#fff9e8; --fac-border:#e3b341; --fac-fg:#4d3800; --fac-chip:#fbe7a6;
+  --hero-a:#0d1117; --hero-b:#151a3f; --hero-c:#3a1d78; --hero-fg:#f0f6fc; --hero-muted:#c3cbd6;
+  --hero-line:rgba(240,246,252,.18); --hero-chip:rgba(240,246,252,.07);
+  --hero-grad-1:#d2a8ff; --hero-grad-2:#79c0ff; --glow-1:rgba(163,113,247,.38); --glow-2:rgba(68,147,248,.26);
+  --code-bg:#0d1117; --code-fg:#e6edf3; --code-muted:#8b949e; --code-key:#ff7b72; --code-str:#a5d6ff; --code-head:#161b22;
+  --lane-gh:rgba(130,80,223,.06); --lane-gh-stroke:rgba(130,80,223,.38); --lane-az:rgba(9,105,218,.06); --lane-az-stroke:rgba(9,105,218,.38);
+  --shadow:0 1px 2px rgba(31,35,40,.05),0 10px 28px rgba(31,35,40,.06);
+  --radius:14px; --max:1440px;
+  --font:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code","Cascadia Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#0d1117; --surface:#151b23; --surface-2:#1c2330; --fg:#e6edf3; --muted:#9198a1; --border:#30363d;
+    --accent:#a371f7; --accent-soft:rgba(163,113,247,.14); --accent-2:#4493f8; --accent-2-soft:rgba(68,147,248,.14);
+    --ok:#3fb950; --ok-soft:rgba(63,185,80,.14); --warn:#d29922; --warn-soft:rgba(210,153,34,.14); --danger:#f85149; --danger-soft:rgba(248,81,73,.14);
+    --on-accent:#0d1117; --topbar-bg:rgba(13,17,23,.88);
+    --fac-bg:rgba(210,153,34,.08); --fac-border:rgba(210,153,34,.55); --fac-fg:#f2cc60; --fac-chip:rgba(210,153,34,.22);
+    --code-bg:#010409; --code-head:#0d1117;
+    --lane-gh:rgba(163,113,247,.09); --lane-gh-stroke:rgba(163,113,247,.42); --lane-az:rgba(68,147,248,.09); --lane-az-stroke:rgba(68,147,248,.42);
+    --shadow:0 0 0 1px rgba(240,246,252,.04);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-block-start:84px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.62;text-align:start;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);padding:.1em .38em;border-radius:6px}
+kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--border);border-block-end-width:2px;border-radius:6px;padding:.05em .4em;background:var(--surface)}
+img,svg{max-inline-size:100%}
+.skip{position:absolute;inset-inline-start:-9999px;inset-block-start:8px;background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px;z-index:60}
+.skip:focus{inset-inline-start:12px}
+
+/* Top bar */
+.topbar{position:sticky;inset-block-start:0;z-index:40;background:var(--topbar-bg);backdrop-filter:saturate(180%) blur(10px);border-block-end:1px solid var(--border)}
+.nav{max-inline-size:var(--max);margin-inline:auto;padding-block:10px;padding-inline:20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--fg);text-decoration:none;white-space:nowrap;font-size:15px}
+.brand-mark{inline-size:26px;block-size:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.brand small{color:var(--muted);font-weight:500}
+.nav ul{list-style:none;display:flex;gap:2px;margin:0;margin-inline-start:auto;padding:0;overflow-x:auto}
+.nav li a{display:block;padding-block:6px;padding-inline:10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;white-space:nowrap}
+.nav li a:hover,.nav li a[aria-current="page"]{background:var(--surface);color:var(--fg)}
+.fac-toggle{display:none;align-items:center;gap:8px;border:1px solid var(--fac-border);background:var(--fac-bg);color:var(--fac-fg);font:inherit;font-size:13px;font-weight:650;padding-block:6px;padding-inline:10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.js .fac-toggle{display:inline-flex}
+.fac-toggle .dot{inline-size:8px;block-size:8px;border-radius:50%;background:var(--fac-border)}
+.fac-off .fac-toggle{border-color:var(--border);background:var(--surface);color:var(--muted)}
+.fac-off .fac-toggle .dot{background:var(--border)}
+.fac-off .facilitator{display:none}
+
+/* Layout */
+.layout{max-inline-size:var(--max);margin-inline:auto;display:grid;grid-template-columns:270px minmax(0,1fr) 220px;gap:36px;padding-inline:20px}
+.sidebar{position:sticky;inset-block-start:58px;align-self:start;max-block-size:calc(100vh - 58px);overflow-y:auto;padding-block:24px 40px;font-size:14px}
+.sidebar h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 10px;margin-inline:0}
+.sidebar ol{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:2px}
+.sidebar a{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:7px;padding-inline:10px;border-radius:9px;color:var(--fg);text-decoration:none;line-height:1.35}
+.sidebar a:hover{background:var(--surface)}
+.sidebar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:650;box-shadow:inset 3px 0 0 var(--accent)}
+.sidebar .t{font-family:var(--mono);font-size:12px;color:var(--muted);padding-block-start:1px}
+.sidebar .brk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:5px;padding-inline:10px;color:var(--muted);font-style:italic}
+.toc{position:sticky;inset-block-start:58px;align-self:start;padding-block:28px;font-size:13px;max-block-size:calc(100vh - 58px);overflow-y:auto}
+.toc h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 8px;margin-inline:0}
+.toc ol{list-style:none;margin:0;padding:0;border-inline-start:1px solid var(--border)}
+.toc a{display:block;padding-block:4px;padding-inline:12px;color:var(--muted);text-decoration:none;line-height:1.35}
+.toc a:hover{color:var(--fg)}
+main{min-inline-size:0;padding-block:28px 64px}
+.content{max-inline-size:900px}
+@media (max-width:1360px){.layout{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .sidebar{position:static;max-block-size:none;padding-block:12px 0;border-block-end:1px solid var(--border)}
+  .sidebar details:not([open]) ol{display:none}
+  .nav ul{display:none}
+}
+.sidebar details summary{display:none}
+@media (max-width:860px){.sidebar details summary{display:block;cursor:pointer;font-weight:650;padding-block:8px}}
+
+/* Typography */
+h1{font-size:clamp(30px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin-block:6px 14px;margin-inline:0;font-weight:750}
+h2{font-size:26px;line-height:1.25;letter-spacing:-.01em;margin-block:46px 12px;margin-inline:0;padding-block-start:6px;font-weight:700}
+h3{font-size:19px;line-height:1.3;margin-block:28px 8px;margin-inline:0;font-weight:680}
+h4{font-size:16px;margin-block:20px 6px;margin-inline:0}
+p{margin-block:0 14px}
+ul,ol{margin-block:0 14px;padding-inline-start:22px}
+li{margin-block:4px}
+li::marker{color:var(--muted)}
+hr{border:0;border-block-start:1px solid var(--border);margin-block:36px}
+.lede{font-size:18px;color:var(--muted);max-inline-size:70ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.crumbs{font-size:13.5px;color:var(--muted);margin-block-end:6px}
+.crumbs a{color:var(--muted)}
+
+/* Chips & badges */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-block:4px 18px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--fg);padding-block:3px;padding-inline:10px;border-radius:999px;white-space:nowrap}
+.chip.time{font-family:var(--mono);font-size:12.5px}
+.chip.talk{background:var(--accent-2-soft);border-color:transparent;color:var(--accent-2)}
+.chip.demo{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.chip.disc{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.chip.brk{background:var(--surface-2);border-color:transparent;color:var(--muted)}
+.st{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-block:1px;padding-inline:7px;border-radius:999px;vertical-align:2px;white-space:nowrap}
+.st.ga{background:var(--ok-soft);color:var(--ok)}
+.st.pv{background:var(--warn-soft);color:var(--warn)}
+.st.plan{background:var(--accent-2-soft);color:var(--accent-2)}
+.st.ret{background:var(--danger-soft);color:var(--danger)}
+.num{display:inline-grid;place-items:center;inline-size:34px;block-size:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:15px;margin-inline-end:4px}
+
+/* Cards & grids */
+.grid{display:grid;gap:14px;margin-block:8px 18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:980px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding-block:16px;padding-inline:18px;box-shadow:var(--shadow)}
+.card h3,.card h4{margin-block-start:0}
+.card p:last-child,.card ul:last-child{margin-block-end:0}
+.card .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-block-end:4px}
+.card.soft{background:var(--surface);box-shadow:none}
+.card.accent{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.card.blue{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+a.card{display:block;color:inherit;text-decoration:none}
+a.card:hover{border-color:var(--accent)}
+
+/* Glance */
+.glance{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;margin-block:6px 26px}
+@media (max-width:760px){.glance{grid-template-columns:minmax(0,1fr)}}
+.glance .card ul{padding-inline-start:18px}
+.keymsg{font-size:17px;font-weight:600;line-height:1.45;margin:0}
+
+/* Callouts */
+.callout{border:1px solid var(--border);border-inline-start:4px solid var(--accent-2);background:var(--surface);border-radius:10px;padding-block:12px;padding-inline:16px;margin-block:14px 18px}
+.callout p:last-child,.callout ul:last-child{margin-block-end:0}
+.callout .h{font-weight:700;display:block;margin-block-end:4px}
+.callout.tip{border-inline-start-color:var(--ok)}
+.callout.warn{border-inline-start-color:var(--warn);background:var(--warn-soft)}
+.callout.danger{border-inline-start-color:var(--danger);background:var(--danger-soft)}
+.callout.docs{border-inline-start-color:var(--accent)}
+
+/* Facilitator panels */
+.facilitator{border:1px solid var(--fac-border);background:var(--fac-bg);border-radius:var(--radius);margin-block:22px 26px;padding-block:0;padding-inline:0}
+.facilitator > summary{list-style:none;cursor:pointer;padding-block:12px;padding-inline:18px;font-weight:700;color:var(--fac-fg);display:flex;align-items:center;gap:10px}
+.facilitator > summary::-webkit-details-marker{display:none}
+.facilitator > summary::before{content:"FACILITATOR";font-size:10.5px;letter-spacing:.1em;background:var(--fac-chip);color:var(--fac-fg);padding-block:2px;padding-inline:8px;border-radius:999px}
+.facilitator > summary::after{content:"\25BE";margin-inline-start:auto;font-size:14px;transition:transform .15s}
+.facilitator:not([open]) > summary::after{transform:rotate(-90deg)}
+.facilitator .fbody{padding-block:0 16px;padding-inline:18px}
+.facilitator h4{margin-block-start:14px;color:var(--fac-fg)}
+.facilitator table{background:var(--bg)}
+
+/* Tables */
+.tablewrap{overflow-x:auto;margin-block:8px 20px;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;inline-size:100%;font-size:14.5px}
+th,td{text-align:start;vertical-align:top;padding-block:9px;padding-inline:12px;border-block-end:1px solid var(--border)}
+thead th{background:var(--surface);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-block-end:0}
+td.t{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--muted)}
+tr.break td{background:var(--surface);color:var(--muted);font-style:italic}
+.agenda td:nth-child(2) a{font-weight:650}
+.agenda td p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* Steps (runbook) */
+.steps{list-style:none;counter-reset:s;padding:0;margin-block:8px 18px;display:grid;gap:10px}
+.steps > li{counter-increment:s;position:relative;padding-block:12px;padding-inline:56px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg);margin:0}
+.steps > li::before{content:counter(s);position:absolute;inset-inline-start:14px;inset-block-start:12px;inline-size:28px;block-size:28px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-weight:750;font-size:14px;color:var(--fg)}
+.steps > li > :last-child{margin-block-end:0}
+.steps .expect{display:block;margin-block-start:6px;font-size:14px;color:var(--ok)}
+.steps .expect::before{content:"\2713  Expect: ";font-weight:700}
+
+/* Acts (demo) */
+.act{border:1px solid var(--border);border-radius:var(--radius);margin-block:26px;overflow:hidden;box-shadow:var(--shadow)}
+.act-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;padding-inline:18px;background:var(--surface);border-block-end:1px solid var(--border)}
+.act-head h3{margin:0;font-size:19px}
+.act-head .chip{margin-inline-start:auto}
+.act-body{padding-block:14px 4px;padding-inline:18px}
+
+/* Prompt blocks */
+.prompt{border:1px solid var(--lane-gh-stroke);background:var(--lane-gh);border-radius:12px;padding-block:10px;padding-inline:14px;margin-block:10px 16px}
+.prompt .lbl{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-block-end:4px}
+.prompt p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.55;white-space:pre-wrap}
+
+/* Code */
+figure.code{margin-block:10px 18px;margin-inline:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--code-bg)}
+figure.code figcaption{display:flex;align-items:center;gap:10px;background:var(--code-head);color:var(--code-muted);font-family:var(--mono);font-size:12.5px;padding-block:7px;padding-inline:14px;border-block-end:1px solid rgba(240,246,252,.1)}
+figure.code figcaption .src{margin-inline-start:auto;font-family:var(--font);font-size:12px}
+figure.code figcaption .src a{color:var(--code-str)}
+figure.code pre{margin:0;padding-block:14px;padding-inline:16px;overflow-x:auto;color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.55;background:transparent}
+figure.code code{background:none;padding:0;font-size:inherit;color:inherit}
+.copy{border:1px solid rgba(240,246,252,.2);background:transparent;color:var(--code-fg);font:inherit;font-size:12px;border-radius:6px;padding-block:2px;padding-inline:8px;cursor:pointer}
+.copy:hover{background:rgba(240,246,252,.1)}
+.y-c{color:var(--code-muted)} .y-k{color:var(--code-key)} .y-s{color:var(--code-str)}
+
+/* Diagrams */
+.diagram{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding-block:18px;padding-inline:18px;margin-block:12px 20px;margin-inline:0;overflow-x:auto}
+.diagram figcaption{font-size:13px;color:var(--muted);margin-block-start:10px}
+.flow{display:flex;align-items:stretch;gap:0;min-inline-size:720px}
+.flow .node{flex:1 1 0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;line-height:1.4}
+.flow .node b{display:block;font-size:14px;margin-block-end:4px}
+.flow .node .tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-block-end:2px}
+.flow .node ul{margin:0;padding-inline-start:16px;font-size:13px}
+.flow .node.gh{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.flow .node.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.flow .node.hl{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.flow .arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--muted);font-size:18px}
+.pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;min-inline-size:760px}
+.pillar{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:12px;font-size:13.5px}
+.pillar h4{margin-block:0 6px;font-size:14.5px}
+.pillar ul{margin:0;padding-inline-start:16px}
+.pillar.ai{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.foundation{grid-column:1 / -1;background:var(--surface-2);border:1px dashed var(--border);border-radius:12px;padding-block:10px;padding-inline:14px;font-size:13.5px;text-align:center}
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;min-inline-size:760px}
+.rung{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding-block:10px;padding-inline:12px;font-size:13.5px}
+.rung b{display:block}
+.rung .lvl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rung.r1{min-block-size:120px}.rung.r2{min-block-size:150px}.rung.r3{min-block-size:180px}.rung.r4{min-block-size:210px;border-color:var(--lane-gh-stroke);background:var(--lane-gh)}.rung.r5{min-block-size:240px;border-color:var(--accent);background:var(--accent-soft)}
+.arch{display:grid;grid-template-columns:minmax(0,1.3fr) 46px minmax(0,1fr);gap:0;align-items:stretch;min-inline-size:680px}
+.lane{border-radius:14px;padding-block:12px;padding-inline:12px;border:1.5px dashed var(--lane-gh-stroke);background:var(--lane-gh)}
+.lane.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.lane > .lt{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:750;color:var(--muted);margin-block-end:8px;display:block}
+.lane .boxes{display:grid;gap:8px}
+.lane .box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding-block:8px;padding-inline:10px;font-size:13px;line-height:1.35;display:flex;gap:10px;align-items:center}
+.lane .box b{display:block;font-size:13.5px}
+.lane .box .ic{flex:0 0 36px;inline-size:36px;block-size:36px;display:grid;place-items:center}
+.lane .box .ic svg{inline-size:36px;block-size:36px}
+.lane .box .gnum{flex:0 0 26px;inline-size:26px;block-size:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:var(--accent-soft);color:var(--accent)}
+.bridge{display:grid;place-items:center;text-align:center;font-size:11.5px;color:var(--muted);padding-inline:4px}
+.bridge span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.06em;font-weight:700}
+
+/* Hero (home) */
+.hero{background:radial-gradient(1100px 520px at 88% -12%,var(--glow-1),transparent 62%),radial-gradient(900px 520px at -5% 112%,var(--glow-2),transparent 60%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 55%,var(--hero-c));color:var(--hero-fg);border-radius:20px;padding-block:44px 38px;padding-inline:38px;margin-block:0 26px}
+.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--hero-muted);background:var(--hero-chip);border:1px solid var(--hero-line);padding-block:5px;padding-inline:12px;border-radius:999px;margin:0 0 16px}
+.hero h1{color:var(--hero-fg);font-size:clamp(32px,4.2vw,50px);line-height:1.06;margin-block:0 16px}
+.grad{background:linear-gradient(90deg,var(--hero-grad-1),var(--hero-grad-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{color:var(--hero-muted);font-size:18px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-block:22px 24px;margin-inline:0}
+@media (max-width:760px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-inline:22px}}
+.facts div{background:var(--hero-chip);border:1px solid var(--hero-line);border-radius:12px;padding-block:9px;padding-inline:13px}
+.facts dt{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--hero-muted);margin:0}
+.facts dd{margin:2px 0 0;font-weight:650;font-size:15px;line-height:1.35}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding-block:10px;padding-inline:16px;border-radius:10px;font-weight:650;text-decoration:none;font-size:15px}
+.btn.primary{background:var(--hero-fg);color:var(--hero-a)}
+.btn.ghost{color:var(--hero-fg);border:1px solid var(--hero-line)}
+
+/* Checklists */
+.check{list-style:none;padding:0;margin-block:6px 18px;display:grid;gap:6px}
+.check li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0;padding-block:6px;padding-inline:10px;border:1px solid var(--border);border-radius:9px;background:var(--bg)}
+.check input{margin-block-start:4px;accent-color:var(--accent)}
+.check li.done{background:var(--ok-soft);border-color:transparent}
+
+/* Sources */
+.sources{border-block-start:1px solid var(--border);margin-block-start:40px;padding-block-start:8px}
+.sources ul{columns:2;column-gap:28px;font-size:14px;padding-inline-start:18px}
+@media (max-width:760px){.sources ul{columns:1}}
+.sources li{break-inside:avoid}
+.ext::after{content:" \2197";font-size:.85em;color:var(--muted)}
+
+/* Pager */
+.pager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block-start:44px}
+.pager a{display:block;border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:16px;text-decoration:none;color:var(--fg)}
+.pager a:hover{border-color:var(--accent)}
+.pager .d{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.pager .next{text-align:end;grid-column:2}
+
+/* Worksheet */
+.canvas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block:10px 20px}
+@media (max-width:760px){.canvas{grid-template-columns:minmax(0,1fr)}}
+.canvas .cell{border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:14px;min-block-size:120px;background:var(--bg)}
+.canvas .cell b{display:block;margin-block-end:4px}
+.canvas .cell p{font-size:14px;color:var(--muted);margin:0}
+.matrix{display:grid;grid-template-columns:28px repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(110px,auto)) 28px;gap:8px;margin-block:10px 20px;max-inline-size:640px}
+.matrix .q{border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;background:var(--bg)}
+.matrix .q b{display:block}
+.matrix .q.best{border-color:var(--ok);background:var(--ok-soft)}
+.matrix .ax{display:grid;place-items:center;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.matrix .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / 3;grid-column:1}
+.matrix .ax.x{grid-column:2 / 4;grid-row:3}
+
+footer.site{border-block-start:1px solid var(--border);margin-block-start:20px}
+footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:22px 36px;padding-inline:20px;font-size:13.5px;color:var(--muted);display:grid;gap:6px}
+
+@media print{
+  .topbar,.sidebar,.toc,.pager,.fac-toggle,.copy{display:none !important}
+  .layout{display:block}
+  .facilitator{break-inside:avoid}
+  .hero{background:none;color:var(--fg);border:1px solid var(--border)}
+  .hero h1,.hero .lede,.facts dd,.facts dt{color:var(--fg)}
+  a{color:var(--fg)}
+}
+
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  var KEY='contoso-ws-fac';
+  try{ if(localStorage.getItem(KEY)==='off'){ d.classList.add('fac-off'); } }catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.querySelector('.fac-toggle');
+    function label(){ var off=d.classList.contains('fac-off'); b.setAttribute('aria-pressed', off?'false':'true'); b.querySelector('.lbl').textContent= off?'Facilitator notes: off':'Facilitator notes: on'; }
+    if(b){ label(); b.addEventListener('click',function(){ d.classList.toggle('fac-off'); try{localStorage.setItem(KEY, d.classList.contains('fac-off')?'off':'on');}catch(e){} label(); }); }
+    document.querySelectorAll('figure.code').forEach(function(f){
+      var cap=f.querySelector('figcaption'); var pre=f.querySelector('pre'); if(!cap||!pre){return;}
+      var btn=document.createElement('button'); btn.type='button'; btn.className='copy'; btn.textContent='Copy';
+      btn.addEventListener('click',function(){
+        var t=pre.innerText;
+        var p=(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(t):Promise.reject(new Error('no clipboard'));
+        p.then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},1500);},function(){btn.textContent='Copy failed';});
+      });
+      cap.appendChild(btn);
+    });
+    document.querySelectorAll('.check input[type=checkbox][data-k]').forEach(function(cb){
+      var k='contoso-ws-ck-'+cb.getAttribute('data-k');
+      try{ if(localStorage.getItem(k)==='1'){cb.checked=true;} }catch(e){}
+      function upd(){ var li=cb.closest('li'); if(li){li.classList.toggle('done',cb.checked);} }
+      upd();
+      cb.addEventListener('change',function(){ try{localStorage.setItem(k,cb.checked?'1':'0');}catch(e){} upd(); });
+    });
+  });
+})();
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <nav aria-label="Site" class="nav">
+    <a class="brand" href="index.html"><span aria-hidden="true" class="brand-mark">C</span><span>Contoso × GitHub <small>· AI-Powered SDLC Workshop</small></span></a>
+    <ul>
+      <li><a href="index.html">Agenda</a></li>
+      <li><a aria-current="page" href="05-live-demo.html">Live demo</a></li>
+      <li><a href="facilitator.html">Facilitator guide</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      
+    </ul>
+    <button aria-pressed="true" class="fac-toggle" title="Show or hide the facilitator notes on every page" type="button"><span aria-hidden="true" class="dot"></span><span class="lbl">Facilitator notes: on</span></button>
+  </nav>
+</header>
+<div class="layout">
+  <aside aria-label="Workshop sessions" class="sidebar">
+    <details open="">
+      <summary>Workshop sessions</summary>
+      <h2>Start here</h2>
+      <ol>
+        <li><a href="index.html"><span class="t">—</span><span>Overview &amp; agenda</span></a></li>
+      </ol>
+      <h2>Agenda · 13:00–16:30</h2>
+      <ol>
+        <li><a href="01-ai-era.html"><span class="t">13:00</span><span>Opening &amp; Software Development in the AI Era</span></a></li>
+        <li><a href="02-platform.html"><span class="t">13:15</span><span>GitHub as an AI-Powered Developer Platform</span></a></li>
+        <li><a href="03-copilot.html"><span class="t">13:40</span><span>Accelerating Developer Productivity with GitHub Copilot</span></a></li>
+        <li><a href="04-security.html"><span class="t">14:10</span><span>Building Security into the Developer Workflow</span></a></li>
+        <li class="brk"><span class="t">14:35</span><span>Break</span></li>
+        <li><a aria-current="page" href="05-live-demo.html"><span class="t">14:45</span><span>Live Demo: From Business Requirement to Production</span></a></li>
+        <li><a href="06-agentic.html"><span class="t">15:45</span><span>The Next Evolution: Agentic Software Development</span></a></li>
+        <li><a href="07-next-steps.html"><span class="t">16:10</span><span>Discussion, Use Cases &amp; Next Steps</span></a></li>
+        
+      </ol>
+      <h2>Run the workshop</h2>
+      <ol>
+        <li><a href="facilitator.html"><span class="t">↳</span><span>Facilitator guide &amp; preparation</span></a></li>
+        <li><a href="resources.html"><span class="t">↳</span><span>Resources &amp; GitHub Docs</span></a></li>
+      </ol>
+    </details>
+  </aside>
+  <main id="main">
+    <div class="content">
+<div class="crumbs"><a href="index.html#agenda">Agenda</a> / Session 5</div><h1><span class="num">05</span> Live Demo: From Business Requirement to Production</h1><div class="chips"><span class="chip time">14:45–15:45</span><span class="chip">60 min</span><span class="chip demo">Live demo</span></div><p class="lede">Experience an end-to-end application development journey, starting from a business requirement and progressing through AI-assisted development, code review, security validation, CI/CD, and application deployment.</p>
+
+<div class="glance">
+  <div class="card">
+    <div class="k">Key message</div>
+    <p class="keymsg">One business requirement reaches production in an hour: AI does much of the work, while people decide, review and approve, and the platform enforces quality and security at every step.</p>
+  </div>
+  <div class="card soft">
+    <div class="k">What the audience will see</div>
+    <ul>
+      <li>A requirement turned into an issue and sub-issues with Copilot</li>
+      <li>Code written in VS Code agent mode and, in parallel, by the Copilot cloud agent</li>
+      <li>Copilot code review, human approval, CodeQL with Copilot Autofix, dependency review</li>
+      <li>CI/CD with GitHub Actions to Azure App Service, using OIDC and an approval gate</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout docs">
+  <span class="h">Names used in this runbook</span>
+  <p>Organization <code>contoso</code>, repository <code>contoso-order-desk</code>, Azure web app <code>contoso-order-desk-demo</code>. Replace them with your demo organization and resources. The environment build is in the <a href="facilitator.html#demo-environment">facilitator guide</a>; rehearse the full run at least twice.</p>
+</div>
+
+<h2 id="the-story">The story</h2>
+<div class="grid g2">
+  <div class="card accent">
+    <div class="k">Business requirement · Contoso Retail customer service</div>
+    <p>"Our agents answer a lot of <em>where is my order?</em> calls, and today they search several systems to find one order. We need a simple <strong>Order Desk</strong>: an agent types an order number and immediately sees the order status and estimated delivery date. Unknown or mistyped numbers must show a clear message. Agents must not see payment details, and every lookup must be recorded for audit."</p>
+  </div>
+  <div class="card">
+    <div class="k">Cast</div>
+    <ul>
+      <li><strong>Presenter (developer and requester):</strong> drives VS Code, creates issues and assigns work to Copilot.</li>
+      <li><strong>Approver (reviewer and release manager):</strong> a second person with write access, on a second laptop or browser profile. They approve pull requests, workflow runs and the production deployment.</li>
+      <li><strong>Narrator (optional):</strong> keeps time and links each step back to Sessions 1–4.</li>
+    </ul>
+    <p class="small muted">Two people are required, not just nice to have. The person who asks Copilot for work cannot approve the resulting pull request, and Actions workflows on Copilot's pull requests wait for approval from a user with write access.</p>
+  </div>
+</div>
+
+<h2 id="demo-architecture">Demo architecture</h2>
+<figure class="diagram">
+  <div class="arch">
+    <div class="lane">
+      <span class="lt">GitHub · contoso/contoso-order-desk</span>
+      <div class="boxes">
+        <div class="box"><span class="gnum">1</span><div><b>Issues &amp; Projects</b>Requirement → feature issue → sub-issues → board</div></div>
+        <div class="box"><span class="gnum">2</span><div><b>GitHub Copilot</b>Agent mode in VS Code builds the API; the cloud agent builds the page on a <code>copilot/</code> branch</div></div>
+        <div class="box"><span class="gnum">3</span><div><b>Pull requests</b>Copilot code review, then human review (CODEOWNERS)</div></div>
+        <div class="box"><span class="gnum">4</span><div><b>Security gates</b>Push protection · CodeQL + Copilot Autofix · dependency review</div></div>
+        <div class="box"><span class="gnum">5</span><div><b>Ruleset on main</b>Required approvals, status checks and code scanning results</div></div>
+        <div class="box"><span class="gnum">6</span><div><b>GitHub Actions</b>CI/CD workflow: build and test, then deploy job</div></div>
+        <div class="box"><span class="gnum">7</span><div><b>Environment "production"</b>Required reviewer approves; the job requests a short-lived OIDC token</div></div>
+      </div>
+    </div>
+    <div class="bridge"><span>OIDC token → federated credential · no stored cloud secret</span></div>
+    <div class="lane az">
+      <span class="lt">Microsoft Azure · rg-contoso-order-desk</span>
+      <div class="boxes">
+        <div class="box"><span class="ic"><svg aria-label="Microsoft Entra ID app registrations icon" id="i1-a76a0103-ce03-4d58-859d-4c27e02925d2" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientTransform="matrix(0.5, 0, 0, -0.5, 3267.42, 559.99)" gradientUnits="userSpaceOnUse" id="i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19" x1="-6518.78" x2="-6518.78" y1="1118.86" y2="1090.06"><stop offset="0" stop-color="#5ea0ef"></stop><stop offset="0.18" stop-color="#589eed"></stop><stop offset="0.41" stop-color="#4897e9"></stop><stop offset="0.66" stop-color="#2e8ce1"></stop><stop offset="0.94" stop-color="#0a7cd7"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><path d="M5.67,10.61H10v4.32H5.67Zm-5-5.76H5V.53H1.23a.6.6,0,0,0-.6.6Zm.6,10.08H5V10.61H.63v3.72A.6.6,0,0,0,1.23,14.93Zm-.6-5H5V5.57H.63Zm10.08,5h3.72a.6.6,0,0,0,.6-.6V10.61H10.71Zm-5-5H10V5.57H5.67Zm5,0H15V5.57H10.71Zm0-9.36V4.85H15V1.13a.6.6,0,0,0-.6-.6Zm-5,4.32H10V.53H5.67Z" fill="url(#i1-efeb8e96-2af0-4681-9a6a-45f9b0262f19)"></path><polygon fill="#32bedd" points="17.37 10.7 17.37 15.21 13.5 17.47 13.5 12.96 17.37 10.7"></polygon><polygon fill="#9cebff" points="17.37 10.7 13.5 12.97 9.63 10.7 13.5 8.44 17.37 10.7"></polygon><polygon fill="#50e6ff" points="13.5 12.97 13.5 17.47 9.63 15.21 9.63 10.7 13.5 12.97"></polygon><polygon fill="#9cebff" points="9.63 15.21 13.5 12.96 13.5 17.47 9.63 15.21"></polygon><polygon fill="#50e6ff" points="17.37 15.21 13.5 12.96 13.5 17.47 17.37 15.21"></polygon></svg></span><div><b>Microsoft Entra ID</b>App registration with a federated credential that trusts only <code>environment:production</code></div></div>
+        <div class="box"><span class="ic"><svg aria-label="Azure App Service icon" id="i2-b70acf0a-34b4-4bdf-9024-7496043ff915" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="13428.81" cy="3518.86" gradientTransform="translate(-2005.33 -518.83) scale(0.15)" gradientUnits="userSpaceOnUse" id="i2-e2cf8746-c9a8-4eee-86c2-4951983c6032" r="56.67"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bdd213dd-d313-473c-8ff4-0133fd3a9033" x1="4.4" x2="4.37" y1="11.48" y2="7.53"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-afcc63c5-3649-4476-a742-bcb53a569f3c" x1="10.13" x2="10.13" y1="15.45" y2="11.9"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d" x1="14.18" x2="14.18" y1="11.15" y2="7.38"><stop offset="0" stop-color="#ccc"></stop><stop offset="1" stop-color="#fcfcfc"></stop></linearGradient></defs><title>Icon-web-41</title><path d="M14.21,15.72A8.5,8.5,0,0,1,3.79,2.28l.09-.06a8.5,8.5,0,0,1,10.33,13.5" fill="url(#i2-e2cf8746-c9a8-4eee-86c2-4951983c6032)" id="i2-ee75dd06-1aca-4f76-9d11-d05a284020ad"></path><path d="M6.69,7.23A13,13,0,0,1,15.6,3.65a8.47,8.47,0,0,0-1.49-1.44,14.34,14.34,0,0,0-4.69,1.1A12.54,12.54,0,0,0,5.34,6.13,2.76,2.76,0,0,1,6.69,7.23Z" fill="#fff" opacity="0.6"></path><path d="M2.48,10.65a17.86,17.86,0,0,0-.83,2.62,7.82,7.82,0,0,0,.62.92c.18.23.35.44.55.65A17.94,17.94,0,0,1,3.9,11.37,2.76,2.76,0,0,1,2.48,10.65Z" fill="#fff" opacity="0.6"></path><path d="M3.46,6.11a12,12,0,0,1-.69-2.94,8.15,8.15,0,0,0-1.1,1.45A12.69,12.69,0,0,0,2.24,7,2.69,2.69,0,0,1,3.46,6.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><path d="M8.36,13.67A1.77,1.77,0,0,1,8.9,12.4a11.88,11.88,0,0,1-2.53-1.86,2.74,2.74,0,0,1-1.49.83,13.1,13.1,0,0,0,1.45,1.28A12.12,12.12,0,0,0,8.38,13.9,1.79,1.79,0,0,1,8.36,13.67Z" fill="#f2f2f2" opacity="0.55"></path><path d="M14.66,13.88a12,12,0,0,1-2.76-.32.41.41,0,0,1,0,.11,1.75,1.75,0,0,1-.51,1.24,13.69,13.69,0,0,0,3.42.24A8.21,8.21,0,0,0,16,13.81,11.5,11.5,0,0,1,14.66,13.88Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle><path d="M12.32,8.93a1.83,1.83,0,0,1,.61-1A25.5,25.5,0,0,1,8.47,3.79a16.91,16.91,0,0,1-2-2.92,7.64,7.64,0,0,0-1.09.42A18.14,18.14,0,0,0,7.53,4.47,26.44,26.44,0,0,0,12.32,8.93Z" fill="#f2f2f2" opacity="0.7"></path><circle cx="14.18" cy="9.27" fill="url(#i2-bd873f0b-9954-4aa5-a3df-9f4c64e8729d)" r="1.89"></circle><path d="M17.35,10.54,17,10.37l0,0-.3-.16-.06,0L16.38,10l-.07,0L16,9.8a1.76,1.76,0,0,1-.64.92c.12.08.25.15.38.22l.08.05.35.19,0,0,.86.45h0a8.63,8.63,0,0,0,.29-1.11Z" fill="#f2f2f2" opacity="0.55"></path><circle cx="4.38" cy="8.68" fill="url(#i2-bdd213dd-d313-473c-8ff4-0133fd3a9033)" r="2.73"></circle><circle cx="10.13" cy="13.67" fill="url(#i2-afcc63c5-3649-4476-a742-bcb53a569f3c)" r="1.78"></circle></svg></span><div><b>Azure App Service</b>Web app, Linux, Node.js LTS. The identity has <em>Website Contributor</em> on this app only</div></div>
+        <div class="box"><span class="ic"><svg aria-label="App Service plan icon" id="i3-fca2105f-c039-4f34-bd65-8ab95d4ecdb9" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientUnits="userSpaceOnUse" id="i3-a773af38-43e4-4fd2-9485-f8aac63ca91b" x1="5.57" x2="5.57" y1="17.5" y2="0.5"><stop offset="0.05" stop-color="#949494"></stop><stop offset="0.36" stop-color="#979797"></stop><stop offset="0.54" stop-color="#9f9f9f"></stop><stop offset="0.69" stop-color="#adadad"></stop><stop offset="0.73" stop-color="#b3b3b3"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="i3-b4779ae6-74a5-486d-8aad-cd011859785a" x1="10.56" x2="10.56" y1="6.02" y2="19.71"><stop offset="0.18" stop-color="#5ea0ef"></stop><stop offset="1" stop-color="#0078d4"></stop></linearGradient></defs><title>Icon-web-46</title><path d="M10.56,16.93a.56.56,0,0,1-.57.57H1.14a.56.56,0,0,1-.56-.57V1.07A.56.56,0,0,1,1.14.5H10a.56.56,0,0,1,.57.57Z" fill="url(#i3-a773af38-43e4-4fd2-9485-f8aac63ca91b)"></path><path d="M2,6.46A1.08,1.08,0,0,1,3.13,5.38h5A1.08,1.08,0,0,1,9.18,6.46h0A1.08,1.08,0,0,1,8.1,7.55h-5A1.09,1.09,0,0,1,2,6.46Z" fill="#003067"></path><path d="M2,3.24A1.09,1.09,0,0,1,3.13,2.15h5A1.08,1.08,0,0,1,9.18,3.24h0A1.08,1.08,0,0,1,8.1,4.32h-5A1.08,1.08,0,0,1,2,3.24Z" fill="#003067"></path><circle cx="3.17" cy="3.24" fill="#50e6ff" r="0.73"></circle><circle cx="3.17" cy="6.46" fill="#50e6ff" r="0.73"></circle><path d="M17.42,14.38a3.12,3.12,0,0,0-2.67-3,3.93,3.93,0,0,0-4-3.8,4,4,0,0,0-3.83,2.66A3.7,3.7,0,0,0,3.7,13.83,3.77,3.77,0,0,0,7.56,17.5l.34,0h6.26l.17,0A3.15,3.15,0,0,0,17.42,14.38Z" fill="url(#i3-b4779ae6-74a5-486d-8aad-cd011859785a)"></path><rect fill="none" height="18" width="18"></rect></svg></span><div><b>App Service plan</b>Linux plan hosting the web app</div></div>
+        <div class="box"><span class="ic"><svg aria-label="Application Insights icon" id="i4-b6f6d99e-f330-481d-836f-ea58cc42217f" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient cx="9" cy="7.35" gradientUnits="userSpaceOnUse" id="i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5" r="6.42"><stop offset="0" stop-color="#b77af4"></stop><stop offset="0.21" stop-color="#b378f2"></stop><stop offset="0.43" stop-color="#a672ed"></stop><stop offset="0.65" stop-color="#9267e4"></stop><stop offset="0.88" stop-color="#7559d8"></stop><stop offset="1" stop-color="#624fd0"></stop></radialGradient><linearGradient gradientUnits="userSpaceOnUse" id="i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49" x1="9.02" x2="9.08" y1="3.91" y2="11.49"><stop offset="0" stop-color="#f2f2f2"></stop><stop offset="0.23" stop-color="#f1f1f2" stop-opacity="0.99"></stop><stop offset="0.37" stop-color="#ededf1" stop-opacity="0.95"></stop><stop offset="0.48" stop-color="#e7e5f0" stop-opacity="0.89"></stop><stop offset="0.58" stop-color="#dedbee" stop-opacity="0.81"></stop><stop offset="0.67" stop-color="#d3ceeb" stop-opacity="0.7"></stop><stop offset="0.76" stop-color="#c4bee8" stop-opacity="0.57"></stop><stop offset="0.84" stop-color="#b4abe5" stop-opacity="0.41"></stop><stop offset="0.92" stop-color="#a095e1" stop-opacity="0.22"></stop><stop offset="0.99" stop-color="#8b7ddc" stop-opacity="0.02"></stop><stop offset="1" stop-color="#897bdc" stop-opacity="0"></stop></linearGradient></defs><title>Icon-manage-310</title><path d="M10.23,17.39l.81-.87V14.2H7v2.32l.81.87A.32.32,0,0,0,8,17.5h2A.32.32,0,0,0,10.23,17.39Z" fill="#cecece"></path><path d="M9,.5A5.89,5.89,0,0,0,3.09,7.07c.27,2.47,2.62,3.62,3.29,6.75a.49.49,0,0,0,.47.38h4.3a.49.49,0,0,0,.47-.38c.67-3.13,3-4.28,3.29-6.75A5.89,5.89,0,0,0,9,.5ZM7,14.2" fill="url(#i4-a7a1c431-6c6d-4a8f-9a69-8da437e5b0c5)"></path><path d="M11.46,3.79a1.4,1.4,0,0,0-1.35,1.44V6H8V5.23A1.41,1.41,0,0,0,6.59,3.79,1.4,1.4,0,0,0,5.24,5.23,1.41,1.41,0,0,0,6.59,6.68h.64v6a.36.36,0,0,0,.72,0v-6h2.16v6a.36.36,0,1,0,.72,0v-6h.63a1.4,1.4,0,0,0,1.35-1.45A1.4,1.4,0,0,0,11.46,3.79ZM7.23,6H6.55a.74.74,0,0,1-.68-.77.74.74,0,0,1,.68-.77.74.74,0,0,1,.68.77Zm4.28,0h-.68V5.19a.68.68,0,1,1,1.35,0A.73.73,0,0,1,11.51,6Z" fill="url(#i4-ec0c4f0d-5c8e-4882-96a1-89d61808eb49)"></path><polygon fill="#999" points="6.96 15.8 11.04 15.01 11.04 14.56 6.96 15.36 6.96 15.8"></polygon><polygon fill="#999" points="11.04 16.11 11.04 15.67 6.96 16.48 6.96 16.52 7.27 16.86 11.04 16.11"></polygon></svg></span><div><b>Application Insights</b>Optional: telemetry for the live app</div></div>
+        <div class="box"><span class="ic"><svg aria-label="Resource groups icon" id="i5-a685cc8c-32ba-4d54-91da-3a125cb58ded" role="img" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><title>Icon-general-7</title><g><g><path d="M.5,15.08a.16.16,0,0,0,.08.14l1.16.65L3.7,17a.17.17,0,0,0,.23-.06l.66-1.12a.16.16,0,0,0-.06-.21l-2.3-1.3a.17.17,0,0,1-.08-.14V3.85a.16.16,0,0,1,.08-.14l2.3-1.3a.16.16,0,0,0,.06-.21L3.93,1.08A.17.17,0,0,0,3.7,1L1.78,2.11l-1.2.67a.16.16,0,0,0-.08.14V15.08Z" fill="#949494"></path><path d="M2.14,3.77l.06-.06,2.3-1.3a.14.14,0,0,0,.06-.21L3.9,1.08A.15.15,0,0,0,3.68,1L1.75,2.11.56,2.78s-.05,0-.06.06l.9.51Z" fill="#a3a3a3"></path><path d="M4.5,15.59l-2.3-1.3a.22.22,0,0,1-.07-.09l-1.62,1,.05,0,1.15.65,2,1.11a.15.15,0,0,0,.22-.06l.66-1.12A.14.14,0,0,0,4.5,15.59Z" fill="#a3a3a3"></path></g><path d="M17.5,15.08a.16.16,0,0,1-.08.14l-1.16.65L14.3,17a.17.17,0,0,1-.23-.06l-.66-1.12a.16.16,0,0,1,.06-.21l2.3-1.3a.17.17,0,0,0,.08-.14V3.85a.16.16,0,0,0-.08-.14l-2.3-1.3a.16.16,0,0,1-.06-.21l.66-1.12A.17.17,0,0,1,14.3,1l1.92,1.09,1.2.67a.16.16,0,0,1,.08.14V15.08Z" fill="#949494"></path><path d="M15.86,3.77l-.06-.06-2.3-1.3a.14.14,0,0,1-.06-.21l.66-1.12A.15.15,0,0,1,14.32,1l1.93,1.09,1.19.67s0,0,.06.06l-.9.51Z" fill="#a3a3a3"></path><path d="M13.5,15.59l2.3-1.3a.22.22,0,0,0,.07-.09l1.62,1,0,0-1.15.65-2,1.11a.15.15,0,0,1-.22-.06l-.66-1.12A.14.14,0,0,1,13.5,15.59Z" fill="#a3a3a3"></path><polygon fill="#32bedd" points="14.31 5.93 14.31 12.07 8.99 15.16 8.99 9.01 14.31 5.93"></polygon><polygon fill="#9cebff" points="14.31 5.93 9 9.02 3.68 5.93 9 2.84 14.31 5.93"></polygon><polygon fill="#50e6ff" points="8.99 9.02 8.99 15.16 3.68 12.07 3.68 5.93 8.99 9.02"></polygon><polygon fill="#9cebff" points="3.68 12.07 8.99 9.01 8.99 15.16 3.68 12.07"></polygon><polygon fill="#50e6ff" points="14.31 12.07 8.99 9.01 8.99 15.16 14.31 12.07"></polygon></g></svg></span><div><b>Resource group</b>Holds every demo resource; delete it after the workshop</div></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Azure services are shown with the official Azure Architecture Icons. The OIDC flow follows GitHub Docs "Configuring OpenID Connect in Azure" and Microsoft Learn "Deploy to Azure App Service by using GitHub Actions".</figcaption>
+</figure>
+
+<h2 id="timeline-60-minutes">Timeline · 60 minutes</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Min</th><th>Act</th><th>Who drives</th><th>Lands the message from</th></tr></thead>
+  <tbody>
+    <tr><td class="t">0–3</td><td>Set the scene: requirement, repository, cast</td><td>Presenter</td><td>Session 1</td></tr>
+    <tr><td class="t">3–10</td><td><a href="#act-1">Act 1</a> · Requirement → issue</td><td>Presenter</td><td>Sessions 2 and 3</td></tr>
+    <tr><td class="t">10–24</td><td><a href="#act-2">Act 2</a> · Build with AI</td><td>Presenter</td><td>Session 3</td></tr>
+    <tr><td class="t">24–32</td><td><a href="#act-3">Act 3</a> · Review</td><td>Presenter + Approver</td><td>Sessions 3 and 4</td></tr>
+    <tr><td class="t">32–44</td><td><a href="#act-4">Act 4</a> · Security gate</td><td>Presenter</td><td>Session 4</td></tr>
+    <tr><td class="t">44–54</td><td><a href="#act-5">Act 5</a> · CI/CD to Azure</td><td>Presenter + Approver</td><td>Session 2</td></tr>
+    <tr><td class="t">54–60</td><td><a href="#act-6">Act 6</a> · Close the loop, Q&amp;A</td><td>Presenter</td><td>Bridge to Session 6</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="pre-flight-30-minutes-before">Pre-flight · 30 minutes before</h2>
+<ul class="check">
+  <li><input aria-label="Done" data-k="pf1" type="checkbox"/><span>Presenter signed in to GitHub (browser profile A) and VS Code; Approver signed in on a second laptop or browser profile B.</span></li>
+  <li><input aria-label="Done" data-k="pf2" type="checkbox"/><span><code>main</code> is reset to the <code>demo-start</code> tag, and rehearsal issues are closed. The Project board shows no rehearsal items.</span></li>
+  <li><input aria-label="Done" data-k="pf3" type="checkbox"/><span>Security pull requests opened at least 30 minutes earlier, with checks finished: <code>demo/not-found-message</code> (CodeQL alert) and <code>demo/add-date-helper</code> (dependency review failed).</span></li>
+  <li><input aria-label="Done" data-k="pf4" type="checkbox"/><span>Fallback branches exist: <code>fallback/order-lookup-api</code> and <code>fallback/agent-lookup-page</code>, plus the rehearsal cloud agent pull request kept as a draft.</span></li>
+  <li><input aria-label="Done" data-k="pf5" type="checkbox"/><span>The Azure web app opens, and the last <code>production</code> deployment is green.</span></li>
+  <li><input aria-label="Done" data-k="pf6" type="checkbox"/><span>VS Code: font size 18 or larger, Agent and Plan modes visible, <code>npm ci</code> done, a terminal open in the repository.</span></li>
+  <li><input aria-label="Done" data-k="pf7" type="checkbox"/><span>Tabs open: repository, Project board, Actions, Settings → Rulesets, <em>Security and quality</em> tab, Azure portal (web app).</span></li>
+  <li><input aria-label="Done" data-k="pf8" type="checkbox"/><span>Notifications off, display tested, a visible timer, and the rehearsal recording on hand in case the network fails.</span></li>
+</ul>
+
+<section class="act" id="act-1">
+  <div class="act-head"><span class="num">1</span><h3>Requirement → issue</h3><span class="chip time">3–10 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Create the issue with Copilot.</strong> Open <code>github.com/copilot</code> and paste the requirement with this prompt. Copilot maps it to the repository's issue form and can draft sub-issues. <span class="st pv">Public preview</span>
+        <div class="prompt"><span class="lbl">Prompt · Copilot on GitHub.com</span><p>In contoso/contoso-order-desk, create a feature issue from the requirement below using our Feature request form. Write testable acceptance criteria, and create sub-issues for: (1) the order lookup API, (2) the agent lookup page, (3) an audit log of every lookup.
+
+[paste the business requirement]</p></div>
+        <span class="expect">A draft parent issue with the form's sections filled in, plus three sub-issues to review before you create them.</span></li>
+      <li><strong>Review before creating.</strong> Read the acceptance criteria aloud and fix one by hand. The point is that people own the requirement.</li>
+      <li><strong>Show the plan.</strong> Open the Project board: the issue arrived through the form's <code>projects</code> key or the project's auto-add workflow. Set the issue type to <em>Feature</em> and move it to <em>In progress</em>.</li>
+      <li><strong>Delegate the page now, so it is ready by Act 3.</strong> Open sub-issue (2), choose <em>Assignees</em> → <strong>Copilot</strong> and add this optional prompt:
+        <div class="prompt"><span class="lbl">Optional prompt · assigning to Copilot</span><p>Build the agent lookup page in public/ with plain HTML, CSS and JavaScript. Another pull request is building the API; code against this contract: GET /api/orders/:orderId returns 200 with { id, status, lastUpdated, estimatedDelivery }, 400 for invalid IDs and 404 with { error } when not found. Show a clear message for unknown order numbers, make the form keyboard accessible, and add tests.</p></div>
+        <span class="expect">An 👀 reaction, then a draft pull request in the issue timeline and a "Copilot started work" event with <em>View session</em>.</span></li>
+    </ol>
+    <div class="callout"><span class="h">Say</span><p>"The issue is the contract. People and agents work from the same acceptance criteria, and Copilot reads only what is in the issue when you assign it, so later comments go on the pull request."</p></div>
+    <div class="callout warn"><span class="h">If it goes wrong</span><p>If creating issues with Copilot is unavailable or slow, use <em>New issue</em> → <strong>Feature request</strong> and paste the prepared text. The demo still works.</p></div>
+  </div>
+</section>
+
+<section class="act" id="act-2">
+  <div class="act-head"><span class="num">2</span><h3>Build with AI in VS Code</h3><span class="chip time">10–24 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Set context.</strong> Create branch <code>feature/order-lookup-api</code>. Open <code>.github/copilot-instructions.md</code> for ten seconds: "these are Contoso's rules, and every Copilot surface reads them."</li>
+      <li><strong>Plan first.</strong> In Chat, choose <strong>Plan</strong>:
+        <div class="prompt"><span class="lbl">Prompt · Plan mode</span><p>Plan the order lookup API from issue #&lt;API sub-issue&gt;: GET /api/orders/:orderId returns id, status, lastUpdated and estimatedDelivery from data/orders.json; 400 when the ID doesn't match ORD- plus six digits; 404 with a JSON error for unknown IDs. List the files you will change and the tests you will add.</p></div>
+        <span class="expect">A plan naming the files to change (for example, an orders module, the app routes and a test file) and the test cases. No files changed yet.</span></li>
+      <li><strong>Let the agent work.</strong> Switch to <strong>Agent</strong>:
+        <div class="prompt"><span class="lbl">Prompt · Agent mode</span><p>Implement the plan. Then run npm test and fix any failures.</p></div>
+        <span class="expect">Edits across files, then a request to approve <code>npm test</code> in the terminal. Approve it, and the tests pass (or the agent fixes them and reruns).</span></li>
+      <li><strong>Review the diff like a senior engineer.</strong> Check the validation regex and the 404 body. Undo or adjust one thing by hand.</li>
+      <li><strong>Commit and open the pull request.</strong> Let Copilot suggest the commit message. Push, open a pull request with <code>Fixes #&lt;API sub-issue&gt;</code>, and let Copilot write the summary.</li>
+    </ol>
+    <div class="callout"><span class="h">Say</span><p>"Agent mode did the typing and ran the test loop. I chose the design, approved every command and reviewed the diff."</p></div>
+    <div class="callout warn"><span class="h">If it goes wrong</span><p>If the agent stalls or tests keep failing after two rounds, stop. Check out <code>fallback/order-lookup-api</code>, push it and open the pull request. Say so openly: "this is the rehearsal run of the same prompt."</p></div>
+  </div>
+</section>
+
+<section class="act" id="act-3">
+  <div class="act-head"><span class="num">3</span><h3>Review: Copilot first, people decide</h3><span class="chip time">24–32 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Copilot code review.</strong> On the API pull request, Copilot was requested automatically by the ruleset (or choose <em>Reviewers</em> → <strong>Copilot</strong>). Read one comment aloud and apply a suggestion, or use <em>Fix with Copilot</em>.
+        <span class="expect">A "Comment" review from Copilot, usually in under 30 seconds. It does not count toward required approvals.</span></li>
+      <li><strong>Open the cloud agent's pull request.</strong> Show <em>View session</em>: the agent's reasoning, the tools it ran and its self-checks (CodeQL, secret scanning, dependency check). Show that commits are signed and list the presenter as co-author.</li>
+      <li><strong>Approver: approve and run workflows.</strong> Workflows on Copilot's pull request wait for <em>Approve and run workflows</em>. The Approver clicks it.</li>
+      <li><strong>Iterate with a comment.</strong>
+        <div class="prompt"><span class="lbl">Pull request comment</span><p>@copilot Show the estimated delivery date in a friendly format such as "5 Nov 2026", and add a test for it.</p></div>
+        <span class="expect">Copilot acknowledges, then pushes a new commit to the same pull request.</span></li>
+      <li><strong>Human approval.</strong> The Approver reviews and approves both pull requests. The presenter cannot approve the Copilot pull request they requested, and that is by design.</li>
+    </ol>
+    <div class="callout"><span class="h">Say</span><p>"Copilot gives a fast first review, but merging still needs a different human's approval. That is enforced by the platform, not by good intentions."</p></div>
+    <div class="callout warn"><span class="h">If it goes wrong</span><p>If the cloud agent's pull request is not ready, show its live session log, then review the rehearsal pull request instead. Come back to the live one in Act 5.</p></div>
+  </div>
+</section>
+
+<section class="act" id="act-4">
+  <div class="act-head"><span class="num">4</span><h3>Security gate in the pull request</h3><span class="chip time">32–44 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Code scanning + Copilot Autofix.</strong> Open the pull request from <code>demo/not-found-message</code>, which was opened before the session so CodeQL had time to run. It adds this deliberately unsafe handler:
+        <figure class="code"><figcaption><span>src/app.js on branch demo/not-found-message (deliberately unsafe)</span></figcaption><pre><code>// Branch demo/not-found-message. DELIBERATELY UNSAFE: exists only to show
+// code scanning and Copilot Autofix in a pull request. Never merge it.
+app.get('/orders/lookup', (req, res) =&gt; {
+  const id = req.query.id;
+  const order = orders.find((o) =&gt; o.id === id);
+  if (!order) {
+    return res.send(`&lt;p&gt;No order found for ${id}&lt;/p&gt;`);
+  }
+  res.json(order);
+});</code></pre></figure>
+        <span class="expect">The <em>Code scanning results</em> check reports a cross-site scripting alert on the changed line, with a Copilot Autofix suggestion (typically encoding the output).</span></li>
+      <li><strong>Accept the fix.</strong> Review the Autofix patch, then commit it to the branch. Wait for the rerun, and the alert closes.</li>
+      <li><strong>Dependency review.</strong> Open the pull request from <code>demo/add-date-helper</code>, which adds an old package version with published advisories:
+        <figure class="code"><figcaption><span>Prepared before the session</span></figcaption><pre><code># Branch demo/add-date-helper: adds an old package version with published advisories.
+git switch -c demo/add-date-helper
+npm install lodash@4.17.15 --save-exact
+git commit -am "Add date helper dependency"
+git push -u origin demo/add-date-helper
+gh pr create --fill --base main
+# Expected: the "Dependency Review" check fails and lists the advisories for the added version.</code></pre></figure>
+        <span class="expect">The <em>Dependency Review</em> check fails and lists the advisories. The <em>Files changed</em> tab shows the dependency diff.</span></li>
+      <li><strong>The merge gate.</strong> Scroll to the merge box: merging is blocked until required checks pass and conversations are resolved. Close the dependency pull request.</li>
+      <li><strong>Optional (skip if shown in Session 4):</strong> push protection blocking a made-up Contoso token from the terminal.</li>
+    </ol>
+    <div class="callout"><span class="h">Say</span><p>"Security feedback arrives in the pull request, with a proposed fix, before anything merges. The same gates apply to code from Copilot."</p></div>
+    <div class="callout warn"><span class="h">Verify in rehearsal (not guaranteed by the docs)</span><p>By default the code scanning check fails on error, critical or high findings, and Copilot Autofix covers a subset of CodeQL queries on a best-effort basis. Confirm in rehearsal that this alert fails the check at your thresholds and gets an Autofix suggestion. If it doesn't, adjust the ruleset thresholds or use a higher-severity example. Also confirm the dependency advisories still trigger.</p></div>
+  </div>
+</section>
+
+<section class="act" id="act-5">
+  <div class="act-head"><span class="num">5</span><h3>CI/CD to Azure App Service</h3><span class="chip time">44–54 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Merge.</strong> Squash-merge the API pull request, then the page pull request. <code>Fixes #</code> closes the sub-issues.</li>
+      <li><strong>Watch the pipeline.</strong> In Actions, the <em>CI/CD</em> run on <code>main</code> shows <em>build</em> passing, then <em>deploy</em> waiting for the <strong>production</strong> environment.</li>
+      <li><strong>Approver approves the deployment</strong> (<em>Review deployments</em> → approve). With "Prevent self-review" on, the presenter cannot approve their own deployment.</li>
+      <li><strong>Show OIDC in the logs.</strong> The <em>Az CLI login</em> step signs in with a short-lived token. There is no stored password, and the Azure identity can only deploy to this one web app.</li>
+      <li><strong>Use the app.</strong> Open the environment URL. Look up <code>ORD-100232</code> (Out for delivery), then <code>ORD-999999</code> (clear not-found message), then <code>12345</code> (invalid format, rejected by the API's validation).</li>
+      <li><strong>Deployment history.</strong> Repository home page → <em>Deployments</em>: each release with its environment, commit and logs. The workflow run records the approval.</li>
+    </ol>
+    <figure class="code"><figcaption><span>.github/workflows/ci-cd.yml</span><span class="src"><a href="https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/nodejs-to-azure-app-service">Adapted from: Deploying Node.js to Azure App Service + OIDC in Azure</a></span></figcaption><pre><code><span class="y-k">name</span>: CI/CD
+<span class="y-k">on</span>:
+  <span class="y-k">pull_request</span>:
+    <span class="y-k">branches</span>: [main]
+  <span class="y-k">push</span>:
+    <span class="y-k">branches</span>: [main]
+  <span class="y-k">workflow_dispatch</span>:
+
+<span class="y-k">permissions</span>:
+  <span class="y-k">contents</span>: read           <span class="y-c"> # least privilege by default; raise per job</span>
+
+<span class="y-k">env</span>:
+  <span class="y-k">AZURE_WEBAPP_NAME</span>: contoso-order-desk-demo  <span class="y-c"> # your App Service name</span>
+  <span class="y-k">NODE_VERSION</span>: <span class="y-s">'24.x'</span>
+
+<span class="y-k">jobs</span>:
+  <span class="y-k">build</span>:
+    <span class="y-k">runs-on</span>: ubuntu-latest
+    <span class="y-k">steps</span>:
+      - <span class="y-k">uses</span>: actions/checkout@v6
+      - <span class="y-k">name</span>: Use Node.js
+        <span class="y-k">uses</span>: actions/setup-node@v7
+        <span class="y-k">with</span>:
+          <span class="y-k">node-version</span>: ${{ env.NODE_VERSION }}
+          <span class="y-k">cache</span>: <span class="y-s">'npm'</span>
+      - <span class="y-k">run</span>: npm ci
+      - <span class="y-k">run</span>: npm run build --if-present
+      - <span class="y-k">run</span>: npm test
+      - <span class="y-k">name</span>: Keep only production dependencies
+        <span class="y-k">run</span>: npm prune --omit=dev
+      - <span class="y-k">name</span>: Upload artifact for deployment job
+        <span class="y-k">uses</span>: actions/upload-artifact@v4
+        <span class="y-k">with</span>:
+          <span class="y-k">name</span>: node-app
+          <span class="y-k">path</span>: .
+
+  <span class="y-k">deploy</span>:
+    <span class="y-k">if</span>: github.event_name == <span class="y-s">'push'</span> &amp;&amp; github.ref == <span class="y-s">'refs/heads/main'</span>
+    <span class="y-k">needs</span>: build
+    <span class="y-k">runs-on</span>: ubuntu-latest
+    <span class="y-k">permissions</span>:
+      <span class="y-k">id-token</span>: write      <span class="y-c"> # lets this job request an OIDC token; grants no other access</span>
+      <span class="y-k">contents</span>: read
+    <span class="y-k">environment</span>:
+      <span class="y-k">name</span>: <span class="y-s">'production'</span>   <span class="y-c"> # required reviewers are configured on this environment</span>
+      <span class="y-k">url</span>: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    <span class="y-k">steps</span>:
+      - <span class="y-k">name</span>: Download artifact from build job
+        <span class="y-k">uses</span>: actions/download-artifact@v5
+        <span class="y-k">with</span>:
+          <span class="y-k">name</span>: node-app
+      - <span class="y-k">name</span>: <span class="y-s">'Az CLI login (OIDC)'</span>
+        <span class="y-k">uses</span>: azure/login@8c334a195cbb38e46038007b304988d888bf676a
+        <span class="y-k">with</span>:
+          <span class="y-k">client-id</span>: ${{ secrets.AZURE_CLIENT_ID }}
+          <span class="y-k">tenant-id</span>: ${{ secrets.AZURE_TENANT_ID }}
+          <span class="y-k">subscription-id</span>: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - <span class="y-k">name</span>: <span class="y-s">'Deploy to Azure WebApp'</span>
+        <span class="y-k">id</span>: deploy-to-webapp
+        <span class="y-k">uses</span>: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
+        <span class="y-k">with</span>:
+          <span class="y-k">app-name</span>: ${{ env.AZURE_WEBAPP_NAME }}
+          <span class="y-k">package</span>: .</code></pre></figure>
+    <p class="small muted">Adaptations: OIDC login instead of the publish profile in GitHub's App Service example; Node.js 24; one workflow for CI and CD. Action versions and pinned SHAs are as shown in GitHub Docs on 26 October 2026; update them through Dependabot.</p>
+    <div class="callout"><span class="h">Say</span><p>"Azure trusts a short-lived token from this repository's production environment, and nothing else. A person approved the release, and GitHub recorded it."</p></div>
+    <div class="callout warn"><span class="h">If it goes wrong</span><p>OIDC errors are usually a subject mismatch. The federated credential must match the job exactly (<code>environment:production</code>), and repositories created after 15 July 2026 use a new immutable subject format. Show the last successful deployment and the live site, and fix the credential after the session.</p></div>
+  </div>
+</section>
+
+<section class="act" id="act-6">
+  <div class="act-head"><span class="num">6</span><h3>Close the loop</h3><span class="chip time">54–60 min</span></div>
+  <div class="act-body">
+    <ol class="steps">
+      <li><strong>Back to the business.</strong> The Project board shows the items as <em>Done</em>, and the stakeholder can see the outcome without reading code.</li>
+      <li><strong>Recap the hour</strong> in one line each: requirement → issue (Copilot) → API (agent mode) and page (cloud agent) in parallel → Copilot and human review → CodeQL + Autofix, dependency review → CI/CD with approval and OIDC → live.</li>
+      <li><strong>The audit trail:</strong> signed commits linked to agent session logs, required reviews, deployment approvals and the enterprise audit log, where agent activity can be filtered with <code>actor:Copilot</code>.</li>
+      <li><strong>Bridge to Session 6:</strong> "Sub-issue (3), the audit log, is still open. In the next session we will see what it means to hand whole workstreams like that to agents."</li>
+    </ol>
+  </div>
+</section>
+
+<h2 id="demo-kit-files-used-on-stage">Demo kit: files used on stage</h2>
+<p>The full environment build (starter app, Azure setup, rulesets, environments) is in the <a href="facilitator.html#demo-environment">facilitator guide</a>. These files are committed to <code>main</code> before the <code>demo-start</code> tag:</p>
+<figure class="code"><figcaption><span>.github/ISSUE_TEMPLATE/feature-request.yml</span><span class="src"><a href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms">Syntax: Syntax for issue forms</a></span></figcaption><pre><code><span class="y-k">name</span>: Feature request
+<span class="y-k">description</span>: Propose a new capability for Contoso Order Desk.
+<span class="y-k">title</span>: <span class="y-s">"[Feature]: "</span>
+<span class="y-k">labels</span>: [<span class="y-s">"enhancement"</span>]
+<span class="y-k">type</span>: feature           <span class="y-c"> # needs the "feature" issue type in your organization</span>
+<span class="y-k">projects</span>: [<span class="y-s">"contoso/1"</span>] <span class="y-c"> # the opener needs write access to this project</span>
+<span class="y-k">body</span>:
+  - <span class="y-k">type</span>: markdown
+    <span class="y-k">attributes</span>:
+      <span class="y-k">value</span>: |
+        Describe the business need. Copilot and reviewers work best with clear, testable acceptance criteria.
+  - <span class="y-k">type</span>: textarea
+    <span class="y-k">id</span>: problem
+    <span class="y-k">attributes</span>:
+      <span class="y-k">label</span>: Business problem
+      <span class="y-k">description</span>: Who is affected and what slows them down today?
+    <span class="y-k">validations</span>:
+      <span class="y-k">required</span>: true
+  - <span class="y-k">type</span>: textarea
+    <span class="y-k">id</span>: outcome
+    <span class="y-k">attributes</span>:
+      <span class="y-k">label</span>: Desired outcome
+      <span class="y-k">description</span>: What can users do when this is done?
+    <span class="y-k">validations</span>:
+      <span class="y-k">required</span>: true
+  - <span class="y-k">type</span>: textarea
+    <span class="y-k">id</span>: acceptance
+    <span class="y-k">attributes</span>:
+      <span class="y-k">label</span>: Acceptance criteria
+      <span class="y-k">description</span>: One testable statement per line.
+      <span class="y-k">placeholder</span>: |
+        - Given a valid order number, the agent sees the status and estimated delivery date
+        - An unknown order number shows a clear <span class="y-s">"not found"</span> message
+    <span class="y-k">validations</span>:
+      <span class="y-k">required</span>: true
+  - <span class="y-k">type</span>: dropdown
+    <span class="y-k">id</span>: data
+    <span class="y-k">attributes</span>:
+      <span class="y-k">label</span>: Data sensitivity
+      <span class="y-k">options</span>:
+        - No customer data
+        - Customer contact data (personal data)
+        - Payment data
+    <span class="y-k">validations</span>:
+      <span class="y-k">required</span>: true
+  - <span class="y-k">type</span>: textarea
+    <span class="y-k">id</span>: nfr
+    <span class="y-k">attributes</span>:
+      <span class="y-k">label</span>: Non-functional requirements
+      <span class="y-k">description</span>: Performance, security, accessibility and audit needs.</code></pre></figure>
+<figure class="code"><figcaption><span>.github/ISSUE_TEMPLATE/config.yml</span><span class="src"><a href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository">Source: Configuring issue templates</a></span></figcaption><pre><code><span class="y-k">blank_issues_enabled</span>: false</code></pre></figure>
+<figure class="code"><figcaption><span>.github/workflows/copilot-setup-steps.yml</span><span class="src"><a href="https://docs.github.com/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/customize-the-agent-environment">Adapted from: Configure the development environment (Node 24)</a></span></figcaption><pre><code><span class="y-k">name</span>: <span class="y-s">"Copilot Setup Steps"</span>
+<span class="y-k">on</span>:
+  <span class="y-k">workflow_dispatch</span>:
+  <span class="y-k">push</span>:
+    <span class="y-k">paths</span>:
+      - .github/workflows/copilot-setup-steps.yml
+  <span class="y-k">pull_request</span>:
+    <span class="y-k">paths</span>:
+      - .github/workflows/copilot-setup-steps.yml
+<span class="y-k">jobs</span>:
+<span class="y-c">  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.</span>
+  <span class="y-k">copilot-setup-steps</span>:
+    <span class="y-k">runs-on</span>: ubuntu-latest
+    <span class="y-k">permissions</span>:
+      <span class="y-k">contents</span>: read
+    <span class="y-k">steps</span>:
+      - <span class="y-k">name</span>: Checkout code
+        <span class="y-k">uses</span>: actions/checkout@v6
+      - <span class="y-k">name</span>: Set up Node.js
+        <span class="y-k">uses</span>: actions/setup-node@v7
+        <span class="y-k">with</span>:
+          <span class="y-k">node-version</span>: <span class="y-s">"24"</span>
+          <span class="y-k">cache</span>: <span class="y-s">"npm"</span>
+      - <span class="y-k">name</span>: Install JavaScript dependencies
+        <span class="y-k">run</span>: npm ci</code></pre></figure>
+<figure class="code"><figcaption><span>.github/CODEOWNERS</span><span class="src"><a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners">Syntax: About code owners</a></span></figcaption><pre><code># Default owners for everything in the repository
+*                     @contoso/order-desk-maintainers
+
+# Pipelines, Copilot configuration and rules need platform review
+/.github/             @contoso/platform-engineering
+
+# Give the CODEOWNERS file an owner too, so nobody can quietly change ownership
+/.github/CODEOWNERS   @contoso/platform-engineering</code></pre></figure>
+<p>Also on <code>main</code>: <code>.github/copilot-instructions.md</code> and <code>.github/instructions/tests.instructions.md</code> (<a href="03-copilot.html#make-copilot-follow-contosos-standards">Session 3</a>), plus <code>.github/dependabot.yml</code> and <code>.github/workflows/dependency-review.yml</code> (<a href="04-security.html#secure-the-supply-chain">Session 4</a>).</p>
+
+<h2 id="fallbacks-at-a-glance">Fallbacks at a glance</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Risk</th><th>What you see</th><th>Recovery</th></tr></thead>
+  <tbody>
+    <tr><td>Creating issues with Copilot is unavailable (preview)</td><td>No draft, or an unexpected format</td><td>Use the Feature request form with the prepared text</td></tr>
+    <tr><td>Agent mode stalls</td><td>Repeated failing test loops</td><td>Push <code>fallback/order-lookup-api</code> and continue at Act 3</td></tr>
+    <tr><td>Cloud agent pull request not ready</td><td>Session still running (the hard limit is 59 minutes)</td><td>Show the live log, then review the rehearsal pull request</td></tr>
+    <tr><td>Checks don't start on Copilot's pull request</td><td>"Approve and run workflows" banner</td><td>The Approver approves the workflow run</td></tr>
+    <tr><td>Code scanning still running</td><td>Check pending</td><td>Use the security pull requests opened before the session</td></tr>
+    <tr><td>Deployment fails</td><td>Login or deploy step red</td><td>Show the last successful deployment and the live site; check the federated credential subject afterwards</td></tr>
+    <tr><td>Network failure</td><td>Pages don't load</td><td>Play the rehearsal recording and narrate live</td></tr>
+  </tbody>
+</table></div>
+
+<details class="facilitator" open="">
+  <summary>Presenter tips for a live AI demo</summary>
+  <div class="fbody">
+    <ul>
+      <li><strong>Say out loud that AI output varies.</strong> "Copilot won't type exactly what it typed in rehearsal; that's normal. Watch how we check it." This turns surprises into credibility.</li>
+      <li><strong>Narrate the decision, not the button.</strong> For every step, say who decides (a person) and what enforces it (the platform).</li>
+      <li><strong>Start long-running things early:</strong> assign the cloud agent in Act 1, and open the security pull requests before the session.</li>
+      <li><strong>Keep a visible clock.</strong> If you are more than 3 minutes behind at minute 24, use a fallback branch for the rest of Act 2.</li>
+      <li><strong>Reset after rehearsal:</strong> reset <code>main</code> to <code>demo-start</code>, close rehearsal issues and pull requests (keep one Copilot pull request as a draft fallback), and redeploy the baseline.</li>
+      <li><strong>Afterwards:</strong> delete the Azure resource group if the app is no longer needed, and remove the demo custom pattern if it was created at organization level.</li>
+    </ul>
+  </div>
+</details>
+
+<section aria-label="Sources" class="sources">
+  <h2 class="notoc" id="sources">Sources</h2>
+  <ul>
+    <li><a class="ext" href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms">Syntax for issue forms</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/copilot-for-github-tasks/use-copilot-to-create-or-update-issues">Using GitHub Copilot to create or update issues</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/use-copilot-agents/use-agent-mode">Using agent mode in your IDE</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github">Using Copilot cloud agent on GitHub</a></li>
+    <li><a class="ext" href="https://docs.github.com/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/customize-the-agent-environment">Configure the development environment</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations">Risks and mitigations for GitHub Copilot cloud agent</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review">Configuring code review by GitHub Copilot</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/code-security/how-tos/manage-security-alerts/manage-code-scanning-alerts/triage-alerts-in-pull-requests">Triaging code scanning alerts in pull requests</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs">Building and testing Node.js</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/nodejs-to-azure-app-service">Deploying Node.js to Azure App Service</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-azure">Configuring OpenID Connect in Azure</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments">Managing environments for deployment</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/view-deployment-history">Viewing deployment history</a></li>
+    <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions">Deploy to Azure App Service by using GitHub Actions (Microsoft Learn)</a></li>
+    <li><a class="ext" href="https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect">Authenticate to Azure from GitHub Actions by OpenID Connect (Microsoft Learn)</a></li>
+  </ul>
+</section>
+<nav aria-label="Previous and next" class="pager"><a class="prev" href="04-security.html"><span class="d">← Previous</span>04 · Building Security into the Developer Workflow</a><a class="next" href="06-agentic.html"><span class="d">Next →</span>06 · The Next Evolution: Agentic Software Development</a></nav>
+    </div>
+  </main>
+  <nav aria-label="On this page" class="toc"><h2>On this page</h2><ol><li><a href="#the-story">The story</a></li><li><a href="#demo-architecture">Demo architecture</a></li><li><a href="#timeline-60-minutes">Timeline · 60 minutes</a></li><li><a href="#pre-flight-30-minutes-before">Pre-flight · 30 minutes before</a></li><li><a href="#demo-kit-files-used-on-stage">Demo kit: files used on stage</a></li><li><a href="#fallbacks-at-a-glance">Fallbacks at a glance</a></li></ol></nav>
+</div>
+<footer class="site">
+  <div class="inner">
+    <div>Content compiled from <a class="ext" href="https://docs.github.com/en">GitHub Docs</a> and <a class="ext" href="https://learn.microsoft.com/">Microsoft Learn</a>, checked on 26 October 2026. GitHub features, plans and preview status change often: re-check the <a class="ext" href="https://github.blog/changelog/">GitHub changelog</a> in the week before delivery.</div>
+    <div>Prepared by Microsoft for the Contoso half-day workshop. Product names, plans and preview labels are quoted from GitHub Docs as of the date above; nothing on this site is a commercial offer.</div>
+  </div>
+</footer>
+
+</body></html>

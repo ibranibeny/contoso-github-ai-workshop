@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>06 · The Next Evolution: Agentic Software Development · Contoso × GitHub Workshop</title>
+<meta content="Explore the emerging evolution from AI-assisted development toward agentic software development, and how AI is changing the way development teams approach the software engineering lifecycle." name="description"/>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#ffffff; --surface:#f6f8fa; --surface-2:#eef1f5; --fg:#1f2328; --muted:#59636e; --border:#d1d9e0;
+  --accent:#8250df; --accent-soft:#f6f0ff; --accent-2:#0969da; --accent-2-soft:#ddf4ff;
+  --ok:#1a7f37; --ok-soft:#dafbe1; --warn:#9a6700; --warn-soft:#fff8c5; --danger:#cf222e; --danger-soft:#ffebe9;
+  --on-accent:#ffffff; --topbar-bg:rgba(255,255,255,.9);
+  --fac-bg:#fff9e8; --fac-border:#e3b341; --fac-fg:#4d3800; --fac-chip:#fbe7a6;
+  --hero-a:#0d1117; --hero-b:#151a3f; --hero-c:#3a1d78; --hero-fg:#f0f6fc; --hero-muted:#c3cbd6;
+  --hero-line:rgba(240,246,252,.18); --hero-chip:rgba(240,246,252,.07);
+  --hero-grad-1:#d2a8ff; --hero-grad-2:#79c0ff; --glow-1:rgba(163,113,247,.38); --glow-2:rgba(68,147,248,.26);
+  --code-bg:#0d1117; --code-fg:#e6edf3; --code-muted:#8b949e; --code-key:#ff7b72; --code-str:#a5d6ff; --code-head:#161b22;
+  --lane-gh:rgba(130,80,223,.06); --lane-gh-stroke:rgba(130,80,223,.38); --lane-az:rgba(9,105,218,.06); --lane-az-stroke:rgba(9,105,218,.38);
+  --shadow:0 1px 2px rgba(31,35,40,.05),0 10px 28px rgba(31,35,40,.06);
+  --radius:14px; --max:1440px;
+  --font:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code","Cascadia Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#0d1117; --surface:#151b23; --surface-2:#1c2330; --fg:#e6edf3; --muted:#9198a1; --border:#30363d;
+    --accent:#a371f7; --accent-soft:rgba(163,113,247,.14); --accent-2:#4493f8; --accent-2-soft:rgba(68,147,248,.14);
+    --ok:#3fb950; --ok-soft:rgba(63,185,80,.14); --warn:#d29922; --warn-soft:rgba(210,153,34,.14); --danger:#f85149; --danger-soft:rgba(248,81,73,.14);
+    --on-accent:#0d1117; --topbar-bg:rgba(13,17,23,.88);
+    --fac-bg:rgba(210,153,34,.08); --fac-border:rgba(210,153,34,.55); --fac-fg:#f2cc60; --fac-chip:rgba(210,153,34,.22);
+    --code-bg:#010409; --code-head:#0d1117;
+    --lane-gh:rgba(163,113,247,.09); --lane-gh-stroke:rgba(163,113,247,.42); --lane-az:rgba(68,147,248,.09); --lane-az-stroke:rgba(68,147,248,.42);
+    --shadow:0 0 0 1px rgba(240,246,252,.04);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-block-start:84px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.62;text-align:start;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);padding:.1em .38em;border-radius:6px}
+kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--border);border-block-end-width:2px;border-radius:6px;padding:.05em .4em;background:var(--surface)}
+img,svg{max-inline-size:100%}
+.skip{position:absolute;inset-inline-start:-9999px;inset-block-start:8px;background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px;z-index:60}
+.skip:focus{inset-inline-start:12px}
+
+/* Top bar */
+.topbar{position:sticky;inset-block-start:0;z-index:40;background:var(--topbar-bg);backdrop-filter:saturate(180%) blur(10px);border-block-end:1px solid var(--border)}
+.nav{max-inline-size:var(--max);margin-inline:auto;padding-block:10px;padding-inline:20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--fg);text-decoration:none;white-space:nowrap;font-size:15px}
+.brand-mark{inline-size:26px;block-size:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.brand small{color:var(--muted);font-weight:500}
+.nav ul{list-style:none;display:flex;gap:2px;margin:0;margin-inline-start:auto;padding:0;overflow-x:auto}
+.nav li a{display:block;padding-block:6px;padding-inline:10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;white-space:nowrap}
+.nav li a:hover,.nav li a[aria-current="page"]{background:var(--surface);color:var(--fg)}
+.fac-toggle{display:none;align-items:center;gap:8px;border:1px solid var(--fac-border);background:var(--fac-bg);color:var(--fac-fg);font:inherit;font-size:13px;font-weight:650;padding-block:6px;padding-inline:10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.js .fac-toggle{display:inline-flex}
+.fac-toggle .dot{inline-size:8px;block-size:8px;border-radius:50%;background:var(--fac-border)}
+.fac-off .fac-toggle{border-color:var(--border);background:var(--surface);color:var(--muted)}
+.fac-off .fac-toggle .dot{background:var(--border)}
+.fac-off .facilitator{display:none}
+
+/* Layout */
+.layout{max-inline-size:var(--max);margin-inline:auto;display:grid;grid-template-columns:270px minmax(0,1fr) 220px;gap:36px;padding-inline:20px}
+.sidebar{position:sticky;inset-block-start:58px;align-self:start;max-block-size:calc(100vh - 58px);overflow-y:auto;padding-block:24px 40px;font-size:14px}
+.sidebar h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 10px;margin-inline:0}
+.sidebar ol{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:2px}
+.sidebar a{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:7px;padding-inline:10px;border-radius:9px;color:var(--fg);text-decoration:none;line-height:1.35}
+.sidebar a:hover{background:var(--surface)}
+.sidebar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:650;box-shadow:inset 3px 0 0 var(--accent)}
+.sidebar .t{font-family:var(--mono);font-size:12px;color:var(--muted);padding-block-start:1px}
+.sidebar .brk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding-block:5px;padding-inline:10px;color:var(--muted);font-style:italic}
+.toc{position:sticky;inset-block-start:58px;align-self:start;padding-block:28px;font-size:13px;max-block-size:calc(100vh - 58px);overflow-y:auto}
+.toc h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-block:0 8px;margin-inline:0}
+.toc ol{list-style:none;margin:0;padding:0;border-inline-start:1px solid var(--border)}
+.toc a{display:block;padding-block:4px;padding-inline:12px;color:var(--muted);text-decoration:none;line-height:1.35}
+.toc a:hover{color:var(--fg)}
+main{min-inline-size:0;padding-block:28px 64px}
+.content{max-inline-size:900px}
+@media (max-width:1360px){.layout{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .sidebar{position:static;max-block-size:none;padding-block:12px 0;border-block-end:1px solid var(--border)}
+  .sidebar details:not([open]) ol{display:none}
+  .nav ul{display:none}
+}
+.sidebar details summary{display:none}
+@media (max-width:860px){.sidebar details summary{display:block;cursor:pointer;font-weight:650;padding-block:8px}}
+
+/* Typography */
+h1{font-size:clamp(30px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin-block:6px 14px;margin-inline:0;font-weight:750}
+h2{font-size:26px;line-height:1.25;letter-spacing:-.01em;margin-block:46px 12px;margin-inline:0;padding-block-start:6px;font-weight:700}
+h3{font-size:19px;line-height:1.3;margin-block:28px 8px;margin-inline:0;font-weight:680}
+h4{font-size:16px;margin-block:20px 6px;margin-inline:0}
+p{margin-block:0 14px}
+ul,ol{margin-block:0 14px;padding-inline-start:22px}
+li{margin-block:4px}
+li::marker{color:var(--muted)}
+hr{border:0;border-block-start:1px solid var(--border);margin-block:36px}
+.lede{font-size:18px;color:var(--muted);max-inline-size:70ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.crumbs{font-size:13.5px;color:var(--muted);margin-block-end:6px}
+.crumbs a{color:var(--muted)}
+
+/* Chips & badges */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-block:4px 18px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--fg);padding-block:3px;padding-inline:10px;border-radius:999px;white-space:nowrap}
+.chip.time{font-family:var(--mono);font-size:12.5px}
+.chip.talk{background:var(--accent-2-soft);border-color:transparent;color:var(--accent-2)}
+.chip.demo{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.chip.disc{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.chip.brk{background:var(--surface-2);border-color:transparent;color:var(--muted)}
+.st{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-block:1px;padding-inline:7px;border-radius:999px;vertical-align:2px;white-space:nowrap}
+.st.ga{background:var(--ok-soft);color:var(--ok)}
+.st.pv{background:var(--warn-soft);color:var(--warn)}
+.st.plan{background:var(--accent-2-soft);color:var(--accent-2)}
+.st.ret{background:var(--danger-soft);color:var(--danger)}
+.num{display:inline-grid;place-items:center;inline-size:34px;block-size:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:15px;margin-inline-end:4px}
+
+/* Cards & grids */
+.grid{display:grid;gap:14px;margin-block:8px 18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:980px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding-block:16px;padding-inline:18px;box-shadow:var(--shadow)}
+.card h3,.card h4{margin-block-start:0}
+.card p:last-child,.card ul:last-child{margin-block-end:0}
+.card .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-block-end:4px}
+.card.soft{background:var(--surface);box-shadow:none}
+.card.accent{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.card.blue{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+a.card{display:block;color:inherit;text-decoration:none}
+a.card:hover{border-color:var(--accent)}
+
+/* Glance */
+.glance{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;margin-block:6px 26px}
+@media (max-width:760px){.glance{grid-template-columns:minmax(0,1fr)}}
+.glance .card ul{padding-inline-start:18px}
+.keymsg{font-size:17px;font-weight:600;line-height:1.45;margin:0}
+
+/* Callouts */
+.callout{border:1px solid var(--border);border-inline-start:4px solid var(--accent-2);background:var(--surface);border-radius:10px;padding-block:12px;padding-inline:16px;margin-block:14px 18px}
+.callout p:last-child,.callout ul:last-child{margin-block-end:0}
+.callout .h{font-weight:700;display:block;margin-block-end:4px}
+.callout.tip{border-inline-start-color:var(--ok)}
+.callout.warn{border-inline-start-color:var(--warn);background:var(--warn-soft)}
+.callout.danger{border-inline-start-color:var(--danger);background:var(--danger-soft)}
+.callout.docs{border-inline-start-color:var(--accent)}
+
+/* Facilitator panels */
+.facilitator{border:1px solid var(--fac-border);background:var(--fac-bg);border-radius:var(--radius);margin-block:22px 26px;padding-block:0;padding-inline:0}
+.facilitator > summary{list-style:none;cursor:pointer;padding-block:12px;padding-inline:18px;font-weight:700;color:var(--fac-fg);display:flex;align-items:center;gap:10px}
+.facilitator > summary::-webkit-details-marker{display:none}
+.facilitator > summary::before{content:"FACILITATOR";font-size:10.5px;letter-spacing:.1em;background:var(--fac-chip);color:var(--fac-fg);padding-block:2px;padding-inline:8px;border-radius:999px}
+.facilitator > summary::after{content:"\25BE";margin-inline-start:auto;font-size:14px;transition:transform .15s}
+.facilitator:not([open]) > summary::after{transform:rotate(-90deg)}
+.facilitator .fbody{padding-block:0 16px;padding-inline:18px}
+.facilitator h4{margin-block-start:14px;color:var(--fac-fg)}
+.facilitator table{background:var(--bg)}
+
+/* Tables */
+.tablewrap{overflow-x:auto;margin-block:8px 20px;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;inline-size:100%;font-size:14.5px}
+th,td{text-align:start;vertical-align:top;padding-block:9px;padding-inline:12px;border-block-end:1px solid var(--border)}
+thead th{background:var(--surface);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-block-end:0}
+td.t{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--muted)}
+tr.break td{background:var(--surface);color:var(--muted);font-style:italic}
+.agenda td:nth-child(2) a{font-weight:650}
+.agenda td p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* Steps (runbook) */
+.steps{list-style:none;counter-reset:s;padding:0;margin-block:8px 18px;display:grid;gap:10px}
+.steps > li{counter-increment:s;position:relative;padding-block:12px;padding-inline:56px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg);margin:0}
+.steps > li::before{content:counter(s);position:absolute;inset-inline-start:14px;inset-block-start:12px;inline-size:28px;block-size:28px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-weight:750;font-size:14px;color:var(--fg)}
+.steps > li > :last-child{margin-block-end:0}
+.steps .expect{display:block;margin-block-start:6px;font-size:14px;color:var(--ok)}
+.steps .expect::before{content:"\2713  Expect: ";font-weight:700}
+
+/* Acts (demo) */
+.act{border:1px solid var(--border);border-radius:var(--radius);margin-block:26px;overflow:hidden;box-shadow:var(--shadow)}
+.act-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;padding-inline:18px;background:var(--surface);border-block-end:1px solid var(--border)}
+.act-head h3{margin:0;font-size:19px}
+.act-head .chip{margin-inline-start:auto}
+.act-body{padding-block:14px 4px;padding-inline:18px}
+
+/* Prompt blocks */
+.prompt{border:1px solid var(--lane-gh-stroke);background:var(--lane-gh);border-radius:12px;padding-block:10px;padding-inline:14px;margin-block:10px 16px}
+.prompt .lbl{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-block-end:4px}
+.prompt p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.55;white-space:pre-wrap}
+
+/* Code */
+figure.code{margin-block:10px 18px;margin-inline:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--code-bg)}
+figure.code figcaption{display:flex;align-items:center;gap:10px;background:var(--code-head);color:var(--code-muted);font-family:var(--mono);font-size:12.5px;padding-block:7px;padding-inline:14px;border-block-end:1px solid rgba(240,246,252,.1)}
+figure.code figcaption .src{margin-inline-start:auto;font-family:var(--font);font-size:12px}
+figure.code figcaption .src a{color:var(--code-str)}
+figure.code pre{margin:0;padding-block:14px;padding-inline:16px;overflow-x:auto;color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.55;background:transparent}
+figure.code code{background:none;padding:0;font-size:inherit;color:inherit}
+.copy{border:1px solid rgba(240,246,252,.2);background:transparent;color:var(--code-fg);font:inherit;font-size:12px;border-radius:6px;padding-block:2px;padding-inline:8px;cursor:pointer}
+.copy:hover{background:rgba(240,246,252,.1)}
+.y-c{color:var(--code-muted)} .y-k{color:var(--code-key)} .y-s{color:var(--code-str)}
+
+/* Diagrams */
+.diagram{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding-block:18px;padding-inline:18px;margin-block:12px 20px;margin-inline:0;overflow-x:auto}
+.diagram figcaption{font-size:13px;color:var(--muted);margin-block-start:10px}
+.flow{display:flex;align-items:stretch;gap:0;min-inline-size:720px}
+.flow .node{flex:1 1 0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;line-height:1.4}
+.flow .node b{display:block;font-size:14px;margin-block-end:4px}
+.flow .node .tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-block-end:2px}
+.flow .node ul{margin:0;padding-inline-start:16px;font-size:13px}
+.flow .node.gh{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.flow .node.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.flow .node.hl{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.flow .arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--muted);font-size:18px}
+.pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;min-inline-size:760px}
+.pillar{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:12px;font-size:13.5px}
+.pillar h4{margin-block:0 6px;font-size:14.5px}
+.pillar ul{margin:0;padding-inline-start:16px}
+.pillar.ai{border-color:var(--lane-gh-stroke);background:var(--lane-gh)}
+.foundation{grid-column:1 / -1;background:var(--surface-2);border:1px dashed var(--border);border-radius:12px;padding-block:10px;padding-inline:14px;font-size:13.5px;text-align:center}
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;min-inline-size:760px}
+.rung{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding-block:10px;padding-inline:12px;font-size:13.5px}
+.rung b{display:block}
+.rung .lvl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rung.r1{min-block-size:120px}.rung.r2{min-block-size:150px}.rung.r3{min-block-size:180px}.rung.r4{min-block-size:210px;border-color:var(--lane-gh-stroke);background:var(--lane-gh)}.rung.r5{min-block-size:240px;border-color:var(--accent);background:var(--accent-soft)}
+.arch{display:grid;grid-template-columns:minmax(0,1.3fr) 46px minmax(0,1fr);gap:0;align-items:stretch;min-inline-size:680px}
+.lane{border-radius:14px;padding-block:12px;padding-inline:12px;border:1.5px dashed var(--lane-gh-stroke);background:var(--lane-gh)}
+.lane.az{border-color:var(--lane-az-stroke);background:var(--lane-az)}
+.lane > .lt{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:750;color:var(--muted);margin-block-end:8px;display:block}
+.lane .boxes{display:grid;gap:8px}
+.lane .box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding-block:8px;padding-inline:10px;font-size:13px;line-height:1.35;display:flex;gap:10px;align-items:center}
+.lane .box b{display:block;font-size:13.5px}
+.lane .box .ic{flex:0 0 36px;inline-size:36px;block-size:36px;display:grid;place-items:center}
+.lane .box .ic svg{inline-size:36px;block-size:36px}
+.lane .box .gnum{flex:0 0 26px;inline-size:26px;block-size:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:var(--accent-soft);color:var(--accent)}
+.bridge{display:grid;place-items:center;text-align:center;font-size:11.5px;color:var(--muted);padding-inline:4px}
+.bridge span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.06em;font-weight:700}
+
+/* Hero (home) */
+.hero{background:radial-gradient(1100px 520px at 88% -12%,var(--glow-1),transparent 62%),radial-gradient(900px 520px at -5% 112%,var(--glow-2),transparent 60%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 55%,var(--hero-c));color:var(--hero-fg);border-radius:20px;padding-block:44px 38px;padding-inline:38px;margin-block:0 26px}
+.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--hero-muted);background:var(--hero-chip);border:1px solid var(--hero-line);padding-block:5px;padding-inline:12px;border-radius:999px;margin:0 0 16px}
+.hero h1{color:var(--hero-fg);font-size:clamp(32px,4.2vw,50px);line-height:1.06;margin-block:0 16px}
+.grad{background:linear-gradient(90deg,var(--hero-grad-1),var(--hero-grad-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{color:var(--hero-muted);font-size:18px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-block:22px 24px;margin-inline:0}
+@media (max-width:760px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-inline:22px}}
+.facts div{background:var(--hero-chip);border:1px solid var(--hero-line);border-radius:12px;padding-block:9px;padding-inline:13px}
+.facts dt{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--hero-muted);margin:0}
+.facts dd{margin:2px 0 0;font-weight:650;font-size:15px;line-height:1.35}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding-block:10px;padding-inline:16px;border-radius:10px;font-weight:650;text-decoration:none;font-size:15px}
+.btn.primary{background:var(--hero-fg);color:var(--hero-a)}
+.btn.ghost{color:var(--hero-fg);border:1px solid var(--hero-line)}
+
+/* Checklists */
+.check{list-style:none;padding:0;margin-block:6px 18px;display:grid;gap:6px}
+.check li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0;padding-block:6px;padding-inline:10px;border:1px solid var(--border);border-radius:9px;background:var(--bg)}
+.check input{margin-block-start:4px;accent-color:var(--accent)}
+.check li.done{background:var(--ok-soft);border-color:transparent}
+
+/* Sources */
+.sources{border-block-start:1px solid var(--border);margin-block-start:40px;padding-block-start:8px}
+.sources ul{columns:2;column-gap:28px;font-size:14px;padding-inline-start:18px}
+@media (max-width:760px){.sources ul{columns:1}}
+.sources li{break-inside:avoid}
+.ext::after{content:" \2197";font-size:.85em;color:var(--muted)}
+
+/* Pager */
+.pager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block-start:44px}
+.pager a{display:block;border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:16px;text-decoration:none;color:var(--fg)}
+.pager a:hover{border-color:var(--accent)}
+.pager .d{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.pager .next{text-align:end;grid-column:2}
+
+/* Worksheet */
+.canvas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block:10px 20px}
+@media (max-width:760px){.canvas{grid-template-columns:minmax(0,1fr)}}
+.canvas .cell{border:1px solid var(--border);border-radius:12px;padding-block:12px;padding-inline:14px;min-block-size:120px;background:var(--bg)}
+.canvas .cell b{display:block;margin-block-end:4px}
+.canvas .cell p{font-size:14px;color:var(--muted);margin:0}
+.matrix{display:grid;grid-template-columns:28px repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(110px,auto)) 28px;gap:8px;margin-block:10px 20px;max-inline-size:640px}
+.matrix .q{border:1px solid var(--border);border-radius:12px;padding-block:10px;padding-inline:12px;font-size:13.5px;background:var(--bg)}
+.matrix .q b{display:block}
+.matrix .q.best{border-color:var(--ok);background:var(--ok-soft)}
+.matrix .ax{display:grid;place-items:center;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.matrix .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / 3;grid-column:1}
+.matrix .ax.x{grid-column:2 / 4;grid-row:3}
+
+footer.site{border-block-start:1px solid var(--border);margin-block-start:20px}
+footer.site .inner{max-inline-size:var(--max);margin-inline:auto;padding-block:22px 36px;padding-inline:20px;font-size:13.5px;color:var(--muted);display:grid;gap:6px}
+
+@media print{
+  .topbar,.sidebar,.toc,.pager,.fac-toggle,.copy{display:none !important}
+  .layout{display:block}
+  .facilitator{break-inside:avoid}
+  .hero{background:none;color:var(--fg);border:1px solid var(--border)}
+  .hero h1,.hero .lede,.facts dd,.facts dt{color:var(--fg)}
+  a{color:var(--fg)}
+}
+
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  var KEY='contoso-ws-fac';
+  try{ if(localStorage.getItem(KEY)==='off'){ d.classList.add('fac-off'); } }catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.querySelector('.fac-toggle');
+    function label(){ var off=d.classList.contains('fac-off'); b.setAttribute('aria-pressed', off?'false':'true'); b.querySelector('.lbl').textContent= off?'Facilitator notes: off':'Facilitator notes: on'; }
+    if(b){ label(); b.addEventListener('click',function(){ d.classList.toggle('fac-off'); try{localStorage.setItem(KEY, d.classList.contains('fac-off')?'off':'on');}catch(e){} label(); }); }
+    document.querySelectorAll('figure.code').forEach(function(f){
+      var cap=f.querySelector('figcaption'); var pre=f.querySelector('pre'); if(!cap||!pre){return;}
+      var btn=document.createElement('button'); btn.type='button'; btn.className='copy'; btn.textContent='Copy';
+      btn.addEventListener('click',function(){
+        var t=pre.innerText;
+        var p=(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(t):Promise.reject(new Error('no clipboard'));
+        p.then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},1500);},function(){btn.textContent='Copy failed';});
+      });
+      cap.appendChild(btn);
+    });
+    document.querySelectorAll('.check input[type=checkbox][data-k]').forEach(function(cb){
+      var k='contoso-ws-ck-'+cb.getAttribute('data-k');
+      try{ if(localStorage.getItem(k)==='1'){cb.checked=true;} }catch(e){}
+      function upd(){ var li=cb.closest('li'); if(li){li.classList.toggle('done',cb.checked);} }
+      upd();
+      cb.addEventListener('change',function(){ try{localStorage.setItem(k,cb.checked?'1':'0');}catch(e){} upd(); });
+    });
+  });
+})();
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <nav aria-label="Site" class="nav">
+    <a class="brand" href="index.html"><span aria-hidden="true" class="brand-mark">C</span><span>Contoso × GitHub <small>· AI-Powered SDLC Workshop</small></span></a>
+    <ul>
+      <li><a href="index.html">Agenda</a></li>
+      <li><a href="05-live-demo.html">Live demo</a></li>
+      <li><a href="facilitator.html">Facilitator guide</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      
+    </ul>
+    <button aria-pressed="true" class="fac-toggle" title="Show or hide the facilitator notes on every page" type="button"><span aria-hidden="true" class="dot"></span><span class="lbl">Facilitator notes: on</span></button>
+  </nav>
+</header>
+<div class="layout">
+  <aside aria-label="Workshop sessions" class="sidebar">
+    <details open="">
+      <summary>Workshop sessions</summary>
+      <h2>Start here</h2>
+      <ol>
+        <li><a href="index.html"><span class="t">—</span><span>Overview &amp; agenda</span></a></li>
+      </ol>
+      <h2>Agenda · 13:00–16:30</h2>
+      <ol>
+        <li><a href="01-ai-era.html"><span class="t">13:00</span><span>Opening &amp; Software Development in the AI Era</span></a></li>
+        <li><a href="02-platform.html"><span class="t">13:15</span><span>GitHub as an AI-Powered Developer Platform</span></a></li>
+        <li><a href="03-copilot.html"><span class="t">13:40</span><span>Accelerating Developer Productivity with GitHub Copilot</span></a></li>
+        <li><a href="04-security.html"><span class="t">14:10</span><span>Building Security into the Developer Workflow</span></a></li>
+        <li class="brk"><span class="t">14:35</span><span>Break</span></li>
+        <li><a href="05-live-demo.html"><span class="t">14:45</span><span>Live Demo: From Business Requirement to Production</span></a></li>
+        <li><a aria-current="page" href="06-agentic.html"><span class="t">15:45</span><span>The Next Evolution: Agentic Software Development</span></a></li>
+        <li><a href="07-next-steps.html"><span class="t">16:10</span><span>Discussion, Use Cases &amp; Next Steps</span></a></li>
+        
+      </ol>
+      <h2>Run the workshop</h2>
+      <ol>
+        <li><a href="facilitator.html"><span class="t">↳</span><span>Facilitator guide &amp; preparation</span></a></li>
+        <li><a href="resources.html"><span class="t">↳</span><span>Resources &amp; GitHub Docs</span></a></li>
+      </ol>
+    </details>
+  </aside>
+  <main id="main">
+    <div class="content">
+<div class="crumbs"><a href="index.html#agenda">Agenda</a> / Session 6</div><h1><span class="num">06</span> The Next Evolution: Agentic Software Development</h1><div class="chips"><span class="chip time">15:45–16:10</span><span class="chip">25 min</span><span class="chip talk">Talk + demo</span></div><p class="lede">Explore the emerging evolution from AI-assisted development toward agentic software development, and how AI is changing the way development teams approach the software engineering lifecycle.</p>
+
+<div class="glance">
+  <div class="card">
+    <div class="k">Key message</div>
+    <p class="keymsg">Agentic development means delegating whole tasks to agents that work in parallel, and the engineering job moves toward specifying, reviewing and governing that work. GitHub builds the guardrails into the platform so that delegation stays safe.</p>
+  </div>
+  <div class="card soft">
+    <div class="k">By the end of this session</div>
+    <ul>
+      <li>The room can tell assistive AI from agentic AI, and knows which tasks suit agents</li>
+      <li>Everyone knows where agents run today and what is GA versus preview</li>
+      <li>Leaders know the governance controls: policies, approvals, audit and cost</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="from-assistant-to-agent">From assistant to agent</h2>
+<p>GitHub Docs separate <strong>assistive</strong> capabilities (suggestions, answers, explanations) from <strong>agentic</strong> ones: work toward a goal over multiple steps, using tools, with a human reviewing the result. In the live demo you saw both. Agent mode worked <em>with</em> the presenter in the editor; the cloud agent worked <em>for</em> the team in the background and came back with a pull request.</p>
+<figure class="diagram">
+  <div aria-label="Agentic loop: a person specifies, the agent researches, plans, implements and self-checks, then a person reviews and merges" class="flow" role="img">
+    <div class="node"><span class="tag">Human</span><b>Specify</b>Issue, acceptance criteria, instructions, custom agent</div>
+    <div aria-hidden="true" class="arrow">→</div>
+    <div class="node gh"><span class="tag">Agent</span><b>Research &amp; plan</b>Reads the repository and writes an implementation plan</div>
+    <div aria-hidden="true" class="arrow">→</div>
+    <div class="node gh"><span class="tag">Agent</span><b>Implement</b>Edits, runs tests and linters in a cloud environment</div>
+    <div aria-hidden="true" class="arrow">→</div>
+    <div class="node gh"><span class="tag">Agent</span><b>Self-check</b>CodeQL, secret scanning, dependency check, Copilot code review</div>
+    <div aria-hidden="true" class="arrow">→</div>
+    <div class="node hl"><span class="tag">Human</span><b>Review &amp; merge</b>Steer with comments, approve, merge, deploy</div>
+  </div>
+  <figcaption>The human checkpoints at both ends are enforced by the platform, as the guardrails section below shows.</figcaption>
+</figure>
+
+<h2 id="copilot-cloud-agent">Copilot cloud agent</h2>
+<p>Formerly the <em>Copilot coding agent</em>. The cloud agent researches a repository, plans, and makes changes in the background in a temporary cloud environment where it can run tests and linters. You can start it from the Agents tab or panel, a chat, an issue or a pull request. It has been generally available for all paid Copilot plans since 25 September 2025 (GitHub changelog).</p>
+<div class="grid g2">
+  <div class="card">
+    <h3>Good first tasks</h3>
+    <ul>
+      <li>Bugs with a clear reproduction</li>
+      <li>UI changes and accessibility improvements</li>
+      <li>Increasing test coverage</li>
+      <li>Documentation</li>
+      <li>Technical debt with a clear definition of done</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Keep for humans (per GitHub's guidance)</h3>
+    <ul>
+      <li>Broad cross-repository refactors and changes that need one consistent design</li>
+      <li>Deep domain or business logic, and legacy dependencies</li>
+      <li>Production-critical, security, personal-data and authentication work, and incident response</li>
+      <li>Ambiguous tasks, and tasks a developer should do to learn</li>
+    </ul>
+  </div>
+</div>
+<ul>
+  <li><strong>Write issues like a brief to a new teammate:</strong> a clear problem statement, acceptance criteria and hints about which files to change. The agent also reads <code>.github/copilot-instructions.md</code>, <code>*.instructions.md</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code> and <code>GEMINI.md</code>.</li>
+  <li><strong>Prepare its environment</strong> with <code>.github/workflows/copilot-setup-steps.yml</code> so dependencies are installed before it starts.</li>
+  <li><strong>Limits:</strong> one repository, one branch and one pull request per task; a session runs for at most <strong>59 minutes</strong>; GitHub-hosted repositories only.</li>
+  <li><strong>Iterate on the pull request:</strong> mention <code>@copilot</code> in a comment, or use <em>Fix with Copilot</em> on review comments, failing workflow runs and merge conflicts.</li>
+</ul>
+<p class="small"><a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github">GitHub Copilot on GitHub.com</a> · <a class="ext" href="https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results">Best practices for using GitHub Copilot to work on tasks</a> · <a class="ext" href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github">Using Copilot cloud agent on GitHub</a></p>
+
+<h2 id="where-agents-run-today">Where agents run today</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Where</th><th>What it is</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Agents tab, page and panel</strong></td><td>Start tasks with a chosen model, third-party agent or custom agent; follow live logs; steer a running session; open it in VS Code or continue in Copilot CLI; review and merge.</td><td><span class="small muted">Part of the cloud agent experience</span></td></tr>
+    <tr><td><strong>GitHub Copilot app</strong></td><td>Desktop app (macOS, Linux, Windows) for running several agents in parallel, built on Copilot CLI. Included in all plans.</td><td><span class="small muted">No preview label on its docs page</span></td></tr>
+    <tr><td><strong>Copilot CLI</strong></td><td>Agentic terminal: edits files, runs commands, creates pull requests and issues; plan mode; local sandbox; built-in GitHub MCP server; custom agents, hooks and skills. It replaced the retired <code>gh copilot</code> extension.</td><td><span class="st ga">GA</span> <span class="small muted">since 25 Feb 2026</span></td></tr>
+    <tr><td><strong>Third-party coding agents</strong></td><td>Anthropic Claude and OpenAI Codex, started from the Agents tab, issues, pull requests, Mobile or VS Code, with the same protections as the cloud agent. Enabling one installs a GitHub App.</td><td><span class="st pv">Public preview</span> <span class="small muted">all paid plans</span></td></tr>
+    <tr><td><strong>Agent apps</strong></td><td>Partner-built agents installed as GitHub Apps; billed like the cloud agent.</td><td><span class="st pv">Public preview</span></td></tr>
+    <tr><td><strong>Copilot automations</strong></td><td>Run the cloud agent on a schedule or on repository events; private and internal repositories only.</td><td><span class="small muted">Pro, Pro+, Max, Business, Enterprise</span></td></tr>
+  </tbody>
+</table></div>
+<p class="small"><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/agent-management">Agent management</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/github-copilot-app">GitHub Copilot app</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli">GitHub Copilot CLI</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents">Third-party coding agents</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/agent-apps">Agent apps</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations">Copilot automations</a></p>
+<div class="callout docs"><span class="h">On names</span><p>"Agent HQ" and "mission control" come from GitHub's launch blog post (28 October 2025). GitHub Docs call these surfaces the Agents tab, Agents page and agents panel.</p></div>
+
+<h2 id="custom-agents">Customize agents for Contoso's way of working</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Custom agents</h3>
+    <p>A Markdown profile with YAML frontmatter (<code>description</code> is required; <code>name</code>, <code>tools</code>, <code>mcp-servers</code> and <code>target</code> are optional) and a prompt of up to 30,000 characters. Locations:</p>
+    <ul>
+      <li>Repository: <code>.github/agents/NAME.agent.md</code></li>
+      <li>Organization: <code>agents/</code> in the org's <code>.github</code> or <code>.github-private</code> repository</li>
+      <li>Enterprise: the <code>.github-private</code> repository of a designated organization</li>
+    </ul>
+    <p>Usable from the cloud agent (dropdown, issue assignment, pull requests), Copilot CLI (<code>/agent</code>), the Copilot app and IDEs.</p>
+  </div>
+  <div class="card">
+    <h3>Model Context Protocol (MCP)</h3>
+    <ul>
+      <li>The cloud agent comes with the GitHub MCP server (read-only, current repository) and Playwright (localhost only).</li>
+      <li>Repository MCP settings are shared by the cloud agent and code review. The cloud agent calls MCP tools without asking, so allowlist read-only tools.</li>
+      <li>The GitHub MCP Registry <span class="st pv">Public preview</span> lists curated servers. Enterprises allowlist servers with a managed settings file.</li>
+      <li>For Business and Enterprise seats, the <em>MCP servers in Copilot</em> policy is off by default.</li>
+    </ul>
+  </div>
+</div>
+<figure class="code"><figcaption><span>.github/agents/test-coverage-improver.agent.md (Contoso example)</span><span class="src"><a href="https://docs.github.com/en/copilot/reference/custom-agents-configuration">Format: Custom agents configuration</a></span></figcaption><pre><code>---
+name: test-coverage-improver
+description: Finds untested code paths in Contoso Order Desk and adds focused tests without changing production code.
+tools: ["read", "search", "edit"]
+---
+You improve test coverage for Contoso Order Desk.
+
+- Read .github/copilot-instructions.md and test/ before writing anything.
+- Add tests only under test/. Never modify files under src/ or public/.
+- For each endpoint, cover success, invalid input (400) and not found (404).
+- Finish with a short summary of the cases you added and any gaps you could not cover.</code></pre></figure>
+<p class="small"><a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/custom-agents">Custom agents</a> · <a class="ext" href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents">Creating custom agents for Copilot cloud agent</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/mcp">Model Context Protocol (MCP)</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/enterprise/mcp-management">MCP server usage in your company</a></p>
+
+<h2 id="agentic-beyond-writing-code">Agentic beyond writing code</h2>
+<div class="grid g2">
+  <div class="card"><h3>Review</h3><p>Copilot code review gathers context from the whole project using Actions runners and can use the repository's MCP servers and skills. Handing its suggested fixes to the cloud agent is in public preview.</p></div>
+  <div class="card"><h3>Security remediation</h3><p>Agentic autofix takes up to 25 code scanning alerts and opens a draft pull request. Dependabot alerts can be assigned to Copilot or a third-party agent. See <a href="04-security.html">Session 4</a>.</p></div>
+  <div class="card"><h3>Repository automation</h3><p><strong>GitHub Agentic Workflows</strong> <span class="st pv">Public preview</span>: Markdown instructions compile to a hardened <code>.lock.yml</code> Actions workflow. Read-only by default, with writes only through declared "safe outputs", secrets kept from the agent, and a default cap of 1,000 AI credits per run.</p><p class="small"><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows">GitHub Agentic Workflows</a></p></div>
+  <div class="card"><h3>Spec-driven development</h3><p><strong>Spec Kit</strong> is GitHub's MIT-licensed open-source toolkit that gives coding agents a structured process: <code>/speckit-constitution</code> → <code>/speckit-specify</code> → <code>/speckit-plan</code> → <code>/speckit-tasks</code> → <code>/speckit-implement</code>. Treat it as an open-source project: check its support model before you depend on it.</p><p class="small"><a class="ext" href="https://github.com/github/spec-kit">github/spec-kit repository</a></p></div>
+</div>
+<div class="callout warn"><span class="h">Retired or retiring, so leave them out of plans</span><p>The <code>gh copilot</code> CLI extension stopped working on 25 October 2025 (replaced by Copilot CLI). GitHub Models retired on 30 July 2026. GitHub Spark has taken no new users or apps since 4 August 2026. (GitHub changelog)</p></div>
+
+<h2 id="guardrails-how-delegation-stays-safe">Guardrails: how delegation stays safe</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Concern from the room</th><th>Documented control</th></tr></thead>
+  <tbody>
+    <tr><td>"Who can make the agent do things?"</td><td>Only users with write access can trigger it; comments from others never reach it. For Business and Enterprise, the cloud agent is <strong>disabled by default</strong> until an admin enables it, and repository access can be limited.</td></tr>
+    <tr><td>"Can it push to production?"</td><td>It pushes only to its own <code>copilot/</code> branch, cannot run raw <code>git push</code>, and is subject to rulesets and required checks.</td></tr>
+    <tr><td>"Can it approve its own work?"</td><td>No. It opens draft pull requests that a human must review and merge. The requester cannot approve, and Actions workflows wait for approval by default.</td></tr>
+    <tr><td>"What can it reach on the internet?"</td><td>A firewall is on by default with a recommended allowlist; hidden characters, such as HTML comments in issues, are filtered from its input.</td></tr>
+    <tr><td>"How do we audit it?"</td><td>Commits are signed and link to session logs. The audit log records agent activity: filter with <code>actor:Copilot</code>, use fields such as <code>actor_is_agent</code> and <code>agent_session_id</code>, keep 180 days, and stream to a SIEM.</td></tr>
+    <tr><td>"How do we control cost?"</td><td>Agents consume AI credits and Actions minutes. Use budgets per user, cost center, organization or enterprise, and decide whether paid usage beyond included credits is allowed.</td></tr>
+  </tbody>
+</table></div>
+<p class="small"><a class="ext" href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations">Risks and mitigations for GitHub Copilot cloud agent</a> · <a class="ext" href="https://docs.github.com/en/copilot/concepts/enterprise/cloud-agent-access">Managing access to GitHub Copilot cloud agent</a> · <a class="ext" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events">Audit log events for agents</a> · <a class="ext" href="https://docs.github.com/en/copilot/responsible-use/agents">Application card: GitHub Copilot Agents</a></p>
+
+<h2 id="what-changes-for-contosos-teams">What changes for Contoso's teams</h2>
+<div class="grid g3">
+  <div class="card"><h3>Developers</h3><p>Spend more time writing good issues and specs, reviewing agent pull requests and handling the hard problems. Tests become the safety net that lets agents move fast.</p></div>
+  <div class="card"><h3>Platform team</h3><p>Owns setup steps, instruction files, custom agents, firewall allowlists and MCP allowlists, the "paved road" agents run on.</p></div>
+  <div class="card"><h3>Security &amp; leadership</h3><p>Owns rulesets, validation tools, policies, budgets and audit streaming, and decides which repositories agents may work in.</p></div>
+</div>
+
+<details class="facilitator" open="">
+  <summary>Run of show · 25 minutes</summary>
+  <div class="fbody">
+    <div class="tablewrap"><table>
+      <thead><tr><th>Min</th><th>Segment</th><th>What to do and say</th></tr></thead>
+      <tbody>
+        <tr><td class="t">0–3</td><td>Callback</td><td>Read back the "never let an agent do…" answers from Session 1. You'll map each one to a control.</td></tr>
+        <tr><td class="t">3–8</td><td>Cloud agent</td><td>Good versus bad tasks; how to write the issue; limits.</td></tr>
+        <tr><td class="t">8–14</td><td>Demo: delegate the audit log</td><td>Use the steps below. Kick off the task, then talk while it runs.</td></tr>
+        <tr><td class="t">14–18</td><td>Where agents run, and status</td><td>Be explicit about GA versus preview. Customers plan around this.</td></tr>
+        <tr><td class="t">18–23</td><td>Guardrails table</td><td>Map each Session 1 concern to a row.</td></tr>
+        <tr><td class="t">23–25</td><td>Transition</td><td>"So where would this help Contoso first? Let's find out together."</td></tr>
+      </tbody>
+    </table></div>
+    <h4>Demo: plan first, then delegate sub-issue (3)</h4>
+    <ol>
+      <li>Open the repository's <strong>Agents</strong> tab and start a task, selecting the custom agent if you created one:
+        <div class="prompt"><span class="lbl">Prompt · Agents tab</span><p>Research how order lookups flow through src/ and write an implementation plan for sub-issue #&lt;audit sub-issue&gt;: record every order lookup (order ID, agent user ID, timestamp, result) without logging customer contact details. Don't open a pull request yet.</p></div>
+        A task started from the Agents tab works on a branch first, so you can review the plan and diff before a pull request exists.</li>
+      <li>While it runs, open the session log and show the steering box: "add a note about retention".</li>
+      <li>Show the plan, then ask it to implement and open a pull request, or stop there for time.</li>
+    </ol>
+    <h4>Likely questions</h4>
+    <ul>
+      <li><strong>"Can we use Claude or Codex?"</strong> Yes, as third-party coding agents in public preview on all paid plans, once enabled in policy. They run with the same protections and their GitHub App actions appear in the audit log.</li>
+      <li><strong>"Does the agent see our internal systems?"</strong> Only through MCP servers you configure, plus the firewall allowlist. Remote MCP servers that use OAuth are not supported for the cloud agent.</li>
+      <li><strong>"Can we restrict it to some repositories?"</strong> Yes: repository access in the organization's cloud agent settings, and enterprise policies on top.</li>
+    </ul>
+  </div>
+</details>
+
+<section aria-label="Sources" class="sources">
+  <h2 class="notoc" id="sources">Sources</h2>
+  <ul>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github">GitHub Copilot on GitHub.com</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results">Best practices for using GitHub Copilot to work on tasks</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/agent-management">Agent management</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents">Third-party coding agents</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/custom-agents">Custom agents</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/reference/custom-agents-configuration">Custom agents configuration</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli">GitHub Copilot CLI</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/customizations/mcp">Model Context Protocol (MCP)</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows">GitHub Agentic Workflows</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations">Risks and mitigations for GitHub Copilot cloud agent</a></li>
+    <li><a class="ext" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events">Audit log events for agents</a></li>
+    <li><a class="ext" href="https://github.blog/changelog/2025-09-25-copilot-coding-agent-is-now-generally-available/">Changelog, 25 Sep 2025: Copilot coding agent is now generally available</a></li>
+    <li><a class="ext" href="https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/">Changelog, 25 Feb 2026: GitHub Copilot CLI is now generally available</a></li>
+    <li><a class="ext" href="https://github.blog/changelog/2026-08-04-upcoming-deprecation-of-github-spark-on-github-com/">Changelog, 4 Aug 2026: Upcoming deprecation of GitHub Spark on github.com</a></li>
+    <li><a class="ext" href="https://github.blog/news-insights/company-news/welcome-home-agents/">GitHub blog: Agent HQ: Any agent, any way you work</a></li>
+  </ul>
+</section>
+<nav aria-label="Previous and next" class="pager"><a class="prev" href="05-live-demo.html"><span class="d">← Previous</span>05 · Live Demo: From Business Requirement to Production</a><a class="next" href="07-next-steps.html"><span class="d">Next →</span>07 · Discussion, Use Cases &amp; Next Steps</a></nav>
+    </div>
+  </main>
+  <nav aria-label="On this page" class="toc"><h2>On this page</h2><ol><li><a href="#from-assistant-to-agent">From assistant to agent</a></li><li><a href="#copilot-cloud-agent">Copilot cloud agent</a></li><li><a href="#where-agents-run-today">Where agents run today</a></li><li><a href="#custom-agents">Customize agents for Contoso's way of working</a></li><li><a href="#agentic-beyond-writing-code">Agentic beyond writing code</a></li><li><a href="#guardrails-how-delegation-stays-safe">Guardrails: how delegation stays safe</a></li><li><a href="#what-changes-for-contosos-teams">What changes for Contoso's teams</a></li></ol></nav>
+</div>
+<footer class="site">
+  <div class="inner">
+    <div>Content compiled from <a class="ext" href="https://docs.github.com/en">GitHub Docs</a>, checked on 26 October 2026. GitHub features, plans and preview status change often: re-check the <a class="ext" href="https://github.blog/changelog/">GitHub changelog</a> in the week before delivery.</div>
+    <div>Prepared by Microsoft for the Contoso half-day workshop. Product names, plans and preview labels are quoted from GitHub Docs as of the date above; nothing on this site is a commercial offer.</div>
+  </div>
+</footer>
+
+</body></html>
