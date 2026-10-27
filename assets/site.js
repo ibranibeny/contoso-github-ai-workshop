@@ -107,7 +107,8 @@
         v.addEventListener('error', toFallback);
         var src = $('source', v);
         if (src) src.addEventListener('error', toFallback);
-        if (v.networkState === 3) toFallback();
+        // Fall back only when no source could be loaded at all (not during source selection).
+        setTimeout(function () { if (!api.fallback && v.readyState === 0 && v.networkState === 3) toFallback(); }, 6000);
       }
       current(0);
     });
