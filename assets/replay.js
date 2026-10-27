@@ -71,8 +71,14 @@
       return '<div class="' + cls + '"' + K.k(it.k) + '>' + (it.d ? '▾ ' : '') + esc(it.t) + '</div>';
     }).join('');
   };
+  K.win = '<span class="wctl"><i class="mn"></i><i class="mx"></i><i class="cl">✕</i></span>';
+  K.edgeTop = function (page, url, fav, who) {
+    return '<div class="eg-tabs' + (who ? ' p-' + who : '') + '"><span class="eg-tab"><i class="fav ' + (fav || 'gh') + '"></i><span class="tt">' + esc(page || url) + '</span><span class="x">✕</span></span><span class="eg-plus">+</span>' + K.win + '</div>' +
+      '<div class="eg-bar"><span class="nv">←</span><span class="nv">→</span><span class="nv">↻</span><span class="eg-url"><i class="lk"></i>' + esc(url) + '</span><span class="nv">☆</span>' +
+      (who ? '<span class="eg-prof p-' + who + '">' + (who === 'A' ? 'A · approver' : 'P · presenter') + '</span>' : '') + '<span class="nv">⋯</span></div>';
+  };
   K.vscode = function (o) {
-    return '<div class="w vsc' + (o.full ? ' full' : '') + '"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="ttl">' + esc(o.title || 'contoso-order-desk — Visual Studio Code') + '</span></div>' +
+    return '<div class="w vsc' + (o.full ? ' full' : '') + '"><div class="vs-title"><span class="vs-logo"></span><span class="vs-menu">File&nbsp;&nbsp; Edit&nbsp;&nbsp; Selection&nbsp;&nbsp; View&nbsp;&nbsp; Go&nbsp;&nbsp; Run&nbsp;&nbsp; Terminal&nbsp;&nbsp; Help</span><span class="vs-cc">' + esc(o.title || 'contoso-order-desk') + '</span>' + K.win + '</div>' +
       '<div class="vs-body"><div class="vs-act"><b class="on"></b><b></b><b></b><b></b></div>' +
       '<div class="vs-side"' + K.k(o.sideKey) + '>' + (o.side || ('<div class="sh">EXPLORER · CONTOSO-ORDER-DESK</div>' + K.tree(o.tree || []))) + '</div>' +
       '<div class="vs-main"><div class="vs-tabs"' + K.k('tabs') + '>' + (o.tabs || '<span class="on">' + esc(o.file || '') + '</span>') + '</div>' +
@@ -98,17 +104,17 @@
     return '<div class="appr"' + K.k(key) + '><div class="q">Run command in terminal?</div><pre>' + esc(cmd) + '</pre><span class="vbtn"' + K.k(btnKey) + '>Allow</span><span class="vbtn sec">Skip</span></div>';
   };
   K.term = function (o) {
-    return '<div class="w term' + (o.full ? ' full' : '') + '"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="ttl">' + esc(o.title || 'Terminal — contoso-order-desk') + '</span></div><div class="tbody" data-k="tb" data-autoscroll="1">' + (o.body || '') + '</div></div>';
+    return '<div class="w term' + (o.full ? ' full' : '') + '"><div class="wt-tabs"><span class="wt-tab"><i class="wt-ic">&gt;_</i><span class="tt">' + esc(o.title || 'Ubuntu') + '</span><span class="x">✕</span></span><span class="eg-plus">+</span><span class="eg-plus">⌄</span>' + K.win + '</div><div class="tbody" data-k="tb" data-autoscroll="1">' + (o.body || '') + '</div></div>';
   };
   K.gh = function (o) {
     var tabs = ['Code', 'Issues', 'Pull requests', 'Agents', 'Actions', 'Projects', 'Security and quality', 'Settings'];
-    return '<div class="w gh' + (o.full ? ' full' : '') + '"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="url">' + esc(o.url || 'github.com/contoso/contoso-order-desk') + '</span></div>' +
+    return '<div class="w gh' + (o.full ? ' full' : '') + '">' + K.edgeTop(o.page || 'contoso/contoso-order-desk', o.url || 'github.com/contoso/contoso-order-desk', o.fav || 'gh', o.who) +
       (o.head !== undefined ? o.head : '<div class="gh-head"><div class="gh-top"><span class="gh-logo"></span><span>contoso</span>/<b>' + esc(o.repo || 'contoso-order-desk') + '</b><span class="pill">Private</span></div>' +
       '<div class="gh-tabs">' + tabs.map(function (t) { return '<span' + (t === o.tab ? ' class="on"' : '') + '>' + esc(t) + '</span>'; }).join('') + '</div></div>') +
       '<div class="gh-body"' + K.k('body') + (o.scroll ? ' data-autoscroll="1"' : '') + '>' + (o.body || '') + '</div></div>';
   };
   K.browser = function (o) {
-    return '<div class="w br' + (o.full ? ' full' : '') + '"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="url">' + esc(o.url) + '</span></div>' + (o.body || '') + '</div>';
+    return '<div class="w br' + (o.full ? ' full' : '') + (o.cls ? ' ' + o.cls : '') + '">' + K.edgeTop(o.page || o.url, o.url, o.fav || 'app', o.who) + (o.body || '') + '</div>';
   };
   K.title = function (o) {
     return '<div class="tc"><div class="k">' + esc(o.kicker || '') + '</div><h1>' + (o.html || esc(o.title)) + '</h1>' + (o.sub ? '<p>' + esc(o.sub) + '</p>' : '') +
@@ -126,9 +132,10 @@
 
   function prepare(demo) {
     if (demo._prepared) return demo;
-    var t = 0;
+    var t = 0, chap = '';
     demo.scenes.forEach(function (sc, i) {
       sc.start = t; sc.dur = sc.dur || 6; sc.end = t + sc.dur; t = sc.end; sc.index = i;
+      if (sc.chapter) chap = sc.chapter; sc.chap = chap || sc.name || '';
       sc.steps = (sc.steps || []).slice().sort(function (a, b) { return a.t - b.t; });
     });
     demo.total = t;
@@ -148,6 +155,8 @@
     this.cap = stage.querySelector('.rp-cap');
     this.chap = stage.querySelector('.rp-chapter');
     this.fade = stage.querySelector('.rp-fade');
+    this.task = stage.querySelector('.rp-task');
+    this.clock = stage.querySelector('.tk-clock');
     this.cur = null;
     this.cache = {};
   }
@@ -249,7 +258,8 @@
         var c = self.center(st.zoom, sc.index + ':z' + st.t);
         if (c) {
           var s = st.s || 1.6;
-          to = { s: s, x: clamp(W / 2 - c.x * s, W - W * s, 0), y: clamp(H / 2 - (c.y + (st.oy || 0)) * s, H - H * s, 0) };
+          var VH = demo.desk ? H - 40 : H;
+          to = { s: s, x: clamp(W / 2 - c.x * s, W - W * s, 0), y: clamp(VH / 2 - (c.y + (st.oy || 0)) * s, VH - VH * s, 0) };
         }
       }
       from = cam;
@@ -259,13 +269,25 @@
     root.style.transform = 'translate(' + cam.x + 'px,' + cam.y + 'px) scale(' + cam.s + ')';
 
     if (this.cap) this.cap.innerHTML = caption;
-    if (this.chap) this.chap.textContent = (demo.label ? demo.label + ' · ' : '') + (sc.name || '');
-    if (this.fade) this.fade.style.opacity = String(sc.index === 0 ? 0 : clamp(1 - lt / 0.35, 0, 1) * 0.85);
+    if (this.chap) this.chap.textContent = demo.desk ? (demo.stepLabel ? demo.stepLabel(sc.chap) : sc.chap) : (demo.label ? demo.label + ' · ' : '') + (sc.name || '');
+    if (this.task) this.task.setAttribute('data-app', sc.app || '');
+    if (this.clock && demo.clock) {
+      var cm = demo.clock.split(':'), mins = (+cm[0]) * 60 + (+cm[1]) + Math.floor(t / 60);
+      this.clock.textContent = Math.floor(mins / 60) % 24 + ':' + String(mins % 60).padStart(2, '0');
+    }
+    var fd = demo.fade != null ? demo.fade : 0.35, fo = demo.desk ? 0.3 : 0.85;
+    if (this.fade) this.fade.style.opacity = String(sc.index === 0 || !fd || sc.cut ? 0 : clamp(1 - lt / fd, 0, 1) * fo);
     return sc;
   };
 
   /* ---------- player ---------- */
-  function stageHTML() {
+  function stageHTML(demo) {
+    if (demo && demo.desk) {
+      return '<div class="rp-stage desk"><div class="rp-scene"></div><div class="rp-fade" style="position:absolute;inset:0;background:#0b0f19;opacity:0;pointer-events:none;z-index:25"></div>' +
+        '<div class="rp-cap"></div><div class="rp-task"><div class="tk-l"><span class="rp-chapter"></span></div>' +
+        '<div class="tk-c"><i class="tk-ic st"><span><b></b><b></b><b></b><b></b></span></i><i class="tk-ic sr"><span></span></i><i class="tk-ic edge"><span></span></i><i class="tk-ic code"><span>&lt;/&gt;</span></i><i class="tk-ic term"><span>&gt;_</span></i></div>' +
+        '<div class="tk-r"><span class="rp-badge">Simulated demo</span><span class="tk-clock"></span></div></div></div>';
+    }
     return '<div class="rp-stage"><div class="rp-scene"></div><div class="rp-fade" style="position:absolute;inset:0;background:#0b0f19;opacity:0;pointer-events:none;z-index:25"></div>' +
       '<div class="rp-badge">Simulated walkthrough</div><div class="rp-chapter"></div><div class="rp-cap"></div></div>';
   }
@@ -273,13 +295,13 @@
     opts = opts || {};
     prepare(demo);
     if (opts.render) {
-      container.innerHTML = stageHTML();
+      container.innerHTML = stageHTML(demo);
       var stage0 = container.querySelector('.rp-stage');
       var eng0 = new Engine(stage0, demo, function () { return 1; });
       eng0.render(0);
       return { total: demo.total, renderAt: function (t) { eng0.render(t); return true; }, chapters: chapters(demo) };
     }
-    container.innerHTML = '<div class="rp-wrap"><div class="rp-viewport">' + stageHTML() + '<button class="rp-big" type="button" aria-label="Play"><span></span></button></div>' +
+    container.innerHTML = '<div class="rp-wrap"><div class="rp-viewport">' + stageHTML(demo) + '<button class="rp-big" type="button" aria-label="Play"><span></span></button></div>' +
       '<div class="rp-ctrl"><button class="rp-btn rp-play" type="button" aria-label="Play">▶</button>' +
       '<button class="rp-btn rp-prev" type="button" aria-label="Previous chapter">⟨</button><button class="rp-btn rp-next" type="button" aria-label="Next chapter">⟩</button>' +
       '<span class="rp-time">0:00 / ' + fmt(demo.total) + '</span><div class="rp-bar" role="slider" aria-label="Seek" tabindex="0"><div class="rp-fill"></div></div>' +

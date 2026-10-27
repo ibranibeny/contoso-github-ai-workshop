@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Demo replay · Contoso × GitHub Workshop</title>
-<meta name="description" content="Interactive replay of a workshop demo: a simulated walkthrough with chapters, built from GitHub Docs steps.">
+<meta name="description" content="Interactive replay of a workshop demo: a simulated screen recording with chapters, built from the runbooks and GitHub Docs.">
 <link rel="stylesheet" href="assets/replay.css">
 <script src="assets/replay.js"></script>
 <script src="assets/demos.js"></script>
@@ -54,9 +54,9 @@
     return;
   }
   if (!demo) { app.innerHTML = '<div class="rp-page"><h1>Demo not found</h1><p><a href="index.html">Back to the workshop</a></p></div>'; return; }
-  var back = demo.session === 5 ? '05-live-demo.html#video' : demo.session === 6 ? '06-agentic.html#video' : 'index.html';
+  var back = ({ 3: '03-copilot.html#watch', 4: '04-security.html#watch', 5: '05-live-demo.html#watch', 6: '06-agentic.html#watch' })[demo.session] || 'index.html';
   app.innerHTML = '<div class="rp-page"><div class="crumbs"><a href="index.html">Workshop</a> / <a href="' + back + '">Session ' + demo.session + '</a> / Interactive replay</div>' +
-    '<h1>' + demo.title + '</h1><p class="lede">Simulated walkthrough built from the steps in GitHub Docs. Interfaces are simplified and AI output is illustrative. Use the chapters to jump to any step; press space to play or pause.</p>' +
+    '<h1>' + demo.title + '</h1><p class="lede">Simulated screen recording of the demo, built from the runbook and GitHub Docs. The screens are re-created and the AI output is illustrative. Use the chapters to jump to any step; press space to play or pause.</p>' +
     '<div id="player"></div><p class="small muted" style="margin-top:12px"><a href="videos/' + demo.id + '.mp4" download>Download the MP4 video</a> · <a href="' + back + '">Back to the session page</a></p></div>';
   var start = parseFloat(qs.get('t') || '');
   var p = window.Replay.mount(document.getElementById('player'), demo, { autoplay: qs.get('autoplay') === '1' });

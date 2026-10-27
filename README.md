@@ -23,11 +23,12 @@ Workshop site for a half-day, demo-led session with Contoso (13:00–16:30): how
 |---|---|
 | `index.html` | Overview, agenda with session progress, demo videos, how to use the site |
 | `01-ai-era.html` … `07-next-steps.html` | One guide per session: key message, content, knowledge check, facilitator notes, sources |
+| `03-copilot.html`, `04-security.html` | Session guides with a simulated demo video of the session's mini demos |
 | `05-live-demo.html` | Live demo runbook: story, clickable architecture, demo video, six acts, prompts, files, fallbacks |
 | `06-agentic.html` | Agentic development: clickable agentic loop and demo video |
 | `07-next-steps.html` | Use-case canvas: capture ideas, score value and feasibility, plot them, export Markdown or CSV |
-| `videos.html` | Both demo videos with chapters |
-| `replay.html` | Interactive replay of a demo (`?demo=live-demo` or `?demo=agentic`) |
+| `videos.html` | All four demo videos with chapters |
+| `replay.html` | Interactive replay of a demo (`?demo=copilot`, `security`, `live-demo` or `agentic`) |
 | `videos/` | Rendered MP4 videos (1920 × 1080, 25 fps, captions, no audio) and poster images |
 | `facilitator.html` | Roles, run of show, preparation checklists, demo environment build, watchlist |
 | `resources.html` | GitHub Docs and Microsoft Learn links with a filter, certifications, glossary |
@@ -38,13 +39,14 @@ There are no external fonts, images, scripts or trackers. Knowledge-check answer
 
 ## About the demo videos
 
-The videos are **simulated walkthroughs**. Steps, settings and file names follow GitHub Docs and the runbooks on this site, but the screens are simplified re-creations and the AI output is illustrative. Every frame is labelled *Simulated walkthrough*.
+The videos are **simulated screen recordings** of the demos for Sessions 3–6. Steps, prompts, settings and file names follow the runbooks on this site and GitHub Docs, but the screens are re-creations and the AI output is illustrative. Every frame is labelled *Simulated demo*.
 
 To re-render a video locally (Node.js 22 or later, Chrome and ffmpeg):
 
 ```bash
 node tools/render-video.mjs --site . --demo live-demo --out videos/live-demo.mp4 --poster videos/live-demo.jpg
 node tools/render-video.mjs --site . --demo agentic --out videos/agentic.mp4 --poster videos/agentic.jpg
+# also: --demo copilot (Session 3) and --demo security (Session 4)
 ```
 
 ## Sources

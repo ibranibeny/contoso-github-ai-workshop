@@ -85,7 +85,7 @@
         api.fallback = true;
         box.innerHTML = '<iframe title="' + esc(sec.getAttribute('data-title') || 'Demo replay') + '" src="replay.html?demo=' + encodeURIComponent(id) + '&amp;embed=1" allow="fullscreen" allowfullscreen></iframe>';
         var note = $('.vd-note', sec);
-        if (note) note.textContent = 'The MP4 file is not available here, so the interactive replay is shown instead. It plays the same simulated walkthrough.';
+        if (note) note.textContent = 'The MP4 file is not available here, so the interactive replay is shown instead. It plays the same simulated demo.';
       }
       api.seek = function (t, play) {
         api.active = true;
