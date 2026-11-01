@@ -55,9 +55,10 @@
   }
   if (!demo) { app.innerHTML = '<div class="rp-page"><h1>Demo not found</h1><p><a href="index.html">Back to the workshop</a></p></div>'; return; }
   var back = ({ 3: '03-copilot.html#watch', 4: '04-security.html#watch', 5: '05-live-demo.html#watch', 6: '06-agentic.html#watch' })[demo.session] || 'index.html';
+  var guide = demo.id === 'live-demo' || demo.id === 'live-demo-prep' ? ' · <a href="live-demo-guide.html' + (demo.id === 'live-demo-prep' ? '#step-p1' : '') + '">Step-by-step live demo guide</a>' : '';
   app.innerHTML = '<div class="rp-page"><div class="crumbs"><a href="index.html">Workshop</a> / <a href="' + back + '">Session ' + demo.session + '</a> / Interactive replay</div>' +
     '<h1>' + demo.title + '</h1><p class="lede">Simulated screen recording of the demo, built from the runbook and GitHub Docs. The screens are re-created and the AI output is illustrative. Use the chapters to jump to any step; press space to play or pause.</p>' +
-    '<div id="player"></div><p class="small muted" style="margin-top:12px"><a href="videos/' + demo.id + '.mp4" download>Download the MP4 video</a> · <a href="' + back + '">Back to the session page</a></p></div>';
+    '<div id="player"></div><p class="small muted" style="margin-top:12px"><a href="videos/' + demo.id + '.mp4" download>Download the MP4 video</a> · <a href="' + back + '">Back to the session page</a>' + guide + '</p></div>';
   var start = parseFloat(qs.get('t') || '');
   var p = window.Replay.mount(document.getElementById('player'), demo, { autoplay: qs.get('autoplay') === '1' });
   var ch = parseInt(qs.get('chapter') || '', 10);

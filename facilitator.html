@@ -19,6 +19,7 @@
     <ul>
       <li><a href="index.html">Agenda</a></li>
       <li><a href="05-live-demo.html">Live demo</a></li>
+      <li><a href="live-demo-guide.html">Live demo guide</a></li>
       <li><a href="videos.html">Demo videos</a></li>
       <li><a aria-current="page" href="facilitator.html">Facilitator guide</a></li>
       <li><a href="resources.html">Resources</a></li>
@@ -49,6 +50,7 @@
       </ol>
       <h2>Run the workshop</h2>
       <ol>
+        <li><a href="live-demo-guide.html"><span class="t">↳</span><span>Live demo guide, step by step</span></a></li>
         <li><a aria-current="page" href="facilitator.html"><span class="t">↳</span><span>Facilitator guide &amp; preparation</span></a></li>
         <li><a href="resources.html"><span class="t">↳</span><span>Resources &amp; GitHub Docs</span></a></li>
         <li><a href="videos.html"><span class="t">↳</span><span>Demo videos</span></a></li>
@@ -122,6 +124,7 @@
 </ul>
 
 <h2 id="demo-environment">Demo environment</h2>
+<div class="callout tip"><span class="h">Ready-made kit: ibranibeny/contoso-order-desk</span><p>The live demo runs in <a class="ext" href="https://github.com/ibranibeny/contoso-order-desk">ibranibeny/contoso-order-desk</a>: the Order Desk app, its tests and workflows, the setup scripts, and every demo and fallback branch. Its scripts (<code>scripts/github-setup.sh</code>, <code>scripts/azure-setup.sh</code>) apply the settings described below. Follow <a href="live-demo-guide.html#step-p1">the live demo guide, before the demo</a>; this section stays as the reference for what the scripts do, and for running the demo in an organization.</p></div>
 <h3>Accounts, licences and policies</h3>
 <div class="tablewrap"><table>
   <thead><tr><th>Need</th><th>Why (from GitHub Docs)</th></tr></thead>
@@ -204,7 +207,7 @@ test('GET /health reports ok and the number of orders loaded', async () =&gt; {
   <li><code>.github/ISSUE_TEMPLATE/feature-request.yml</code>, <code>config.yml</code>, <code>.github/CODEOWNERS</code>, <code>.github/workflows/copilot-setup-steps.yml</code> and <code>.github/workflows/ci-cd.yml</code> (<a href="05-live-demo.html#demo-kit-files-used-on-stage">Session 5</a>)</li>
   <li><code>.github/dependabot.yml</code> and <code>.github/workflows/dependency-review.yml</code> (<a href="04-security.html#secure-the-supply-chain">Session 4</a>)</li>
 </ul>
-<div class="callout warn"><span class="h">Starter code not run by us</span><p>This starter code was written for this guide but has not been run, because <code>npm install</code> needs network access. Run <code>npm install &amp;&amp; npm test</code> in your first rehearsal and fix anything that fails before you tag <code>demo-start</code>.</p></div>
+<div class="callout tip"><span class="h">Tested in the kit</span><p>In <code>ibranibeny/contoso-order-desk</code>, the CI/CD workflow runs <code>npm ci</code> and <code>npm test</code> on Node.js 24 for every pull request and every push to <code>main</code>. The fallback and solution branches were tested the same way when the repository was created.</p></div>
 
 <h3>Repository settings</h3>
 <ol class="steps">

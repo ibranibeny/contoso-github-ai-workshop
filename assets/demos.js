@@ -689,6 +689,187 @@
     stepLabel: function (chap) { var m = /^(\d+) · (.*)$/.exec(chap || ''); return m ? 'Step ' + m[1] + ' of 7 · ' + m[2] : chap === 'Azure' ? 'Azure · trusted hand-off' : chap; }, scenes: L });
 
   /* =====================================================================
+     SESSION 5 · Before the live demo: build the environment (preparation)
+     Terminal output is the text the scripts in contoso-order-desk print;
+     the repository is ibranibeny/contoso-order-desk; the approver,
+     subscription, web app name and commit IDs are example values.
+     ===================================================================== */
+  function tline(cls, text) { return '<div class="' + cls + '">' + esc(text) + '</div>'; }
+  function tout(key, rows) { return '<div data-k="' + key + '">' + rows.map(function (r) { return tline(r[0], r[1]); }).join('') + '</div>'; }
+  function tcmd(key) { return '<div class="t-p" data-k="' + key + '"></div>'; }
+  var OKL = function (s) { return ['t-g', '  ✓ ' + s]; };
+  var HDR = function (s) { return ['t-b', '==> ' + s]; };
+  var DIM = function (s) { return ['t-d', '  ' + s]; };
+  var P = [];
+
+  // ---- 1 · The demo repository
+  var REPO_HEAD = '<div class="gh-head"><div class="gh-top"><span class="gh-logo"></span><span>ibranibeny</span>/<b>contoso-order-desk</b><span class="pill">Public template</span>' +
+    '<span class="gbtn pri" data-k="cbtn" style="margin-left:auto">&lt;&gt; Code ▾</span></div>' +
+    '<div class="gh-tabs"><span class="on">Code</span><span>Issues</span><span>Pull requests</span><span>Actions</span><span>Projects</span><span>Security and quality</span><span>Settings</span></div></div>';
+  P.push({ name: 'The demo repository', chapter: '1 · The demo repository', app: 'edge', dur: 7, html: gh({ page: 'ibranibeny/contoso-order-desk', url: 'github.com/ibranibeny/contoso-order-desk', head: REPO_HEAD, body:
+    '<div class="gh-cols"><div class="gh-main"><div class="gh-box"><div class="hd"><b>README.md</b></div><div class="bd"><h4 style="margin-top:0;font-size:20px">Contoso Order Desk · live demo kit</h4>' +
+    '<div>Starter repository for Session 5: a business requirement becomes an issue, Copilot builds it, people review it, security gates check it, and GitHub Actions deploys it to Azure App Service.</div>' +
+    '<h4>Branches</h4><ul><li><code>main</code>: the starting point (tag <code>demo-start</code>)</li><li><code>fallback/order-lookup-api</code>, <code>fallback/agent-lookup-page</code>, <code>solution</code></li><li><code>demo/not-found-message</code>, <code>demo/add-date-helper</code></li></ul></div></div></div>' +
+    '<div data-k="sd">' + side([{ h: 'About', v: 'Live demo kit for "From business requirement to production"' }, { h: 'Branches', v: '6 branches · 1 tag' }, { h: 'Actions', v: 'CI/CD ✓ on main' }]) + '</div></div>' +
+    '<div class="pop hid" data-k="cpop" style="right:40px;top:96px;width:400px"><div class="it"><b>Clone</b></div><div class="it" style="font-size:12px;color:#59636e">HTTPS · SSH · <b style="color:#1f2328">GitHub CLI</b></div><div class="it on" style="font-family:var(--mono,monospace);font-size:13px">gh repo clone ibranibeny/contoso-order-desk</div></div>' }),
+    steps: [
+      { t: 0.2, cap: 'The live demo runs in <b>ibranibeny/contoso-order-desk</b>: the app, its tests and workflows, the setup scripts and every demo branch.' },
+      { t: 1.2, focus: 'sd', dur: 2.2 },
+      { t: 3.6, click: 'cbtn' }, { t: 3.9, show: 'cpop' },
+      { t: 4.1, cap: '<b>Code → GitHub CLI</b>: copy the clone command.' }
+    ] });
+  P.push({ name: 'Clone it', app: 'term', cut: true, dur: 13, html: K.term({ title: 'Ubuntu · ~', body:
+    tcmd('c1') + tout('c1o', [['t-d', "Cloning into 'contoso-order-desk'..."]]) +
+    tcmd('c2') + tout('c2o', [['t-d', '  origin/HEAD -> origin/main'], ['t-g', '  origin/demo/add-date-helper'], ['t-g', '  origin/demo/not-found-message'], ['t-g', '  origin/fallback/agent-lookup-page'], ['t-g', '  origin/fallback/order-lookup-api'], ['t-g', '  origin/main'], ['t-g', '  origin/solution']]) +
+    tcmd('c3') + tout('c3o', [['t-g', 'demo-start']]) }),
+    steps: [
+      { t: 0.2, cap: 'Clone it with the GitHub CLI, signed in as the repository owner.' },
+      { t: 0.5, type: 'c1', str: '$ gh repo clone ibranibeny/contoso-order-desk && cd contoso-order-desk', cps: 60 },
+      { t: 1.9, lines: 'c1o', dur: 0.3 },
+      { t: 2.6, type: 'c2', str: '$ git branch -r', cps: 30 },
+      { t: 3.3, lines: 'c2o', dur: 1.4 },
+      { t: 3.6, cap: 'All six branches are there: the <b>fallback</b> branches for the API and the page, the <b>solution</b>, and the two <b>security demo</b> branches.' },
+      { t: 7.8, type: 'c3', str: '$ git tag', cps: 30 },
+      { t: 8.3, lines: 'c3o', dur: 0.3 },
+      { t: 8.6, cap: 'The tag <b>demo-start</b> marks the clean starting point. Participants who want their own copy use <b>Use this template</b> with <b>Include all branches</b>.' }
+    ] });
+
+  // ---- 2 · Configure GitHub
+  var GH_OUT = [
+    HDR('Setting up ibranibeny/contoso-order-desk (public, owned by a User) with approver @approver'),
+    HDR('1/9 Repository settings: squash merge only, delete branches after merge'), OKL('Pull requests merge with squash; merged branches are deleted'),
+    HDR('2/9 Write access for the approver'), OKL('@approver already has access'),
+    HDR('3/9 Labels and project'), OKL("Label 'enhancement' (used by the feature request form)"), OKL("Created project 'Order Desk' (#1)"), OKL('Project ibranibeny/1 is linked to ibranibeny/contoso-order-desk'),
+    HDR('4/9 Code owners, the feature request form and the demo data'), OKL('Committed to main: CODEOWNERS (@approver), the feature form (project ibranibeny/1)'),
+    HDR('5/9 Security features'), OKL('Dependabot alerts'), OKL('Dependabot security updates'), OKL('Secret scanning and push protection'), OKL('CodeQL default setup requested (the first analysis takes a few minutes)'),
+    HDR("6/9 Environment 'production': approval by @approver, main branch only"), OKL('Required reviewer @approver, prevent self-review on'), OKL('Deployment branches: main'),
+    HDR("7/9 Ruleset 'Protect main'"), OKL("Pull request with 1 code-owner approval, checks 'build' and 'dependency-review', CodeQL results, automatic Copilot code review"),
+    HDR('8/9 Copilot setup steps'), OKL("Started 'Copilot Setup Steps' once to check the cloud agent's environment (see the Actions tab)"),
+    HDR('9/9 Tag the clean starting point'), OKL('demo-start -> 3c7e9d2 (scripts/reset-demo.sh returns main to this commit)'),
+    HDR('Done')
+  ];
+  P.push({ name: 'Run github-setup.sh', chapter: '2 · Configure GitHub', app: 'term', dur: 22, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('g1') + tcmd('g2') + tout('gout', GH_OUT) }),
+    steps: [
+      { t: 0.2, cap: 'Sign in the GitHub CLI as the repository owner, with the <b>project</b> scope for the project board.' },
+      { t: 0.5, type: 'g1', str: '$ gh auth refresh -s project', cps: 32 },
+      { t: 2.4, cap: 'One script configures the repository. <b>APPROVER</b> is the second person: code owner and production approver.' },
+      { t: 2.8, type: 'g2', str: '$ YES=1 APPROVER=approver scripts/github-setup.sh', cps: 50 },
+      { t: 4.4, lines: 'gout', dur: 9.5 },
+      { t: 5.0, cap: 'Settings, code owners, the issue form, security features, the <b>production</b> environment and the <b>Protect main</b> ruleset.' },
+      { t: 12.6, cap: 'It ends by tagging the clean starting point <b>demo-start</b>, which the reset script returns to.' }
+    ] });
+
+  // ---- 3 · Create Azure
+  var AZ_OUT = [
+    HDR('Deploying the Order Desk demo for ibranibeny/contoso-order-desk'), DIM('Subscription Contoso Demo (00000000-1111-2222-3333-444444444444)'), DIM('Resource group rg-contoso-order-desk in southeastasia; web app order-desk-ibranibeny-1a2b3c; plan asp-contoso-order-desk (B1)')
+  ];
+  var AZ_OUT2 = [
+    HDR('1/6 Resource group and App Service plan'), OKL('Resource group rg-contoso-order-desk'), OKL('App Service plan asp-contoso-order-desk (Linux, B1)'),
+    HDR('2/6 Web app order-desk-ibranibeny-1a2b3c'), OKL('Web app created (NODE:24-lts)'), OKL('HTTPS only, TLS 1.2+, FTP off, Always On, health check /health'), OKL('Basic authentication (publishing credentials) turned off; deployments use Microsoft Entra ID'),
+    HDR('3/6 Monitoring'), OKL('Application Insights (auto-instrumentation) with a Log Analytics workspace'),
+    HDR('4/6 Identity for GitHub Actions: id-github-order-desk'), OKL('Website Contributor on order-desk-ibranibeny-1a2b3c only'),
+    HDR("5/6 Federated credential: trust only the 'production' environment of ibranibeny/contoso-order-desk"), OKL('Subject (immutable format): repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production'),
+    HDR('6/6 GitHub: environment secrets and the web app name'), OKL("Secrets AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID on the 'production' environment"), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c (the deploy job is skipped while it is empty)'),
+    OKL("Started the first CI/CD run on main. The approver approves the 'production' deployment in the Actions tab."),
+    HDR('Done'), DIM('Web app:   https://order-desk-ibranibeny-1a2b3c.azurewebsites.net')
+  ];
+  P.push({ name: 'Run azure-setup.sh in Cloud Shell', chapter: '3 · Create Azure', app: 'term', dur: 23, html: K.term({ title: 'Azure Cloud Shell · Bash', body:
+    tcmd('a1') + tcmd('a2') + tout('aout', AZ_OUT) + '<div class="t-y" data-k="aq"></div>' + tout('aout2', AZ_OUT2) }),
+    steps: [
+      { t: 0.2, cap: 'In <b>Azure Cloud Shell (Bash)</b>, which already has az, gh, git and node, in the same clone.' },
+      { t: 0.5, type: 'a1', str: '$ az account set --subscription "Contoso Demo"', cps: 40 },
+      { t: 2.0, type: 'a2', str: '$ scripts/azure-setup.sh', cps: 30 },
+      { t: 3.0, lines: 'aout', dur: 0.8 },
+      { t: 4.0, type: 'aq', str: 'Create or update these Azure resources (an App Service plan B1 has an hourly cost until you delete it)? [y/N] y', cps: 90 },
+      { t: 5.6, lines: 'aout2', dur: 9 },
+      { t: 6.0, cap: 'App Service with hardening, Application Insights, and a <b>user-assigned managed identity</b> with Website Contributor on the web app only.' },
+      { t: 11.4, cap: 'A <b>federated credential</b> trusts tokens from the <b>production</b> environment of this repository only. No secret is stored.' },
+      { t: 11.6, zoom: 'aout2', s: 1.25, oy: 60 }, { t: 17.4, zoom: null },
+      { t: 17.6, cap: 'The IDs go into <b>production</b> environment secrets, and the first CI/CD run starts.' }
+    ] });
+
+  // ---- 4 · First deployment
+  function prepRun(extra, who) {
+    return gh({ tab: 'Actions', who: who, page: 'CI/CD · ibranibeny/contoso-order-desk', url: 'github.com/ibranibeny/contoso-order-desk/actions/runs/1', body:
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span data-k="runst">' + ci('run') + '</span><b style="font-size:18px">CI/CD · workflow_dispatch on main</b><span class="pill">main</span></div>' +
+      '<div class="gh-box"><div class="wf"><div class="job"><span>' + ci('ok') + '</span><div><b>build</b><div class="s">Success · 31s</div></div></div><span class="arrow2">→</span><div class="job" data-k="jd"><span data-k="jdi">' + ci('wait') + '</span><div><b>deploy</b><div class="s" data-k="jds">Waiting for review · production</div></div></div></div></div>' + (extra || '') });
+  }
+  P.push({ name: 'Approve the first deployment', chapter: '4 · First deployment', app: 'edge', dur: 14, html: prepRun(
+    '<div class="banner" data-k="ban"><b>production</b>&nbsp;is waiting for review<span class="gbtn" data-k="rd" style="margin-left:auto">Review deployments</span></div>' +
+    '<div class="gh-box steps2 hid" data-k="dsteps"><div class="hd">deploy · environment: production</div><div class="chk">' + ci('ok') + 'Download artifact from build job</div><div class="chk">' + ci('ok') + 'Az CLI login (OIDC, no stored password)<span class="r">azure/login@v3</span></div><div class="chk">' + ci('ok') + 'Deploy to Azure Web App<span class="r">azure/webapps-deploy@v3</span></div><div class="chk">' + ci('ok') + 'Smoke test<span class="r">GET /health → 200</span></div></div>' +
+    '<div class="modal hid" data-k="rdm"><div class="dlg"><div class="hd">Review pending deployments</div><div class="bd"><div style="display:flex;gap:8px;align-items:center"><span class="ci ok">✓</span><b>production</b><span class="pill">required reviewer: approver</span></div></div><div class="ft"><span class="gbtn danger">Reject</span><span class="gbtn pri" data-k="ad">Approve and deploy</span></div></div></div>', 'A'),
+    steps: [
+      { t: 0.2, cap: 'In <b>Actions</b>, build passed and <b>deploy</b> waits for the <b>production</b> environment.' },
+      { t: 1.4, cap: 'The <b>approver</b> (second browser profile) approves the first deployment.' },
+      { t: 2.0, click: 'rd' }, { t: 2.3, show: 'rdm' },
+      { t: 3.6, click: 'ad' }, { t: 3.9, hide: ['rdm', 'ban'] },
+      { t: 4.0, el: 'jdi', html: ci('run') }, { t: 4.0, el: 'jds', text: 'In progress · production' },
+      { t: 4.1, show: 'dsteps' }, { t: 4.1, lines: 'dsteps', dur: 4.4 },
+      { t: 8.8, el: 'jdi', html: ci('ok') }, { t: 8.8, el: 'jds', text: 'Success · order-desk-ibranibeny-1a2b3c.azurewebsites.net' }, { t: 8.8, el: 'runst', html: ci('ok') },
+      { t: 9.0, cap: 'Signed in with OIDC, deployed, and the smoke test checked <b>/health</b>.' }, { t: 9.4, focus: 'jd', dur: 4 }
+    ] });
+  var PH_ICON = '<span style="width:30px;height:30px;border-radius:9px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;font-size:15px">⬢</span>';
+  P.push({ name: 'The starting point is live', app: 'edge', cut: true, dur: 8, html: K.browser({ page: 'Contoso Order Desk', url: 'order-desk-ibranibeny-1a2b3c.azurewebsites.net', body:
+    '<div style="flex:1;background:#f4f6fb;font-family:\'Segoe UI\',\'DejaVu Sans\',sans-serif;color:#0f172a">' +
+    '<div style="background:#fff;border-bottom:1px solid #e3e8f0;padding:12px 60px;display:flex;align-items:center;gap:12px">' + PH_ICON + '<div><b style="font-size:16px">Contoso Order Desk</b><div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#5b6576">CUSTOMER CARE</div></div><span style="margin-left:auto;font-size:12px;border:1px solid #e3e8f0;border-radius:999px;padding:3px 12px;color:#5b6576">Agent workspace</span></div>' +
+    '<div style="padding:34px 60px 60px;background:linear-gradient(180deg,#eef0ff,#f4f6fb)"><div style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#4f46e5">CUSTOMER CARE</div><div style="font-size:40px;font-weight:750;letter-spacing:-.02em">Where is my order?</div><div style="font-size:17px;color:#5b6576;max-width:620px">One place for agents to answer order questions. Order lookup is being built and will appear on this page.</div></div>' +
+    '<div data-k="card" style="margin:-36px 60px 0;background:#fff;border:1px solid #e3e8f0;border-radius:16px;padding:22px;box-shadow:0 12px 32px rgba(15,23,42,.08)"><b style="font-size:18px">Order lookup is on its way</b><div style="font-size:13.5px;color:#5b6576">Agents will type an order number and see the order\'s status and estimated delivery date.</div>' +
+    '<div style="display:flex;gap:24px;margin-top:16px;font-size:13.5px"><div style="flex:1"><b>Status at a glance</b><div style="color:#5b6576">From payment to delivery, with a clear step-by-step tracker.</div></div><div style="flex:1"><b>Estimated delivery</b><div style="color:#5b6576">The date the customer can expect.</div></div><div style="flex:1"><b>Private by design</b><div style="color:#5b6576">Payment details stay hidden.</div></div></div></div></div>' }),
+    steps: [
+      { t: 0.2, cap: 'The starting point is live: a placeholder page. The demo replaces it with the real order lookup.' },
+      { t: 1.4, focus: 'card', dur: 4.6 }
+    ] });
+
+  // ---- 5 · Before each session
+  var SEC_OUT = [
+    HDR('1/2 demo/not-found-message (code scanning + Copilot Autofix)'), OKL('Opened: #1 https://github.com/ibranibeny/contoso-order-desk/pull/1'),
+    HDR('2/2 demo/add-date-helper (dependency review)'), OKL('Opened: #2 https://github.com/ibranibeny/contoso-order-desk/pull/2'),
+    HDR('Done'), DIM('Wait until both pull requests show their checks (CodeQL takes a few minutes), then run scripts/preflight.sh.')
+  ];
+  var PF_OUT = [
+    HDR('Repository ibranibeny/contoso-order-desk'), OKL('You have admin rights'), OKL('Workflow ci-cd.yml on main'), OKL('Workflow dependency-review.yml on main'), OKL('Workflow copilot-setup-steps.yml on main'), OKL('main is at demo-start (3c7e9d2)'), OKL('Branch fallback/order-lookup-api'), OKL('Branch fallback/agent-lookup-page'),
+    HDR('Rules, security and environment'), OKL("Ruleset 'Protect main' is active"), OKL('CodeQL default setup'), OKL('Push protection'), OKL("Environment 'production' needs approval from: approver"), OKL('Environment secret AZURE_CLIENT_ID'), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c'),
+    HDR('Actions'), OKL('Last CI/CD run on main succeeded'), OKL('Copilot Setup Steps succeeded'),
+    HDR('Security pull requests (open them 30+ minutes before the demo)'), OKL("#1 cross-site scripting: 'CodeQL' fails as expected"), OKL("#2 vulnerable dependency: 'dependency-review' fails as expected"),
+    HDR('Azure web app'), OKL('https://order-desk-ibranibeny-1a2b3c.azurewebsites.net/health answers: {"status":"ok","orders":40}'),
+    HDR('Ready')
+  ];
+  P.push({ name: 'Security pull requests and pre-flight', chapter: '5 · Before each session', app: 'term', dur: 21, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('s1') + tout('sout', SEC_OUT) + tcmd('s2') + tout('pout', PF_OUT) }),
+    steps: [
+      { t: 0.2, cap: 'At least 60 minutes before: open the two security pull requests, so CodeQL and dependency review finish in time.' },
+      { t: 0.5, type: 's1', str: '$ scripts/prepare-security-prs.sh', cps: 34 },
+      { t: 1.8, lines: 'sout', dur: 2.6 },
+      { t: 6.0, cap: '30 minutes before, and again in the break: a read-only <b>pre-flight</b> check.' },
+      { t: 6.3, type: 's2', str: '$ scripts/preflight.sh', cps: 30 },
+      { t: 7.4, lines: 'pout', dur: 8 },
+      { t: 12.0, cap: 'Every line green means the gates, the environment and the app are ready for the live run.' }
+    ] });
+
+  // ---- 6 · Reset afterwards
+  var RS_OUT = [
+    HDR('Reset ibranibeny/contoso-order-desk to demo-start (3c7e9d2)'), DIM('main is at 9c41e07'),
+    HDR('1/4 Pull requests'), OKL('Closed pull request #1'),
+    HDR('2/4 Issues'), OKL('Closed issue #3'), OKL('Closed issue #6'),
+    HDR('3/4 Branches'), OKL('Deleted branch feature/order-lookup-api'),
+    HDR('4/4 main'), DIM('Ruleset "Protect main" paused'), DIM('Ruleset "Protect main" active again'), OKL('main moved back to demo-start (5f88ca3)'),
+    HDR('Done'), DIM('Next: scripts/prepare-security-prs.sh, then scripts/preflight.sh.')
+  ];
+  P.push({ name: 'Reset for the next run', chapter: '6 · Reset afterwards', app: 'term', dur: 15, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('r1') + tout('rout', RS_OUT) + tcmd('r2') + '<div data-k="r2o">' + tline('t-d', '  Deletion started (it takes a few minutes): web app, plan, identity and its federated credential, monitoring') + '</div>' }),
+    steps: [
+      { t: 0.2, cap: 'After a rehearsal or a session, put the repository back to <b>demo-start</b>.' },
+      { t: 0.5, type: 'r1', str: '$ YES=1 scripts/reset-demo.sh', cps: 34 },
+      { t: 1.9, lines: 'rout', dur: 5 },
+      { t: 2.2, cap: 'Open pull requests and issues are closed (except those labelled <b>keep</b>), demo branches deleted, and main moved back with the ruleset paused for a moment.' },
+      { t: 9.4, cap: 'After the workshop, delete the Azure resources so the plan stops costing money.' },
+      { t: 9.8, type: 'r2', str: '$ scripts/cleanup-azure.sh', cps: 30 }, { t: 11.2, lines: 'r2o', dur: 0.4 }
+    ] });
+  D.push({ id: 'live-demo-prep', session: 5, label: 'Session 5', title: 'Before the live demo: build the environment', desk: true, fade: 0.15, clock: '08:30',
+    stepLabel: function (chap) { var m = /^(\d+) · (.*)$/.exec(chap || ''); return m ? 'Prep ' + m[1] + ' of 6 · ' + m[2] : chap; }, scenes: P });
+
+  /* =====================================================================
      SESSION 6 · The Next Evolution: Agentic Software Development
      ===================================================================== */
   var AGENT_MD = "---\nname: test-coverage-improver\ndescription: Finds untested code paths in Contoso Order Desk and adds focused tests without changing production code.\ntools: [\"read\", \"search\", \"edit\"]\n---\nYou improve test coverage for Contoso Order Desk.\n\n- Read .github/copilot-instructions.md and test/ before writing anything.\n- Add tests only under test/. Never modify files under src/ or public/.\n- For each endpoint, cover success, invalid input (400) and not found (404).";
