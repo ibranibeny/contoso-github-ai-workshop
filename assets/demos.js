@@ -874,11 +874,11 @@
     OKL('Web app order-desk-ibranibeny-1a2b3c · resource group rg-contoso-order-desk · Southeast Asia · plan asp-contoso-order-desk (B1) · subscription Contoso Demo'),
     OKL('Running, HTTPS only, TLS 1.2+, FTP off, NODE|24-lts, health check /health'),
     OKL('Basic authentication off (scm and ftp): deployments sign in with Microsoft Entra ID'),
-    OKL('Application Insights connected'),
-    OKL('Identity id-github-order-desk (client ID b23c119a-70d2-48e7-bb0c-cb207b97574f): Website Contributor on this web app, no other role in subscription Contoso Demo (other subscriptions not checked)'),
-    OKL('Federated credential github-production trusts repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production, the immutable subject GitHub sends for this repository'),
+    OKL('Application Insights configured: connection string set, auto-instrumentation ~3 (telemetry itself is not checked)'),
+    OKL('Identity id-github-order-desk (client ID b23c119a-70d2-48e7-bb0c-cb207b97574f): Website Contributor on this web app and no other role in subscription Contoso Demo (including through groups; other subscriptions not checked)'),
+    OKL('Federated credential github-production trusts repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production, the immutable subject a repository created after 15 July 2026 always sends'),
     DIM('Values for the guide: web app order-desk-ibranibeny-1a2b3c, resource group rg-contoso-order-desk'),
-    OKL('Last production deployment (2026-11-04) succeeded: GitHub signed in to Azure with the AZURE_* secrets and the federated credential'),
+    OKL('Last production deployment (2026-11-04) succeeded: Azure sign-in worked at that time'),
     OKL('https://order-desk-ibranibeny-1a2b3c.azurewebsites.net/health answers: {"status":"ok","orders":40}')
   ];
   var PF_END = [HDR('Check by hand'), DIM('- Presenter signed in to GitHub and VS Code; Approver signed in with the second account in another browser or on a second laptop'), DIM('- Copilot, VS Code, tabs and the offline backup (see the guide)'), HDR('Ready')];
@@ -900,7 +900,7 @@
       { t: 8.2, cap: 'Then Azure, from the <b>az login</b> session: it finds the subscription, resource group, web app and identity by itself, and checks them.' },
       { t: 12.6, lines: 'pend', dur: 0.8 },
       { t: 13.6, focus: 'paz', dur: 7 },
-      { t: 13.8, cap: 'Settings, the identity, its <b>federated credential</b>, and the last deployment as proof that sign-in works.' },
+      { t: 13.8, cap: 'Settings, the identity and its <b>federated credential</b>, and the last deployment: sign-in worked at that time.' },
       { t: 20.8, cap: 'It prints the web app and resource group for <b>Your values</b>. All green: ready for the live run.' }
     ] });
 
