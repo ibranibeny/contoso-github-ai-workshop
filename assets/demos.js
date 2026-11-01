@@ -691,9 +691,8 @@
   /* =====================================================================
      SESSION 5 · Before the live demo: build the environment (preparation)
      Terminal output is the text the scripts in contoso-order-desk print;
-     the repository is ibranibeny/contoso-order-desk, switched to one account
-     after setup; the approver, subscription, web app name and commit IDs
-     are example values.
+     the repository is ibranibeny/contoso-order-desk, set up for one
+     account; subscription, web app name and commit IDs are example values.
      ===================================================================== */
   function tline(cls, text) { return '<div class="' + cls + '">' + esc(text) + '</div>'; }
   function tout(key, rows) { return '<div data-k="' + key + '">' + rows.map(function (r) { return tline(r[0], r[1]); }).join('') + '</div>'; }
@@ -764,14 +763,14 @@
 
   // ---- 3 · Configure GitHub
   var GH_OUT = [
-    HDR('Setting up ibranibeny/contoso-order-desk (public, owned by a User) with approver @approver'),
+    HDR('Setting up ibranibeny/contoso-order-desk (public, owned by a User) for one account: @ibranibeny is code owner and production approver'),
     HDR('1/9 Repository settings: squash merge only, delete branches after merge'), OKL('Pull requests merge with squash; merged branches are deleted'),
-    HDR('2/9 Write access for the approver'), OKL('@approver already has access'),
+    HDR('2/9 Write access for the approver'), OKL('One account: nobody to invite'),
     HDR('3/9 Labels and project'), OKL("Label 'enhancement' (used by the feature request form)"), OKL("Created project 'Order Desk' (#1)"), OKL('Project ibranibeny/1 is linked to ibranibeny/contoso-order-desk'),
-    HDR('4/9 Code owners, the feature request form and the demo data'), OKL('Committed to main: CODEOWNERS (@approver), the feature form (project ibranibeny/1)'),
+    HDR('4/9 Code owners, the feature request form and the demo data'), OKL('Committed to main: CODEOWNERS (@ibranibeny), the feature form (project ibranibeny/1)'),
     HDR('5/9 Security features'), OKL('Dependabot alerts'), OKL('Dependabot security updates'), OKL('Secret scanning and push protection'), OKL('CodeQL default setup requested (the first analysis takes a few minutes)'),
-    HDR("6/9 Environment 'production': approval by @approver, main branch only"), OKL('Required reviewer @approver, prevent self-review on'), OKL('Deployment branches: main'),
-    HDR("7/9 Ruleset 'Protect main'"), OKL("Pull request with 1 code-owner approval, checks 'build' and 'dependency-review', CodeQL results, automatic Copilot code review"),
+    HDR("6/9 Environment 'production': approval by @ibranibeny, main branch only"), OKL('Required reviewer @ibranibeny (you), prevent self-review off: you approve your own deployments'), OKL('Deployment branches: main'),
+    HDR("7/9 Ruleset 'Protect main'"), OKL("Pull request without approval (one account), checks 'build' and 'dependency-review', CodeQL results, automatic Copilot code review"),
     HDR('8/9 Copilot setup steps'), OKL("Started 'Copilot Setup Steps' once to check the cloud agent's environment (see the Actions tab)"),
     HDR('9/9 Tag the clean starting point'), OKL('demo-start -> 3c7e9d2 (scripts/reset-demo.sh returns main to this commit)'),
     HDR('Done')
@@ -782,8 +781,8 @@
       { t: 0.2, cap: 'In the clone: check that the GitHub CLI is signed in as the repository owner.' },
       { t: 0.5, type: 'g1', str: '$ gh auth status', cps: 30 },
       { t: 1.2, lines: 'g1o', dur: 0.5 },
-      { t: 2.4, cap: 'One script configures the repository. It asks for a second account, <b>APPROVER</b>; step 0.3 then switches the approvals to one account.' },
-      { t: 2.8, type: 'g2', str: '$ YES=1 APPROVER=approver scripts/github-setup.sh', cps: 50 },
+      { t: 2.4, cap: 'One script configures the repository. Without <b>APPROVER</b> it is set up for one account: you are code owner and approve the deployment yourself.' },
+      { t: 2.8, type: 'g2', str: '$ YES=1 scripts/github-setup.sh', cps: 50 },
       { t: 4.4, lines: 'gout', dur: 9.5 },
       { t: 5.0, cap: 'Settings, code owners, the issue form, security features, the <b>production</b> environment and the <b>Protect main</b> ruleset.' },
       { t: 12.6, cap: 'It ends by tagging the clean starting point <b>demo-start</b>, which the reset script returns to.' }
@@ -800,7 +799,7 @@
     HDR('4/6 Identity for GitHub Actions: id-github-order-desk'), OKL('Website Contributor on order-desk-ibranibeny-1a2b3c only'),
     HDR("5/6 Federated credential: trust only the 'production' environment of ibranibeny/contoso-order-desk"), OKL('Subject (immutable format): repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production'),
     HDR('6/6 GitHub: environment secrets and the web app name'), OKL("Secrets AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID on the 'production' environment"), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c (the deploy job is skipped while it is empty)'),
-    OKL("Started the first CI/CD run on main. The approver approves the 'production' deployment in the Actions tab."),
+    OKL("Started the first CI/CD run on main. Approve the 'production' deployment in the Actions tab (you with one account, otherwise the approver)."),
     HDR('Done'), DIM('Web app:   https://order-desk-ibranibeny-1a2b3c.azurewebsites.net')
   ];
   P.push({ name: 'Run azure-setup.sh in Cloud Shell', chapter: '4 · Create Azure', app: 'term', dur: 26, html: K.term({ title: 'Azure Cloud Shell · Bash', body:
@@ -883,7 +882,7 @@
     OKL('Last production deployment (2026-11-04) succeeded: Azure sign-in worked at that time'),
     OKL('https://order-desk-ibranibeny-1a2b3c.azurewebsites.net/health answers: {"status":"ok","orders":40}')
   ];
-  var PF_END = [HDR('Check by hand'), DIM('- Presenter signed in to GitHub and VS Code; Approver signed in with the second account in another browser or on a second laptop'), DIM('- Copilot, VS Code, tabs and the offline backup (see the guide)'), HDR('Ready')];
+  var PF_END = [HDR('Check by hand'), DIM('- Presenter signed in to GitHub and VS Code; with a second person, the Approver signed in with that account in another browser or on a second laptop'), DIM('- Copilot, VS Code, tabs and the offline backup (see the guide)'), HDR('Ready')];
   P.push({ name: 'Security pull requests', chapter: '6 · Before each session', app: 'term', dur: 9, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
     tcmd('s1') + tout('sout', SEC_OUT) }),
     steps: [
