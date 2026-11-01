@@ -870,11 +870,12 @@
     HDR('Security pull requests (open them 30+ minutes before the demo)'), OKL("#1 cross-site scripting: 'CodeQL' fails as expected"), OKL("#2 vulnerable dependency: 'dependency-review' fails as expected")
   ];
   var PF_AZ = [
-    HDR('Azure'), DIM('Signed in to Azure as presenter@contoso.com · current subscription Contoso Demo'),
+    HDR('Azure'), DIM('Signed in to Azure as presenter@contoso.com · current subscription Contoso Demo'), DIM('Looking for the web app in 2 enabled subscription(s)'),
     OKL('Web app order-desk-ibranibeny-1a2b3c · resource group rg-contoso-order-desk · Southeast Asia · plan asp-contoso-order-desk (B1) · subscription Contoso Demo'),
     OKL('Running, HTTPS only, TLS 1.2+, FTP off, NODE|24-lts, health check /health'),
     OKL('Basic authentication off (scm and ftp): deployments sign in with Microsoft Entra ID'),
     OKL('Application Insights configured: connection string set, auto-instrumentation ~3 (telemetry itself is not checked)'),
+    DIM('No other service principal has Owner, Contributor or Website Contributor on this web app or above (role grants to groups are not expanded)'),
     OKL('Identity id-github-order-desk (client ID b23c119a-70d2-48e7-bb0c-cb207b97574f): Website Contributor on this web app and no other role in subscription Contoso Demo (including through groups; other subscriptions not checked)'),
     OKL('Federated credential github-production trusts repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production, the immutable subject a repository created after 15 July 2026 always sends'),
     DIM('Values for the guide: web app order-desk-ibranibeny-1a2b3c, resource group rg-contoso-order-desk'),
