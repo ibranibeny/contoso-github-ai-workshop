@@ -154,7 +154,7 @@
     document.body.classList.toggle('mode-handson', mode === 'handson');
     document.body.classList.toggle('mode-presenter', mode === 'presenter');
     $$('[data-mode]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === mode)); });
-    $$('details.lg-deep').forEach(function (d) { d.open = mode === 'handson'; });
+    $$('details.lg-deep').forEach(function (d) { d.open = mode === 'handson' || d.hasAttribute('data-open'); });
   }
 
   // ------------------------------------------------------------------ demo clock
@@ -253,7 +253,7 @@
     document.title = (s ? s.num + ' · ' + s.title : 'Live demo, step by step') + ' · Contoso × GitHub Workshop';
     if (s) { var slot = $('.lg-vslot', pages[id]); if (slot) { slot.appendChild(wrap); loadClip(s); } }
     else { V.pause(); clip = null; }
-    $$('details.lg-deep', pages[id]).forEach(function (d) { d.open = mode === 'handson'; });
+    $$('details.lg-deep', pages[id]).forEach(function (d) { d.open = mode === 'handson' || d.hasAttribute('data-open'); });
     window.scrollTo(0, 0);
     var h1 = $('h1', pages[id]); if (h1) h1.focus({ preventScroll: true });
     var rail = $('.lg-rail'); if (rail) rail.classList.remove('open');

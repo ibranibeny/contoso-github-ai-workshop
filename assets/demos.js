@@ -702,39 +702,66 @@
   var DIM = function (s) { return ['t-d', '  ' + s]; };
   var P = [];
 
-  // ---- 1 · The demo repository
+  // ---- 1 · Prerequisites
+  P.push({ name: 'Check the tools and sign in', chapter: '1 · Prerequisites', app: 'term', dur: 20, html: K.term({ title: 'Ubuntu · ~', body:
+    tcmd('q1') + tout('q1o', [['t-d', '? Where do you use GitHub? GitHub.com'], ['t-d', '? What is your preferred protocol for Git operations on this host? HTTPS'], ['t-d', '? Authenticate Git with your GitHub credentials? Yes'],
+      ['t-d', '? How would you like to authenticate GitHub CLI? Login with a web browser'], ['t-y', '! First copy your one-time code: 4F2A-9C1D'], ['t-d', 'Press Enter to open https://github.com/login/device in your browser...'],
+      ['t-g', '✓ Authentication complete.'], ['t-d', '- gh config set -h github.com git_protocol https'], ['t-g', '✓ Configured git protocol'], ['t-g', '✓ Logged in as ibranibeny']]) +
+    tcmd('q2') + tout('q2o', [['t-y', '! First copy your one-time code: 7B3E-2K9P'], ['t-g', '✓ Authentication complete.']]) +
+    tcmd('q3') + tout('q3o', [['t-d', 'A web browser has been opened at https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize. Please continue the login in the web browser.']]) +
+    tcmd('q4') + tout('q4o', [['t-d', 'Subscription    User'], ['t-d', '--------------  ---------------------'], ['t-g', 'Contoso Demo    presenter@contoso.com']]) }),
+    steps: [
+      { t: 0.2, cap: 'First, on the Presenter\'s laptop: sign the <b>GitHub CLI</b> in as the repository owner, over HTTPS, and let it <b>authenticate Git</b> so the scripts can push.' },
+      { t: 0.5, type: 'q1', str: '$ gh auth login', cps: 30 },
+      { t: 1.2, lines: 'q1o', dur: 4.5 },
+      { t: 6.0, cap: 'Add the <b>project</b> scope for the project board.' },
+      { t: 6.2, type: 'q2', str: '$ gh auth refresh -s project', cps: 34 },
+      { t: 7.2, lines: 'q2o', dur: 1.2 },
+      { t: 9.0, cap: 'Sign in to <b>Azure</b> and pick the subscription. Azure Cloud Shell is already signed in.' },
+      { t: 9.2, type: 'q3', str: '$ az login', cps: 30 },
+      { t: 9.8, lines: 'q3o', dur: 0.4 },
+      { t: 11.0, type: 'q4', str: '$ az account set --subscription "Contoso Demo" && az account show --query "{subscription:name, user:user.name}" -o table', cps: 70 },
+      { t: 12.9, lines: 'q4o', dur: 0.8 },
+      { t: 14.8, cap: 'Also on the laptop: git, Node.js 24 with npm, curl, and VS Code with GitHub Copilot.' }
+    ] });
+
+  // ---- 2 · The demo repository
   var REPO_HEAD = '<div class="gh-head"><div class="gh-top"><span class="gh-logo"></span><span>ibranibeny</span>/<b>contoso-order-desk</b><span class="pill">Public template</span>' +
     '<span class="gbtn pri" data-k="cbtn" style="margin-left:auto">&lt;&gt; Code ▾</span></div>' +
     '<div class="gh-tabs"><span class="on">Code</span><span>Issues</span><span>Pull requests</span><span>Actions</span><span>Projects</span><span>Security and quality</span><span>Settings</span></div></div>';
-  P.push({ name: 'The demo repository', chapter: '1 · The demo repository', app: 'edge', dur: 7, html: gh({ page: 'ibranibeny/contoso-order-desk', url: 'github.com/ibranibeny/contoso-order-desk', head: REPO_HEAD, body:
+  P.push({ name: 'The demo repository', chapter: '2 · The demo repository', app: 'edge', dur: 7, html: gh({ page: 'ibranibeny/contoso-order-desk', url: 'github.com/ibranibeny/contoso-order-desk', head: REPO_HEAD, body:
     '<div class="gh-cols"><div class="gh-main"><div class="gh-box"><div class="hd"><b>README.md</b></div><div class="bd"><h4 style="margin-top:0;font-size:20px">Contoso Order Desk · live demo kit</h4>' +
     '<div>Starter repository for Session 5: a business requirement becomes an issue, Copilot builds it, people review it, security gates check it, and GitHub Actions deploys it to Azure App Service.</div>' +
     '<h4>Branches</h4><ul><li><code>main</code>: the starting point (tag <code>demo-start</code>)</li><li><code>fallback/order-lookup-api</code>, <code>fallback/agent-lookup-page</code>, <code>solution</code></li><li><code>demo/not-found-message</code>, <code>demo/add-date-helper</code></li></ul></div></div></div>' +
     '<div data-k="sd">' + side([{ h: 'About', v: 'Live demo kit for "From business requirement to production"' }, { h: 'Branches', v: '6 branches · 1 tag' }, { h: 'Actions', v: 'CI/CD ✓ on main' }]) + '</div></div>' +
-    '<div class="pop hid" data-k="cpop" style="right:40px;top:96px;width:400px"><div class="it"><b>Clone</b></div><div class="it" style="font-size:12px;color:#59636e">HTTPS · SSH · <b style="color:#1f2328">GitHub CLI</b></div><div class="it on" style="font-family:var(--mono,monospace);font-size:13px">gh repo clone ibranibeny/contoso-order-desk</div></div>' }),
+    '<div class="pop hid" data-k="cpop" style="right:40px;top:96px;width:400px"><div class="it"><b>Clone</b></div><div class="it" style="font-size:12px;color:#59636e"><b style="color:#1f2328">HTTPS</b> · SSH · GitHub CLI</div><div class="it on" style="font-family:var(--mono,monospace);font-size:13px">https://github.com/ibranibeny/contoso-order-desk.git</div></div>' }),
     steps: [
       { t: 0.2, cap: 'The live demo runs in <b>ibranibeny/contoso-order-desk</b>: the app, its tests and workflows, the setup scripts and every demo branch.' },
       { t: 1.2, focus: 'sd', dur: 2.2 },
       { t: 3.6, click: 'cbtn' }, { t: 3.9, show: 'cpop' },
-      { t: 4.1, cap: '<b>Code → GitHub CLI</b>: copy the clone command.' }
+      { t: 4.1, cap: '<b>Code → HTTPS</b>: copy the clone URL.' }
     ] });
-  P.push({ name: 'Clone it', app: 'term', cut: true, dur: 13, html: K.term({ title: 'Ubuntu · ~', body:
+  P.push({ name: 'Clone it', app: 'term', cut: true, dur: 16, html: K.term({ title: 'Ubuntu · ~', body:
     tcmd('c1') + tout('c1o', [['t-d', "Cloning into 'contoso-order-desk'..."]]) +
     tcmd('c2') + tout('c2o', [['t-d', '  origin/HEAD -> origin/main'], ['t-g', '  origin/demo/add-date-helper'], ['t-g', '  origin/demo/not-found-message'], ['t-g', '  origin/fallback/agent-lookup-page'], ['t-g', '  origin/fallback/order-lookup-api'], ['t-g', '  origin/main'], ['t-g', '  origin/solution']]) +
-    tcmd('c3') + tout('c3o', [['t-g', 'demo-start']]) }),
+    tcmd('c3') + tout('c3o', [['t-g', 'demo-start']]) +
+    tcmd('c4') + tout('c4o', [['t-b', 'azure-setup.sh    create-demo-issues.sh  lib.sh        prepare-security-prs.sh  reset-demo.sh  seed-orders.mjs'], ['t-b', 'cleanup-azure.sh  github-setup.sh        preflight.sh  push-protection-demo.sh  rulesets']]) }),
     steps: [
-      { t: 0.2, cap: 'Clone it with the GitHub CLI, signed in as the repository owner.' },
-      { t: 0.5, type: 'c1', str: '$ gh repo clone ibranibeny/contoso-order-desk && cd contoso-order-desk', cps: 60 },
-      { t: 1.9, lines: 'c1o', dur: 0.3 },
-      { t: 2.6, type: 'c2', str: '$ git branch -r', cps: 30 },
-      { t: 3.3, lines: 'c2o', dur: 1.4 },
-      { t: 3.6, cap: 'All six branches are there: the <b>fallback</b> branches for the API and the page, the <b>solution</b>, and the two <b>security demo</b> branches.' },
-      { t: 7.8, type: 'c3', str: '$ git tag', cps: 30 },
-      { t: 8.3, lines: 'c3o', dur: 0.3 },
-      { t: 8.6, cap: 'The tag <b>demo-start</b> marks the clean starting point. Participants who want their own copy use <b>Use this template</b> with <b>Include all branches</b>.' }
+      { t: 0.2, cap: 'Clone it with <b>git clone</b> and go into the folder. Every script in the guide runs from here.' },
+      { t: 0.5, type: 'c1', str: '$ git clone https://github.com/ibranibeny/contoso-order-desk.git && cd contoso-order-desk', cps: 60 },
+      { t: 2.2, lines: 'c1o', dur: 0.3 },
+      { t: 3.0, type: 'c2', str: '$ git branch -r', cps: 30 },
+      { t: 3.6, lines: 'c2o', dur: 1.4 },
+      { t: 3.8, cap: 'All six branches are there: the <b>fallback</b> branches for the API and the page, the <b>solution</b>, and the two <b>security demo</b> branches.' },
+      { t: 7.6, type: 'c3', str: '$ git tag', cps: 30 },
+      { t: 8.1, lines: 'c3o', dur: 0.3 },
+      { t: 8.4, cap: 'The tag <b>demo-start</b> marks the clean starting point.' },
+      { t: 10.0, type: 'c4', str: '$ ls scripts', cps: 30 },
+      { t: 10.6, lines: 'c4o', dur: 0.5 },
+      { t: 10.8, cap: 'The setup scripts are files in the repository\'s <b>scripts/</b> folder. Participants who want their own copy use <b>Use this template</b> with <b>Include all branches</b>.' }
     ] });
 
-  // ---- 2 · Configure GitHub
+  // ---- 3 · Configure GitHub
   var GH_OUT = [
     HDR('Setting up ibranibeny/contoso-order-desk (public, owned by a User) with approver @approver'),
     HDR('1/9 Repository settings: squash merge only, delete branches after merge'), OKL('Pull requests merge with squash; merged branches are deleted'),
@@ -748,11 +775,12 @@
     HDR('9/9 Tag the clean starting point'), OKL('demo-start -> 3c7e9d2 (scripts/reset-demo.sh returns main to this commit)'),
     HDR('Done')
   ];
-  P.push({ name: 'Run github-setup.sh', chapter: '2 · Configure GitHub', app: 'term', dur: 22, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
-    tcmd('g1') + tcmd('g2') + tout('gout', GH_OUT) }),
+  P.push({ name: 'Run github-setup.sh', chapter: '3 · Configure GitHub', app: 'term', dur: 22, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('g1') + tout('g1o', [['t-d', 'github.com'], ['t-g', '  ✓ Logged in to github.com account ibranibeny (keyring)']]) + tcmd('g2') + tout('gout', GH_OUT) }),
     steps: [
-      { t: 0.2, cap: 'Sign in the GitHub CLI as the repository owner, with the <b>project</b> scope for the project board.' },
-      { t: 0.5, type: 'g1', str: '$ gh auth refresh -s project', cps: 32 },
+      { t: 0.2, cap: 'In the clone: check that the GitHub CLI is signed in as the repository owner.' },
+      { t: 0.5, type: 'g1', str: '$ gh auth status', cps: 30 },
+      { t: 1.2, lines: 'g1o', dur: 0.5 },
       { t: 2.4, cap: 'One script configures the repository. <b>APPROVER</b> is the second person: code owner and production approver.' },
       { t: 2.8, type: 'g2', str: '$ YES=1 APPROVER=approver scripts/github-setup.sh', cps: 50 },
       { t: 4.4, lines: 'gout', dur: 9.5 },
@@ -760,7 +788,7 @@
       { t: 12.6, cap: 'It ends by tagging the clean starting point <b>demo-start</b>, which the reset script returns to.' }
     ] });
 
-  // ---- 3 · Create Azure
+  // ---- 4 · Create Azure
   var AZ_OUT = [
     HDR('Deploying the Order Desk demo for ibranibeny/contoso-order-desk'), DIM('Subscription Contoso Demo (00000000-1111-2222-3333-444444444444)'), DIM('Resource group rg-contoso-order-desk in southeastasia; web app order-desk-ibranibeny-1a2b3c; plan asp-contoso-order-desk (B1)')
   ];
@@ -774,28 +802,33 @@
     OKL("Started the first CI/CD run on main. The approver approves the 'production' deployment in the Actions tab."),
     HDR('Done'), DIM('Web app:   https://order-desk-ibranibeny-1a2b3c.azurewebsites.net')
   ];
-  P.push({ name: 'Run azure-setup.sh in Cloud Shell', chapter: '3 · Create Azure', app: 'term', dur: 23, html: K.term({ title: 'Azure Cloud Shell · Bash', body:
+  P.push({ name: 'Run azure-setup.sh in Cloud Shell', chapter: '4 · Create Azure', app: 'term', dur: 26, html: K.term({ title: 'Azure Cloud Shell · Bash', body:
+    tcmd('a0') + tout('a0o', [['t-g', '✓ Logged in as ibranibeny']]) + tcmd('a9') + tout('a9o', [['t-d', "Cloning into 'contoso-order-desk'..."]]) +
     tcmd('a1') + tcmd('a2') + tout('aout', AZ_OUT) + '<div class="t-y" data-k="aq"></div>' + tout('aout2', AZ_OUT2) }),
     steps: [
-      { t: 0.2, cap: 'In <b>Azure Cloud Shell (Bash)</b>, which already has az, gh, git and node, in the same clone.' },
-      { t: 0.5, type: 'a1', str: '$ az account set --subscription "Contoso Demo"', cps: 40 },
-      { t: 2.0, type: 'a2', str: '$ scripts/azure-setup.sh', cps: 30 },
-      { t: 3.0, lines: 'aout', dur: 0.8 },
-      { t: 4.0, type: 'aq', str: 'Create or update these Azure resources (an App Service plan B1 has an hourly cost until you delete it)? [y/N] y', cps: 90 },
-      { t: 5.6, lines: 'aout2', dur: 9 },
-      { t: 6.0, cap: 'App Service with hardening, Application Insights, and a <b>user-assigned managed identity</b> with Website Contributor on the web app only.' },
-      { t: 11.4, cap: 'A <b>federated credential</b> trusts tokens from the <b>production</b> environment of this repository only. No secret is stored.' },
-      { t: 11.6, zoom: 'aout2', s: 1.25, oy: 60 }, { t: 17.4, zoom: null },
-      { t: 17.6, cap: 'The IDs go into <b>production</b> environment secrets, and the first CI/CD run starts.' }
+      { t: 0.2, cap: '<b>Azure Cloud Shell (Bash)</b> is already signed in to Azure, but it is a separate machine: sign the GitHub CLI in and clone the repository there first.' },
+      { t: 0.5, type: 'a0', str: '$ gh auth login', cps: 30 },
+      { t: 1.2, lines: 'a0o', dur: 0.3 },
+      { t: 1.8, type: 'a9', str: '$ gh repo clone ibranibeny/contoso-order-desk && cd contoso-order-desk', cps: 70 },
+      { t: 3.0, lines: 'a9o', dur: 0.3 },
+      { t: 3.6, type: 'a1', str: '$ az account set --subscription "Contoso Demo"', cps: 45 },
+      { t: 5.0, type: 'a2', str: '$ scripts/azure-setup.sh', cps: 30 },
+      { t: 6.0, lines: 'aout', dur: 0.8 },
+      { t: 7.0, type: 'aq', str: 'Create or update these Azure resources (an App Service plan B1 has an hourly cost until you delete it)? [y/N] y', cps: 90 },
+      { t: 8.6, lines: 'aout2', dur: 9 },
+      { t: 9.0, cap: 'App Service with hardening, Application Insights, and a <b>user-assigned managed identity</b> with Website Contributor on the web app only.' },
+      { t: 14.4, cap: 'A <b>federated credential</b> trusts tokens from the <b>production</b> environment of this repository only. No secret is stored.' },
+      { t: 14.6, zoom: 'aout2', s: 1.25, oy: 60 }, { t: 20.4, zoom: null },
+      { t: 20.6, cap: 'The IDs go into <b>production</b> environment secrets, and the first CI/CD run starts.' }
     ] });
 
-  // ---- 4 · First deployment
+  // ---- 5 · First deployment
   function prepRun(extra, who) {
     return gh({ tab: 'Actions', who: who, page: 'CI/CD · ibranibeny/contoso-order-desk', url: 'github.com/ibranibeny/contoso-order-desk/actions/runs/1', body:
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span data-k="runst">' + ci('run') + '</span><b style="font-size:18px">CI/CD · workflow_dispatch on main</b><span class="pill">main</span></div>' +
       '<div class="gh-box"><div class="wf"><div class="job"><span>' + ci('ok') + '</span><div><b>build</b><div class="s">Success · 31s</div></div></div><span class="arrow2">→</span><div class="job" data-k="jd"><span data-k="jdi">' + ci('wait') + '</span><div><b>deploy</b><div class="s" data-k="jds">Waiting for review · production</div></div></div></div></div>' + (extra || '') });
   }
-  P.push({ name: 'Approve the first deployment', chapter: '4 · First deployment', app: 'edge', dur: 14, html: prepRun(
+  P.push({ name: 'Approve the first deployment', chapter: '5 · First deployment', app: 'edge', dur: 14, html: prepRun(
     '<div class="banner" data-k="ban"><b>production</b>&nbsp;is waiting for review<span class="gbtn" data-k="rd" style="margin-left:auto">Review deployments</span></div>' +
     '<div class="gh-box steps2 hid" data-k="dsteps"><div class="hd">deploy · environment: production</div><div class="chk">' + ci('ok') + 'Download artifact from build job</div><div class="chk">' + ci('ok') + 'Az CLI login (OIDC, no stored password)<span class="r">azure/login@v3</span></div><div class="chk">' + ci('ok') + 'Deploy to Azure Web App<span class="r">azure/webapps-deploy@v3</span></div><div class="chk">' + ci('ok') + 'Smoke test<span class="r">GET /health → 200</span></div></div>' +
     '<div class="modal hid" data-k="rdm"><div class="dlg"><div class="hd">Review pending deployments</div><div class="bd"><div style="display:flex;gap:8px;align-items:center"><span class="ci ok">✓</span><b>production</b><span class="pill">required reviewer: approver</span></div></div><div class="ft"><span class="gbtn danger">Reject</span><span class="gbtn pri" data-k="ad">Approve and deploy</span></div></div></div>', 'A'),
@@ -821,33 +854,56 @@
       { t: 1.4, focus: 'card', dur: 4.6 }
     ] });
 
-  // ---- 5 · Before each session
+  // ---- 6 · Before each session
   var SEC_OUT = [
     HDR('1/2 demo/not-found-message (code scanning + Copilot Autofix)'), OKL('Opened: #1 https://github.com/ibranibeny/contoso-order-desk/pull/1'),
     HDR('2/2 demo/add-date-helper (dependency review)'), OKL('Opened: #2 https://github.com/ibranibeny/contoso-order-desk/pull/2'),
     HDR('Done'), DIM('Wait until both pull requests show their checks (CodeQL takes a few minutes), then run scripts/preflight.sh.')
   ];
-  var PF_OUT = [
-    HDR('Repository ibranibeny/contoso-order-desk'), OKL('You have admin rights'), OKL('Workflow ci-cd.yml on main'), OKL('Workflow dependency-review.yml on main'), OKL('Workflow copilot-setup-steps.yml on main'), OKL('main is at demo-start (3c7e9d2)'), OKL('Branch fallback/order-lookup-api'), OKL('Branch fallback/agent-lookup-page'),
-    HDR('Rules, security and environment'), OKL("Ruleset 'Protect main' is active"), OKL('CodeQL default setup'), OKL('Push protection'), OKL("Environment 'production' needs approval from: approver"), OKL('Environment secret AZURE_CLIENT_ID'), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c'),
+  var PF_GH = [
+    HDR('Repository ibranibeny/contoso-order-desk'), OKL('You have admin rights'), OKL('Workflow ci-cd.yml on main'), OKL('Workflow dependency-review.yml on main'), OKL('Workflow copilot-setup-steps.yml on main'),
+    OKL('CODEOWNERS names an owner'), OKL('main is at demo-start (3c7e9d2)'), OKL('Branch fallback/order-lookup-api'), OKL('Branch fallback/agent-lookup-page'), OKL('Branch solution'), OKL('No open issues (the demo creates them)'),
+    HDR('Rules, security and environment'), OKL("Ruleset 'Protect main' is active"), DIM('Rules: deletion, non_fast_forward, pull_request, required_status_checks, code_scanning, copilot_code_review'),
+    OKL('CodeQL default setup'), OKL('Push protection'), OKL("Environment 'production' needs approval from: approver"),
+    OKL('Environment secret AZURE_CLIENT_ID'), OKL('Environment secret AZURE_TENANT_ID'), OKL('Environment secret AZURE_SUBSCRIPTION_ID'), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c'),
     HDR('Actions'), OKL('Last CI/CD run on main succeeded'), OKL('Copilot Setup Steps succeeded'),
-    HDR('Security pull requests (open them 30+ minutes before the demo)'), OKL("#1 cross-site scripting: 'CodeQL' fails as expected"), OKL("#2 vulnerable dependency: 'dependency-review' fails as expected"),
-    HDR('Azure web app'), OKL('https://order-desk-ibranibeny-1a2b3c.azurewebsites.net/health answers: {"status":"ok","orders":40}'),
-    HDR('Ready')
+    HDR('Security pull requests (open them 30+ minutes before the demo)'), OKL("#1 cross-site scripting: 'CodeQL' fails as expected"), OKL("#2 vulnerable dependency: 'dependency-review' fails as expected")
   ];
-  P.push({ name: 'Security pull requests and pre-flight', chapter: '5 · Before each session', app: 'term', dur: 21, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
-    tcmd('s1') + tout('sout', SEC_OUT) + tcmd('s2') + tout('pout', PF_OUT) }),
+  var PF_AZ = [
+    HDR('Azure'), DIM('Signed in to Azure as presenter@contoso.com · current subscription Contoso Demo'),
+    OKL('Web app order-desk-ibranibeny-1a2b3c · resource group rg-contoso-order-desk · Southeast Asia · plan asp-contoso-order-desk (B1) · subscription Contoso Demo'),
+    OKL('Running, HTTPS only, TLS 1.2+, FTP off, NODE|24-lts, health check /health'),
+    OKL('Basic authentication off (scm and ftp): deployments sign in with Microsoft Entra ID'),
+    OKL('Application Insights connected'),
+    OKL('Identity id-github-order-desk: Website Contributor on this web app only'),
+    OKL('Federated credential github-production trusts only repo:ibranibeny@66096127/contoso-order-desk@1441594164:environment:production (immutable format)'),
+    DIM('Values for the guide: web app order-desk-ibranibeny-1a2b3c, resource group rg-contoso-order-desk'),
+    OKL('https://order-desk-ibranibeny-1a2b3c.azurewebsites.net/health answers: {"status":"ok","orders":40}')
+  ];
+  var PF_END = [HDR('Check by hand'), DIM('- Presenter signed in to GitHub and VS Code; Approver signed in with the second account in another browser or on a second laptop'), DIM('- Copilot, VS Code, tabs and the offline backup (see the guide)'), HDR('Ready')];
+  P.push({ name: 'Security pull requests', chapter: '6 · Before each session', app: 'term', dur: 9, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('s1') + tout('sout', SEC_OUT) }),
     steps: [
       { t: 0.2, cap: 'At least 60 minutes before: open the two security pull requests, so CodeQL and dependency review finish in time.' },
       { t: 0.5, type: 's1', str: '$ scripts/prepare-security-prs.sh', cps: 34 },
-      { t: 1.8, lines: 'sout', dur: 2.6 },
-      { t: 6.0, cap: '30 minutes before, and again in the break: a read-only <b>pre-flight</b> check.' },
-      { t: 6.3, type: 's2', str: '$ scripts/preflight.sh', cps: 30 },
-      { t: 7.4, lines: 'pout', dur: 8 },
-      { t: 12.0, cap: 'Every line green means the gates, the environment and the app are ready for the live run.' }
+      { t: 1.8, lines: 'sout', dur: 2.6 }
+    ] });
+  P.push({ name: 'Pre-flight check', app: 'term', cut: true, dur: 26, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+    tcmd('s2') + tout('pgh', PF_GH) + tout('paz', PF_AZ) + tout('pend', PF_END) }),
+    steps: [
+      { t: 0.2, cap: '30 minutes before, and again in the break: a read-only <b>pre-flight</b> check. There is nothing to pass.' },
+      { t: 0.5, type: 's2', str: '$ scripts/preflight.sh', cps: 30 },
+      { t: 1.6, lines: 'pgh', dur: 6 },
+      { t: 3.6, cap: 'GitHub first: repository, rules, security features, the <b>production</b> environment, Actions and the two security pull requests.' },
+      { t: 8.0, lines: 'paz', dur: 4.5 },
+      { t: 8.2, cap: 'Then Azure, from the <b>az login</b> session: it finds the subscription, resource group, web app and identity by itself, and checks them.' },
+      { t: 12.6, lines: 'pend', dur: 0.8 },
+      { t: 13.6, focus: 'paz', dur: 7 },
+      { t: 13.8, cap: 'Settings, basic authentication off, the identity\'s single role, and a <b>federated credential</b> that matches the subject this repository sends.' },
+      { t: 20.8, cap: 'It prints the web app and resource group for <b>Your values</b>. All green: ready for the live run.' }
     ] });
 
-  // ---- 6 · Reset afterwards
+  // ---- 7 · Reset afterwards
   var RS_OUT = [
     HDR('Reset ibranibeny/contoso-order-desk to demo-start (3c7e9d2)'), DIM('main is at 9c41e07'),
     HDR('1/4 Pull requests'), OKL('Closed pull request #1'),
@@ -856,7 +912,7 @@
     HDR('4/4 main'), DIM('Ruleset "Protect main" paused'), DIM('Ruleset "Protect main" active again'), OKL('main moved back to demo-start (5f88ca3)'),
     HDR('Done'), DIM('Next: scripts/prepare-security-prs.sh, then scripts/preflight.sh.')
   ];
-  P.push({ name: 'Reset for the next run', chapter: '6 · Reset afterwards', app: 'term', dur: 15, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
+  P.push({ name: 'Reset for the next run', chapter: '7 · Reset afterwards', app: 'term', dur: 15, html: K.term({ title: 'Ubuntu · contoso-order-desk', body:
     tcmd('r1') + tout('rout', RS_OUT) + tcmd('r2') + '<div data-k="r2o">' + tline('t-d', '  Deletion started (it takes a few minutes): web app, plan, identity and its federated credential, monitoring') + '</div>' }),
     steps: [
       { t: 0.2, cap: 'After a rehearsal or a session, put the repository back to <b>demo-start</b>.' },
@@ -867,7 +923,7 @@
       { t: 9.8, type: 'r2', str: '$ scripts/cleanup-azure.sh', cps: 30 }, { t: 11.2, lines: 'r2o', dur: 0.4 }
     ] });
   D.push({ id: 'live-demo-prep', session: 5, label: 'Session 5', title: 'Before the live demo: build the environment', desk: true, fade: 0.15, clock: '08:30',
-    stepLabel: function (chap) { var m = /^(\d+) · (.*)$/.exec(chap || ''); return m ? 'Prep ' + m[1] + ' of 6 · ' + m[2] : chap; }, scenes: P });
+    stepLabel: function (chap) { var m = /^(\d+) · (.*)$/.exec(chap || ''); return m ? 'Prep ' + m[1] + ' of 7 · ' + m[2] : chap; }, scenes: P });
 
   /* =====================================================================
      SESSION 6 · The Next Evolution: Agentic Software Development
