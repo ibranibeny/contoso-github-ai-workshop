@@ -691,8 +691,9 @@
   /* =====================================================================
      SESSION 5 · Before the live demo: build the environment (preparation)
      Terminal output is the text the scripts in contoso-order-desk print;
-     the repository is ibranibeny/contoso-order-desk; the approver,
-     subscription, web app name and commit IDs are example values.
+     the repository is ibranibeny/contoso-order-desk, switched to one account
+     after setup; the approver, subscription, web app name and commit IDs
+     are example values.
      ===================================================================== */
   function tline(cls, text) { return '<div class="' + cls + '">' + esc(text) + '</div>'; }
   function tout(key, rows) { return '<div data-k="' + key + '">' + rows.map(function (r) { return tline(r[0], r[1]); }).join('') + '</div>'; }
@@ -781,7 +782,7 @@
       { t: 0.2, cap: 'In the clone: check that the GitHub CLI is signed in as the repository owner.' },
       { t: 0.5, type: 'g1', str: '$ gh auth status', cps: 30 },
       { t: 1.2, lines: 'g1o', dur: 0.5 },
-      { t: 2.4, cap: 'One script configures the repository. <b>APPROVER</b> is the second person: code owner and production approver.' },
+      { t: 2.4, cap: 'One script configures the repository. It asks for a second account, <b>APPROVER</b>; step 0.3 then switches the approvals to one account.' },
       { t: 2.8, type: 'g2', str: '$ YES=1 APPROVER=approver scripts/github-setup.sh', cps: 50 },
       { t: 4.4, lines: 'gout', dur: 9.5 },
       { t: 5.0, cap: 'Settings, code owners, the issue form, security features, the <b>production</b> environment and the <b>Protect main</b> ruleset.' },
@@ -831,10 +832,10 @@
   P.push({ name: 'Approve the first deployment', chapter: '5 · First deployment', app: 'edge', dur: 14, html: prepRun(
     '<div class="banner" data-k="ban"><b>production</b>&nbsp;is waiting for review<span class="gbtn" data-k="rd" style="margin-left:auto">Review deployments</span></div>' +
     '<div class="gh-box steps2 hid" data-k="dsteps"><div class="hd">deploy · environment: production</div><div class="chk">' + ci('ok') + 'Download artifact from build job</div><div class="chk">' + ci('ok') + 'Az CLI login (OIDC, no stored password)<span class="r">azure/login@v3</span></div><div class="chk">' + ci('ok') + 'Deploy to Azure Web App<span class="r">azure/webapps-deploy@v3</span></div><div class="chk">' + ci('ok') + 'Smoke test<span class="r">GET /health → 200</span></div></div>' +
-    '<div class="modal hid" data-k="rdm"><div class="dlg"><div class="hd">Review pending deployments</div><div class="bd"><div style="display:flex;gap:8px;align-items:center"><span class="ci ok">✓</span><b>production</b><span class="pill">required reviewer: approver</span></div></div><div class="ft"><span class="gbtn danger">Reject</span><span class="gbtn pri" data-k="ad">Approve and deploy</span></div></div></div>', 'A'),
+    '<div class="modal hid" data-k="rdm"><div class="dlg"><div class="hd">Review pending deployments</div><div class="bd"><div style="display:flex;gap:8px;align-items:center"><span class="ci ok">✓</span><b>production</b><span class="pill">required reviewer: ibranibeny</span></div></div><div class="ft"><span class="gbtn danger">Reject</span><span class="gbtn pri" data-k="ad">Approve and deploy</span></div></div></div>', 'P'),
     steps: [
       { t: 0.2, cap: 'In <b>Actions</b>, build passed and <b>deploy</b> waits for the <b>production</b> environment.' },
-      { t: 1.4, cap: 'The <b>approver</b> (second browser profile) approves the first deployment.' },
+      { t: 1.4, cap: 'You approve the first deployment yourself: with one account you are the only required reviewer, and Prevent self-review is off.' },
       { t: 2.0, click: 'rd' }, { t: 2.3, show: 'rdm' },
       { t: 3.6, click: 'ad' }, { t: 3.9, hide: ['rdm', 'ban'] },
       { t: 4.0, el: 'jdi', html: ci('run') }, { t: 4.0, el: 'jds', text: 'In progress · production' },
@@ -864,13 +865,13 @@
     HDR('Repository ibranibeny/contoso-order-desk'), OKL('You have admin rights'), OKL('Workflow ci-cd.yml on main'), OKL('Workflow dependency-review.yml on main'), OKL('Workflow copilot-setup-steps.yml on main'),
     OKL('CODEOWNERS names an owner'), OKL('main is at demo-start (3c7e9d2)'), OKL('Branch fallback/order-lookup-api'), OKL('Branch fallback/agent-lookup-page'), OKL('Branch solution'), OKL('No open issues (the demo creates them)'),
     HDR('Rules, security and environment'), OKL("Ruleset 'Protect main' is active"), DIM('Rules: deletion, non_fast_forward, pull_request, required_status_checks, code_scanning, copilot_code_review'),
-    OKL('CodeQL default setup'), OKL('Push protection'), OKL("Environment 'production' needs approval from: approver"),
+    OKL('CodeQL default setup'), OKL('Push protection'), OKL("Environment 'production' needs approval from: ibranibeny"),
     OKL('Environment secret AZURE_CLIENT_ID'), OKL('Environment secret AZURE_TENANT_ID'), OKL('Environment secret AZURE_SUBSCRIPTION_ID'), OKL('Variable AZURE_WEBAPP_NAME=order-desk-ibranibeny-1a2b3c'),
     HDR('Actions'), OKL('Last CI/CD run on main succeeded'), OKL('Copilot Setup Steps succeeded'),
     HDR('Security pull requests (open them 30+ minutes before the demo)'), OKL("#1 cross-site scripting: 'CodeQL' fails as expected"), OKL("#2 vulnerable dependency: 'dependency-review' fails as expected")
   ];
   var PF_AZ = [
-    HDR('Azure'), DIM('Signed in to Azure as presenter@contoso.com · current subscription Contoso Demo'), DIM('Looking for the web app in 2 enabled subscription(s)'),
+    HDR('Azure'), DIM('Signed in to Azure as presenter@contoso.com · current subscription Contoso Demo'),
     OKL('Web app order-desk-ibranibeny-1a2b3c · resource group rg-contoso-order-desk · Southeast Asia · plan asp-contoso-order-desk (B1) · subscription Contoso Demo'),
     OKL('Running, HTTPS only, TLS 1.2+, FTP off, NODE|24-lts, health check /health'),
     OKL('Basic authentication off (scm and ftp): deployments sign in with Microsoft Entra ID'),
