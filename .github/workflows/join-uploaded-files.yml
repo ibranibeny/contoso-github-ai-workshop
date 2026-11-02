@@ -1,0 +1,62 @@
+# Joins large files uploaded in parts (each under the 5 MiB limit of the upload path),
+# verifies each against its SHA-256, and commits the result to main. Lives only on the
+# upload branch; main never carries this workflow.
+name: Join uploaded files
+on:
+  push:
+    branches: [handson-upload]
+    paths: ['upload/READY']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: join-uploaded-files
+  cancel-in-progress: false
+jobs:
+  join:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: handson-upload
+          path: up
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+          fetch-depth: 0
+      - name: Join the parts and verify each file
+        run: |
+          set -euo pipefail
+          cd up/upload
+          # MANIFEST lines: <sha256> <number of parts> <target path in main>
+          while read -r sum parts target; do
+            [ -z "${sum:-}" ] && continue
+            out="$GITHUB_WORKSPACE/site/$target"
+            mkdir -p "$(dirname "$out")"
+            : > "$out"
+            for i in $(seq -f '%03g' 0 $((parts - 1))); do
+              cat "$(basename "$target").part$i" >> "$out"
+            done
+            echo "$sum  $out" | sha256sum -c -
+            ls -l "$out"
+          done < MANIFEST
+      - name: Commit to main
+        run: |
+          set -euo pipefail
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
+          git commit -m "Hands-on guide: add the joined video files"
+          for n in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            sleep 5
+          done
+          exit 1
+      - name: Request a Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
