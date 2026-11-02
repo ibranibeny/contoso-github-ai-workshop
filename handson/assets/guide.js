@@ -251,7 +251,7 @@
     var s = byId[id];
     $$('.lg-ch').forEach(function (c) { c.classList.toggle('cur', !!s && c.getAttribute('data-act') === s.act); });
     document.title = (s ? s.num + ' · ' + s.title : 'Live demo, step by step') + ' · Hands-on live demo · Contoso × GitHub';
-    if (s) { var slot = $('.lg-vslot', pages[id]); if (slot) { slot.appendChild(wrap); loadClip(s); } }
+    if (s) { var slot = $('.lg-vslot', pages[id]); if (slot) { slot.appendChild(wrap); loadClip(s); } else { V.pause(); clip = null; } }
     else { V.pause(); clip = null; }
     $$('details.lg-deep', pages[id]).forEach(function (d) { d.open = mode === 'handson' || d.hasAttribute('data-open'); });
     window.scrollTo(0, 0);
@@ -271,7 +271,7 @@
     if (b.hasAttribute('data-mode')) { setMode(b.getAttribute('data-mode')); return; }
     var a = b.getAttribute('data-a');
     if (a === 'play') playToggle();
-    else if (a === 'replay') { free = false; endOv.classList.remove('on'); seek(clip.start); V.play().catch(function () {}); }
+    else if (a === 'replay' && clip) { free = false; endOv.classList.remove('on'); seek(clip.start); V.play().catch(function () {}); }
     else if (a === 'next') step(1);
     else if (a === 'prev') step(-1);
     else if (a === 'done-next') { done[cur] = 1; lsSet(KEY.done, done); renderDone(); step(1); }
@@ -313,7 +313,7 @@
     if (k === 'j' || k === 'ArrowRight') { step(1); e.preventDefault(); }
     else if (k === 'k' || k === 'ArrowLeft') { step(-1); e.preventDefault(); }
     else if (k === ' ' && byId[cur] && tag !== 'BUTTON' && tag !== 'A') { playToggle(); e.preventDefault(); }
-    else if (k === 'r' && byId[cur]) { free = false; seek(clip.start); V.play().catch(function () {}); }
+    else if (k === 'r' && byId[cur] && clip) { free = false; seek(clip.start); V.play().catch(function () {}); }
     else if (k === 'd' && byId[cur]) { if (done[cur]) delete done[cur]; else done[cur] = 1; lsSet(KEY.done, done); renderDone(); }
     else if (k === '?') $('.lg-help').classList.toggle('on');
     else if (k === 'Escape') { $('.lg-help').classList.remove('on'); $('.lg-rail').classList.remove('open'); }
